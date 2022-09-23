@@ -33,8 +33,8 @@ export class GraphComponent implements OnInit {
   private svg: any;
   private width = 400;
   private height = 400;
-  private maxRadius = 30;
-  private minRadius = 5;
+  private maxRadius = 70;
+  private minRadius = 20;
 
   constructor() { }
 
@@ -42,7 +42,7 @@ export class GraphComponent implements OnInit {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.createSvg();
-    d3.json("/testJSON/test3.json")
+    d3.json("/testJSON/test2.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
 
@@ -79,7 +79,7 @@ export class GraphComponent implements OnInit {
     .append("g")
 
     g.append("circle")
-    .attr("r", ((d: GenericNode) => Math.max(this.minRadius, Math.max(d.tot_packets, this.maxRadius))))
+    .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
     .style("fill", ((d: GenericNode) => d?.program ? "#3f51b5" : "#D86A0F"))
 
     g.append("text")
@@ -96,9 +96,8 @@ export class GraphComponent implements OnInit {
         .links(links)
     )
     .force("center", d3.forceCenter(this.width/2, this.height/2))
-    .force("charge", d3.forceManyBody().strength(100))
-    .force("collision", d3.forceCollide().radius(d => {return Math.max(this.minRadius, Math.max((d as GenericNode).tot_packets, this.maxRadius)+20);}))
-
+    .force("charge", d3.forceManyBody().strength(300))
+    .force("collision", d3.forceCollide().radius(d => {return this.calculateRadius(d as GenericNode)+10;}))
     .on("tick", () =>{
       link
       .attr("x1", (d: { source: { x: any; }; }) => { return this.boundX(d.source.x, 20); })
@@ -111,11 +110,15 @@ export class GraphComponent implements OnInit {
     });
   }
 
-  private boundY(y:number|null|undefined, r:number) : number {
-    return Math.max(r+25, Math.min(this.height-r-25, y ? y : 0));
+  private calculateRadius(node: GenericNode): number {
+    return Math.min(this.maxRadius, Math.max(node.tot_packets, this.minRadius));
   }
 
-  private boundX(x:number|null|undefined, r:number) : number {
-    return Math.max(r, Math.min(this.width-r, x ? x : 0));
+  private boundY(y:number|null|undefined, r:number): number {
+    return Math.max(r+25, Math.min(this.height-r, y ? y : 0));
+  }
+
+  private boundX(x:number|null|undefined, r:number): number {
+    return Math.max(r+20, Math.min(this.width-r, x ? x : 0));
   }
 }
