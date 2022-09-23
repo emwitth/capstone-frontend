@@ -70,6 +70,21 @@ export class GraphComponent implements OnInit {
     .append("line")
     .style("stroke", "black");
 
+    const g = this.svg
+    .selectAll(null)
+    .data(allNodes)
+    .enter()
+    .append("g")
+
+    g.append("circle")
+    .attr("r", ((d: GenericNode) => d.tot_packets*3))
+    .style("fill", ((d: GenericNode) => d?.program ? "blue" : "red"))
+
+    g.append("text")
+    .text((d: GenericNode) => d?.program ? d.program : d?.ip)
+    .attr("dominant-baseline", "text-after-edge")
+    .attr("text-anchor", "middle")
+
     // Initialize the nodes
     const node = this.svg
     .selectAll("circle")
@@ -97,9 +112,8 @@ export class GraphComponent implements OnInit {
       .attr("x2", function(d: { target: { x: any; }; }) { return d.target.x; })
       .attr("y2", function(d: { target: { y: any; }; }) { return d.target.y; });
 
-      node
-      .attr("cx", function (d: { x: number; }) { return d.x; })
-      .attr("cy", function(d: { y: number; }) { return d.y; });
+      g
+      .attr("transform", (d: GenericNode) => {return "translate(" + d.x + ","+ d.y + ")"})
     });
   }
 }
