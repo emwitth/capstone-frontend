@@ -42,7 +42,7 @@ export class GraphComponent implements OnInit {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.createSvg();
-    d3.json("/testJSON/test4.json")
+    d3.json("/testJSON/test3.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
 
@@ -96,26 +96,26 @@ export class GraphComponent implements OnInit {
         .links(links)
     )
     .force("center", d3.forceCenter(this.width/2, this.height/2))
-    .force("charge", d3.forceManyBody().strength(600))
+    .force("charge", d3.forceManyBody().strength(100))
     .force("collision", d3.forceCollide().radius(d => {return Math.max(this.minRadius, Math.max((d as GenericNode).tot_packets, this.maxRadius)+20);}))
 
     .on("tick", () =>{
       link
-      .attr("x1", (d: { source: { x: any; }; }) => { return this.boundX(d.source.x); })
-      .attr("y1", (d: { source: { y: any; }; }) => { return this.boundY(d.source.y); })
-      .attr("x2", (d: { target: { x: any; }; }) => { return this.boundX(d.target.x); })
-      .attr("y2", (d: { target: { y: any; }; }) => { return this.boundY(d.target.y); });
+      .attr("x1", (d: { source: { x: any; }; }) => { return this.boundX(d.source.x, 20); })
+      .attr("y1", (d: { source: { y: any; }; }) => { return this.boundY(d.source.y, 20); })
+      .attr("x2", (d: { target: { x: any; }; }) => { return this.boundX(d.target.x, 20); })
+      .attr("y2", (d: { target: { y: any; }; }) => { return this.boundY(d.target.y, 20); });
 
       g
-      .attr("transform", (d: GenericNode) => {return "translate(" + this.boundX(d.x) + ","+ this.boundY(d.y) + ")"})
+      .attr("transform", (d: GenericNode) => {return "translate(" + this.boundX(d.x, d.tot_packets) + ","+ this.boundY(d.y, d.tot_packets) + ")"})
     });
   }
 
-  private boundY(y:number|null|undefined) : number {
-    return Math.max(20, Math.min(this.height-10, y ? y : 0));
+  private boundY(y:number|null|undefined, r:number) : number {
+    return Math.max(r+25, Math.min(this.height-r-25, y ? y : 0));
   }
 
-  private boundX(x:number|null|undefined) : number {
-    return Math.max(40, Math.min(this.width-10, x ? x : 0));
+  private boundX(x:number|null|undefined, r:number) : number {
+    return Math.max(r, Math.min(this.width-r, x ? x : 0));
   }
 }
