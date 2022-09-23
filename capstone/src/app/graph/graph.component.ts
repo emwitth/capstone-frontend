@@ -31,25 +31,27 @@ export interface ForceLink {
 })
 export class GraphComponent implements OnInit {
   private svg: any;
-  private margin = 50;
-  private width = 750 - (this.margin * 2);
-  private height = 400 - (this.margin * 2);
+  private width = 400;
+  private height = 400;
+  private maxRadius = 30;
+  private minRadius = 5;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.width = window.innerWidth;
+    this.height = window.innerHeight;
     this.createSvg();
-    d3.json("/testJSON/test0.json")
+    d3.json("/testJSON/test4.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
 
   private createSvg(): void {
     this.svg = d3.select("div#graph")
     .append("svg")
-    .attr("width", this.width + (this.margin * 2))
-    .attr("height", this.height + (this.margin * 2))
-    .append("g")
-    .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
+    .attr("width", this.width)
+    .attr("height", this.height)
+    .append("g");
   }
 
   private makeGraph(data: GraphJSON): void {
@@ -77,22 +79,13 @@ export class GraphComponent implements OnInit {
     .append("g")
 
     g.append("circle")
-    .attr("r", ((d: GenericNode) => d.tot_packets*3))
-    .style("fill", ((d: GenericNode) => d?.program ? "blue" : "red"))
+    .attr("r", ((d: GenericNode) => Math.max(this.minRadius, Math.max(d.tot_packets, this.maxRadius))))
+    .style("fill", ((d: GenericNode) => d?.program ? "#3f51b5" : "#D86A0F"))
 
     g.append("text")
     .text((d: GenericNode) => d?.program ? d.program : d?.ip)
     .attr("dominant-baseline", "text-after-edge")
     .attr("text-anchor", "middle")
-
-    // Initialize the nodes
-    const node = this.svg
-    .selectAll("circle")
-    .data(allNodes)
-    .enter()
-    .append("circle")
-    .attr("r", ((d: GenericNode) => d.tot_packets*3))
-    .style("fill", ((d: GenericNode) => d?.program ? "blue" : "red"));
 
     // Let's list the force we wanna apply on the network
     const simulation = forceSimulation(allNodes)
@@ -103,17 +96,26 @@ export class GraphComponent implements OnInit {
         .links(links)
     )
     .force("center", d3.forceCenter(this.width/2, this.height/2))
-    .force("collision", d3.forceCollide().radius(d => {return (d as GenericNode).tot_packets * 5;}))
+    .force("charge", d3.forceManyBody().strength(600))
+    .force("collision", d3.forceCollide().radius(d => {return Math.max(this.minRadius, Math.max((d as GenericNode).tot_packets, this.maxRadius)+20);}))
 
     .on("tick", () =>{
       link
-      .attr("x1", function(d: { source: { x: any; }; }) { return d.source.x; })
-      .attr("y1", function(d: { source: { y: any; }; }) { return d.source.y; })
-      .attr("x2", function(d: { target: { x: any; }; }) { return d.target.x; })
-      .attr("y2", function(d: { target: { y: any; }; }) { return d.target.y; });
+      .attr("x1", (d: { source: { x: any; }; }) => { return this.boundX(d.source.x); })
+      .attr("y1", (d: { source: { y: any; }; }) => { return this.boundY(d.source.y); })
+      .attr("x2", (d: { target: { x: any; }; }) => { return this.boundX(d.target.x); })
+      .attr("y2", (d: { target: { y: any; }; }) => { return this.boundY(d.target.y); });
 
       g
-      .attr("transform", (d: GenericNode) => {return "translate(" + d.x + ","+ d.y + ")"})
+      .attr("transform", (d: GenericNode) => {return "translate(" + this.boundX(d.x) + ","+ this.boundY(d.y) + ")"})
     });
+  }
+
+  private boundY(y:number|null|undefined) : number {
+    return Math.max(20, Math.min(this.height-10, y ? y : 0));
+  }
+
+  private boundX(x:number|null|undefined) : number {
+    return Math.max(40, Math.min(this.width-10, x ? x : 0));
   }
 }
