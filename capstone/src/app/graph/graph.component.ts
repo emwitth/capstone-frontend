@@ -1,23 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
-import { SimulationNodeDatum } from 'd3';
 import { forceSimulation } from 'd3-force';
-
-export interface Node {
-  id: number,
-  name: string,
-  x?:number,
-  y?:number
-}
-
-export interface Link {
-  source: number,
-  target: number
-}
+import { ProgNode, ProgInfo } from '../interfaces/prog-node';
+import { IPNode } from '../interfaces/ipnode';
+import { Link } from '../interfaces/link';
 
 export interface GraphJSON {
-  nodes: Array<Node>,
+  prog_nodes: Array<ProgNode>,
+  ip_nodes: Array<IPNode>,
   links: Array<Link>
+}
+
+export interface GenericNode {
+  tot_packets: number,
+  program?: ProgInfo,
+  ip?: string,
+  x?: number,
+  y?: number
+}
+
+export interface ForceLink {
+  source: string,
+  target: string
 }
 
 @Component({
@@ -35,7 +39,7 @@ export class GraphComponent implements OnInit {
 
   ngOnInit(): void {
     this.createSvg();
-    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_network.json")
+    d3.json("/testJSON/test0.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
 
@@ -51,35 +55,42 @@ export class GraphComponent implements OnInit {
   private makeGraph(data: GraphJSON): void {
     console.log(data);
 
-    // const forceNode = d3.forceManyBody();
-    // const forceLink = d3.forceLink(data.links).id(({index: i}) => N[i]);
+    var allNodes: Array<GenericNode> = new Array<GenericNode>();
+    allNodes = allNodes.concat(data.ip_nodes, data.prog_nodes);
+
+    console.log(allNodes);
+
+    var links: Array<ForceLink> = data.links.map(x => ({source: x.ip, target: x.program}));
 
     // Initialize the links
     const link = this.svg
     .selectAll("line")
-    .data(data.links)
+    .data(links)
     .enter()
     .append("line")
-    .style("stroke", "#aaa");
+    .style("stroke", "black");
 
     // Initialize the nodes
     const node = this.svg
     .selectAll("circle")
-    .data(data.nodes)
+    .data(allNodes)
     .enter()
     .append("circle")
-    .attr("r", 20)
-    .style("fill", "#69b3a2");
+    .attr("r", ((d: GenericNode) => d.tot_packets*3))
+    .style("fill", ((d: GenericNode) => d?.program ? "blue" : "red"));
 
     // Let's list the force we wanna apply on the network
-    const simulation = forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
-    .force("link", d3.forceLink()                               // This force provides links between nodes
-        .id(function(d) { return (d as Node).id; })                     // This provide  the id of a node
-        .links(data.links)                                    // and this the list of links
+    const simulation = forceSimulation(allNodes)
+    .force("link", d3.forceLink()
+        .id(d => { return (d as GenericNode)?.program ? 
+                          (d as GenericNode)?.program + "" : 
+                          (d as GenericNode).ip + ""; })
+        .links(links)
     )
-    .force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
-    .force("center", d3.forceCenter(this.width / 2, this.height / 2))     // This force attracts nodes to the center of the svg area
-    .on("end", () =>{
+    .force("center", d3.forceCenter(this.width/2, this.height/2))
+    .force("collision", d3.forceCollide().radius(d => {return (d as GenericNode).tot_packets * 5;}))
+
+    .on("tick", () =>{
       link
       .attr("x1", function(d: { source: { x: any; }; }) { return d.source.x; })
       .attr("y1", function(d: { source: { y: any; }; }) { return d.source.y; })
@@ -87,9 +98,8 @@ export class GraphComponent implements OnInit {
       .attr("y2", function(d: { target: { y: any; }; }) { return d.target.y; });
 
       node
-      .attr("cx", function (d: { x: number; }) { return d.x+6; })
-      .attr("cy", function(d: { y: number; }) { return d.y-6; });
+      .attr("cx", function (d: { x: number; }) { return d.x; })
+      .attr("cy", function(d: { y: number; }) { return d.y; });
     });
-
   }
 }
