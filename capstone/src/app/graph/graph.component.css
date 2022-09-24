@@ -1,0 +1,6 @@
+.graph{
+    background-color: var(--BACKGROUND_COLOR);
+    border-style: solid;
+    border-color: var(--COMPLEMENTARY_COLOR);
+    border-radius: 5px;
+}

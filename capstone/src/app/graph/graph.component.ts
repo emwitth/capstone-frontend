@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { forceSimulation } from 'd3-force';
+import { PROGRAM_COLOR, IP_COLOR } from '../constants';
 import { ProgNode, ProgInfo } from '../interfaces/prog-node';
 import { IPNode } from '../interfaces/ipnode';
 import { Link } from '../interfaces/link';
@@ -80,7 +81,10 @@ export class GraphComponent implements OnInit {
 
     g.append("circle")
     .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
-    .style("fill", ((d: GenericNode) => d?.program ? "#3F7A59" : "#9D4523"))
+    .style("fill", (
+      (d: GenericNode) => {
+       return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/40)
+      }))
 
     g.append("text")
     .text((d: GenericNode) => d?.program ? d.program : d?.ip)
