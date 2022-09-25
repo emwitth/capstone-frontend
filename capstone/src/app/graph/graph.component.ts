@@ -5,7 +5,6 @@ import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR } from '../constants';
 import { ProgNode, ProgInfo } from '../interfaces/prog-node';
 import { IPNode } from '../interfaces/ipnode';
 import { Link } from '../interfaces/link';
-import { select } from 'd3';
 
 export interface GraphJSON {
   prog_nodes: Array<ProgNode>,
@@ -47,7 +46,7 @@ export class GraphComponent implements OnInit {
     console.log(this.width);
     console.log(this.height);
     this.createSvg();
-    d3.json("/testJSON/test5.json")
+    d3.json("/testJSON/test6.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
   private createSvg(): void {
@@ -96,10 +95,26 @@ export class GraphComponent implements OnInit {
                                 d => { return this.calculateRadius(d as GenericNode) + 30;}))
     .on("tick", () =>{
       link
-      .attr("x1", (d: { source: { x: any; }; }) => { return this.boundX(d.source.x, 20); })
-      .attr("y1", (d: { source: { y: any; }; }) => { return this.boundY(d.source.y, 20); })
-      .attr("x2", (d: { target: { x: any; }; }) => { return this.boundX(d.target.x, 20); })
-      .attr("y2", (d: { target: { y: any; }; }) => { return this.boundY(d.target.y, 20); });
+      .attr("x1", (d: { source: { x: any; }; }) => {
+        var x = this.boundX(d.source.x, 0);
+        d.source.x = x;
+        return x; 
+      })
+      .attr("y1", (d: { source: { y: any; }; }) => {
+        var y = this.boundY(d.source.y, 0);
+        d.source.y = y;
+        return y;
+      })
+      .attr("x2", (d: { target: { x: any; }; }) => {
+        var x = this.boundX(d.target.x, 0);
+        d.target.x = x;
+        return x;
+      })
+      .attr("y2", (d: { target: { y: any; }; }) => {
+        var y = this.boundY(d.target.y, 0);
+        d.target.y = y;
+        return y; 
+      });
       
       g
       .attr("transform", (d: GenericNode) => {
@@ -151,14 +166,21 @@ export class GraphComponent implements OnInit {
   }
 
   private calculateRadius(node: GenericNode): number {
-    return Math.min(this.maxRadius, Math.max(node.tot_packets, this.minRadius));
+    return this.calculateRadiusNum(node.tot_packets);
+  }
+
+  private calculateRadiusNum(radius: number): number {
+    return Math.min(this.maxRadius, Math.max(radius, this.minRadius));
   }
 
   private boundY(y:number|null|undefined, r:number): number {
-    return Math.max(r+30, Math.min(this.height-r-10, y ? y : 0));
+    var newR: number = this.calculateRadiusNum(r);
+    return Math.max(newR, Math.min(this.height-newR, y ? y : 0));
   }
 
   private boundX(x:number|null|undefined, r:number): number {
-    return Math.max(r+30, Math.min(this.width-r-10, x ? x : 0));
+    var newR: number = this.calculateRadiusNum(r);
+    return Math.max(newR, Math.min(this.width-newR, x ? x : 0));
   }
+
 }
