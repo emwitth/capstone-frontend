@@ -47,7 +47,7 @@ export class GraphComponent implements OnInit {
     console.log(this.width);
     console.log(this.height);
     this.createSvg();
-    d3.json("/testJSON/test3.json")
+    d3.json("/testJSON/test5.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
   private createSvg(): void {
@@ -82,32 +82,13 @@ export class GraphComponent implements OnInit {
     .enter()
     .append("g");
 
-    g.append("circle")
-    .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
-    .style("fill", (
-      (d: GenericNode) => {
-       return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/40)
-      }))
-      .on("mouseover", (d: { target: any; }) => {
-        d3.select(d.target).attr("class", "hover-indication");
-      })
-      .on("mouseout", (d: { target: any; }) => {
-        d3.select(d.target).attr("class", "");
-      });
-
-    g.append("text")
-    .style("fill", GRAPH_TEXT_COLOR)
-    .text((d: GenericNode) => d?.program ? d.program : d?.ip)
-    .attr("dominant-baseline", "text-after-edge")
-    .attr("text-anchor", "middle");
-
     // Let's list the force we wanna apply on the network
-    const simulation = forceSimulation(allNodes)
+    var simulation = forceSimulation(allNodes)
     .force("link", d3.forceLink()
-        .id(d => { return (d as GenericNode)?.program ? 
-                          (d as GenericNode)?.program + "" : 
-                          (d as GenericNode).ip + ""; })
-        .links(links)
+      .id(d => { return (d as GenericNode)?.program ? 
+                        (d as GenericNode)?.program + "" : 
+                        (d as GenericNode).ip + ""; })
+      .links(links)
     )
     .force("center", d3.forceCenter(this.width/2, this.height/2))
     .force("charge", d3.forceManyBody().strength(300))
@@ -119,7 +100,7 @@ export class GraphComponent implements OnInit {
       .attr("y1", (d: { source: { y: any; }; }) => { return this.boundY(d.source.y, 20); })
       .attr("x2", (d: { target: { x: any; }; }) => { return this.boundX(d.target.x, 20); })
       .attr("y2", (d: { target: { y: any; }; }) => { return this.boundY(d.target.y, 20); });
-
+      
       g
       .attr("transform", (d: GenericNode) => {
         return "translate(" 
@@ -128,6 +109,44 @@ export class GraphComponent implements OnInit {
         + this.boundY(d.y, d.tot_packets) 
         + ")"
       })
+    });
+
+    g.append("circle")
+    .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
+    .style("fill", (
+      (d: GenericNode) => {
+       return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/40)
+      }))
+      .on("mouseover", (d: { target: any; }) => {
+        d3.select(d.target).attr("class", "hover-indication");
+      })
+      .on("mouseout", (d: { target: any; }) => {
+        d3.select(d.target).attr("class", "");
+      })
+      .call(this.drag(simulation));
+
+    g.append("text")
+    .style("fill", GRAPH_TEXT_COLOR)
+    .text((d: GenericNode) => d?.program ? d.program : d?.ip)
+    .attr("dominant-baseline", "text-after-edge")
+    .attr("text-anchor", "middle");
+  }
+
+  private drag(simulation: d3.Simulation<GenericNode, any>) {
+    return d3.drag()
+    .on("start", event => {
+      if(!event.active) simulation.alphaTarget(.6).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    })
+    .on("drag", event => {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    })
+    .on("end", event => {
+      if(!event.active) simulation.alphaTarget(0);
+      event.subject.fx = null;
+      event.subject.fy = null;
     });
   }
 
