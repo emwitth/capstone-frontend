@@ -5,6 +5,7 @@ import { PROGRAM_COLOR, IP_COLOR } from '../constants';
 import { ProgNode, ProgInfo } from '../interfaces/prog-node';
 import { IPNode } from '../interfaces/ipnode';
 import { Link } from '../interfaces/link';
+import { select } from 'd3';
 
 export interface GraphJSON {
   prog_nodes: Array<ProgNode>,
@@ -79,7 +80,7 @@ export class GraphComponent implements OnInit {
     .selectAll(null)
     .data(allNodes)
     .enter()
-    .append("g")
+    .append("g");
 
     g.append("circle")
     .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
@@ -87,6 +88,12 @@ export class GraphComponent implements OnInit {
       (d: GenericNode) => {
        return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/40)
       }))
+      .on("mouseover", (d: { target: any; }) => {
+        d3.select(d.target).attr("class", "hover-indication");
+      })
+      .on("mouseout", (d: { target: any; }) => {
+        d3.select(d.target).attr("class", "");
+      });
 
     g.append("text")
     .text((d: GenericNode) => d?.program ? d.program : d?.ip)
