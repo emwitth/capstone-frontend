@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { forceSimulation } from 'd3-force';
-import { PROGRAM_COLOR, IP_COLOR } from '../constants';
+import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR } from '../constants';
 import { ProgNode, ProgInfo } from '../interfaces/prog-node';
 import { IPNode } from '../interfaces/ipnode';
 import { Link } from '../interfaces/link';
@@ -47,7 +47,7 @@ export class GraphComponent implements OnInit {
     console.log(this.width);
     console.log(this.height);
     this.createSvg();
-    d3.json("/testJSON/test5.json")
+    d3.json("/testJSON/test3.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
   private createSvg(): void {
@@ -96,9 +96,10 @@ export class GraphComponent implements OnInit {
       });
 
     g.append("text")
+    .style("fill", GRAPH_TEXT_COLOR)
     .text((d: GenericNode) => d?.program ? d.program : d?.ip)
     .attr("dominant-baseline", "text-after-edge")
-    .attr("text-anchor", "middle")
+    .attr("text-anchor", "middle");
 
     // Let's list the force we wanna apply on the network
     const simulation = forceSimulation(allNodes)

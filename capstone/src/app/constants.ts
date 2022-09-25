@@ -1,6 +1,7 @@
-export const MAIN_COLOR: string = "#7bc6c5";
-export const COMPLEMENTARY_COLOR: string = "#bb6d6e";
-export const BACKGROUND_COLOR: string = "#9B9A9A";
+export const MAIN_COLOR: string = "##72aaaa";
+export const COMPLEMENTARY_COLOR: string = "#945b5c";
+export const BACKGROUND_COLOR: string = "#757575";
+export const GRAPH_TEXT_COLOR: string = "#c2c2c2";
 
-export const PROGRAM_COLOR = "#5bf2f1";
+export const PROGRAM_COLOR = "#72aaaa";
 export const IP_COLOR = "#db4142";
