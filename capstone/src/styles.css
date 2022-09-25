@@ -4,3 +4,11 @@
     --COMPLEMENTARY_COLOR: #bb6d6e;
     --BACKGROUND_COLOR: #9B9A9A;
 }
+
+body {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+h2 {
+    color: var(--MAIN_COLOR);
+}

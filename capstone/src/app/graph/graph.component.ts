@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { forceSimulation } from 'd3-force';
 import { PROGRAM_COLOR, IP_COLOR } from '../constants';
@@ -32,21 +32,23 @@ export interface ForceLink {
 })
 export class GraphComponent implements OnInit {
   private svg: any;
-  private width = 400;
-  private height = 400;
+  private width = 500;
+  private height = 700;
   private maxRadius = 70;
   private minRadius = 20;
 
-  constructor() { }
+  constructor(private elem: ElementRef) { }
 
   ngOnInit(): void {
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
+    console.log(this,this.elem.nativeElement)
+    this.width = this.elem.nativeElement.offsetWidth;
+    this.height = window.innerHeight-23;
+    console.log(this.width);
+    console.log(this.height);
     this.createSvg();
     d3.json("/testJSON/test5.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
-
   private createSvg(): void {
     this.svg = d3.select("div#graph")
     .append("svg")
