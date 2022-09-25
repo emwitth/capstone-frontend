@@ -5,6 +5,7 @@ import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR } from '../constants';
 import { ProgNode, ProgInfo } from '../interfaces/prog-node';
 import { IPNode } from '../interfaces/ipnode';
 import { Link } from '../interfaces/link';
+import { of } from 'rxjs';
 
 export interface GraphJSON {
   prog_nodes: Array<ProgNode>,
@@ -35,18 +36,18 @@ export class GraphComponent implements OnInit {
   private width = 500;
   private height = 700;
   private maxRadius = 70;
-  private minRadius = 20;
+  private minRadius = 10;
 
   constructor(private elem: ElementRef) { }
 
   ngOnInit(): void {
     console.log(this,this.elem.nativeElement)
     this.width = this.elem.nativeElement.offsetWidth;
-    this.height = window.innerHeight-23;
+    this.height = window.innerHeight-7;
     console.log(this.width);
     console.log(this.height);
     this.createSvg();
-    d3.json("/testJSON/test6.json")
+    d3.json("/testJSON/test7.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
   private createSvg(): void {
@@ -142,9 +143,16 @@ export class GraphComponent implements OnInit {
 
     g.append("text")
     .style("fill", GRAPH_TEXT_COLOR)
-    .text((d: GenericNode) => d?.program ? d.program : d?.ip)
+    .text((d: GenericNode) => {
+        return d?.program ? d.program : d?.ip;  
+    })
     .attr("dominant-baseline", "text-after-edge")
-    .attr("text-anchor", "middle");
+    .attr("text-anchor", "middle")
+    .style("font-size", (d: GenericNode) => {
+      var x = Math.max(8, Math.min(12, d.tot_packets));
+      console.log(x);
+      return x;
+    });
   }
 
   private drag(simulation: d3.Simulation<GenericNode, any>) {
