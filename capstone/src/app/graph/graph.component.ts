@@ -47,7 +47,7 @@ export class GraphComponent implements OnInit {
     console.log(this.width);
     console.log(this.height);
     this.createSvg();
-    d3.json("/testJSON/test7.json")
+    d3.json("/testJSON/test3.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
   private createSvg(): void {
@@ -146,12 +146,10 @@ export class GraphComponent implements OnInit {
     .text((d: GenericNode) => {
         return d?.program ? d.program : d?.ip;  
     })
-    .attr("dominant-baseline", "text-after-edge")
+    .attr("dominant-baseline", "middle")
     .attr("text-anchor", "middle")
     .style("font-size", (d: GenericNode) => {
-      var x = Math.max(8, Math.min(12, d.tot_packets));
-      console.log(x);
-      return x;
+      return Math.max(8, Math.min(12, d.tot_packets));
     });
   }
 
