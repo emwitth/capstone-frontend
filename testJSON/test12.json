@@ -5,6 +5,11 @@
       "tot_packets": 4000
     }
   ],
-  "ip_nodes": [],
+  "ip_nodes": [
+    {
+      "ip": "1.456.53.145",
+      "tot_packets": 4000
+    }
+  ],
   "links": []
 }

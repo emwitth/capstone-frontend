@@ -1,0 +1,22 @@
+{
+  "prog_nodes": [
+    {
+      "program": "<!--",
+      "tot_packets": 10
+    }
+  ],
+  "ip_nodes": [
+    {
+      "ip": "1.456.53.145",
+      "tot_packets": 10
+    }
+  ],
+  "links": [
+    {
+      "ip": "1.456.53.145",
+      "program": "<!--",
+      "in_packets": 5,
+      "out_packets": 5
+    }
+  ]
+}

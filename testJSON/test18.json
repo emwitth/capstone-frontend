@@ -1,0 +1,42 @@
+{
+  "prog_nodes": [
+    {
+      "program": "nc",
+      "tot_packets": 4000
+    },
+    {
+      "program": "test",
+      "tot_packets": 4
+    },
+    {
+      "program": "program",
+      "tot_packets": 4
+    },
+    {
+      "program": "james",
+      "tot_packets": 4
+    },
+    {
+      "program": "name",
+      "tot_packets": 4
+    },
+    {
+      "program": "coffee",
+      "tot_packets": 4
+    }
+  ],
+  "ip_nodes": [
+    {
+      "ip": "1.456.53.145",
+      "tot_packets": 4
+    }
+  ],
+  "links": [
+    {
+      "ip": "1.456.53.145",
+      "program": "nc",
+      "in_packets": 4,
+      "out_packets": 4
+    }
+  ]
+}

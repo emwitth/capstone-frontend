@@ -1,0 +1,70 @@
+{
+  "prog_nodes": [
+
+  ],
+  "ip_nodes": [
+   
+  ],
+  "links": [
+    {
+      "ip": "1.456.53.145",
+      "program": "nc",
+      "in_packets": 5,
+      "out_packets": 5
+    },
+    {
+      "program": "test",
+      "ip": "1.652.43.126",
+      "in_packets": 10,
+      "out_packets": 10
+    },
+    {
+      "program": "program",
+      "ip": "1.57.567.158",
+      "in_packets": 15,
+      "out_packets": 15
+    },
+    {
+      "program": "james",
+      "ip": "1.266.53.198",
+      "in_packets": 20,
+      "out_packets": 20
+    },
+    {
+      "program": "name",
+      "ip": "1.563.78.16",
+      "in_packets": 25,
+      "out_packets": 25
+    },
+    {
+      "program": "coffee",
+      "ip": "1.959.55.838",
+      "in_packets": 30,
+      "out_packets": 30
+    },
+    {
+      "program": "buddy",
+      "ip": "1.234.537.943",
+      "in_packets": 35,
+      "out_packets": 35
+    },
+    {
+      "program": "foozball",
+      "ip": "1.46.63.62",
+      "in_packets": 40,
+      "out_packets": 40
+    },
+    {
+      "program": "pikachu",
+      "ip": "1.260.034.439",
+      "in_packets": 45,
+      "out_packets": 45
+    },
+    {
+      "program": "greg",
+      "ip": "1.234.522.526",
+      "in_packets": 50,
+      "out_packets": 50
+    }
+  ]
+}

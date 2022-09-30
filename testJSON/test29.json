@@ -1,0 +1,22 @@
+{
+  "prog_nodes": [
+    {
+      "program": "nc",
+      "tot_packets": 0
+    }
+  ],
+  "ip_nodes": [
+    {
+      "ip": "100.23.892.54",
+      "tot_packets": 0
+    }
+  ],
+  "links": [
+    {
+      "ip": "100.23.892.54",
+      "program": "nc",
+      "in_packets": 5,
+      "out_packets": 5
+    }
+  ]
+}
