@@ -1,0 +1,10 @@
+{
+  "prog_nodes": [
+    {
+      "program": "nc",
+      "tot_packets": 4000
+    }
+  ],
+  "ip_nodes": [],
+  "links": []
+}

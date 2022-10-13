@@ -1,1 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --MAIN_COLOR: #72aaaa;
+    --COMPLEMENTARY_COLOR: #945b5c;
+    --BACKGROUND_COLOR: #757575;
+    --GRAPH_TEXT_COLOR: #c2c2c2;
+}
+
+body {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+h2 {
+    color: var(--MAIN_COLOR);
+}
+
+.hover-indication{
+    stroke: black;
+    stroke-width: 3;
+}

@@ -1,0 +1,4 @@
+.module{
+    background-color: var(--BACKGROUND_COLOR);
+    border-color: var(--COMPLEMENTARY_COLOR) !important;
+}
