@@ -47,7 +47,7 @@ export class GraphComponent implements OnInit {
     console.log(this.width);
     console.log(this.height);
     this.createSvg();
-    d3.json("/testJSON/test31.json")
+    d3.json("/testJSON/test7.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
   private createSvg(): void {
