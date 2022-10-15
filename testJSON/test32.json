@@ -1,0 +1,183 @@
+{
+  "ip_nodes": [
+    {
+      "ip": "no ip",
+      "name": "no hostname",
+      "tot_packets": 46
+    },
+    {
+      "ip": "172.20.192.1",
+      "name": "DESKTOP-KD784JE.mshome.net",
+      "tot_packets": 329
+    },
+    {
+      "ip": "172.217.0.174",
+      "name": "ord38s42-in-f14.1e100.net",
+      "tot_packets": 11
+    },
+    {
+      "ip": "fe80::7124:11b3:7160:7203",
+      "name": "DESKTOP-KD784JE",
+      "tot_packets": 44
+    },
+    {
+      "ip": "8.8.8.8",
+      "name": "dns.google",
+      "tot_packets": 722
+    },
+    {
+      "ip": "138.49.101.136",
+      "name": "wngwas36.intra.uwlax.edu",
+      "tot_packets": 462
+    },
+    {
+      "ip": "138.49.185.40",
+      "name": "no hostname",
+      "tot_packets": 77
+    },
+    {
+      "ip": "fe80::215:5dff:fe93:2b5",
+      "name": "no hostname",
+      "tot_packets": 1
+    }
+  ],
+  "links": [
+    {
+      "in_packets": 0,
+      "ip": "no ip",
+      "out_packets": 46,
+      "program": {
+        "fd": "no process",
+        "name": "no process",
+        "socket": "no port",
+        "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
+      }
+    },
+    {
+      "in_packets": 102,
+      "ip": "172.20.192.1",
+      "out_packets": 227,
+      "program": {
+        "fd": "no process",
+        "name": "no process",
+        "socket": "no port",
+        "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
+      }
+    },
+    {
+      "in_packets": 0,
+      "ip": "fe80::7124:11b3:7160:7203",
+      "out_packets": 44,
+      "program": {
+        "fd": "no process",
+        "name": "no process",
+        "socket": "no port",
+        "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
+      }
+    },
+    {
+      "in_packets": 358,
+      "ip": "8.8.8.8",
+      "out_packets": 358,
+      "program": {
+        "fd": "no process",
+        "name": "no process",
+        "socket": "no port",
+        "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
+      }
+    },
+    {
+      "in_packets": 231,
+      "ip": "138.49.101.136",
+      "out_packets": 231,
+      "program": {
+        "fd": "no process",
+        "name": "no process",
+        "socket": "no port",
+        "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
+      }
+    },
+    {
+      "in_packets": 0,
+      "ip": "fe80::215:5dff:fe93:2b5",
+      "out_packets": 1,
+      "program": {
+        "fd": "no process",
+        "name": "no process",
+        "socket": "no port",
+        "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
+      }
+    },
+    {
+      "in_packets": 6,
+      "ip": "172.217.0.174",
+      "out_packets": 5,
+      "program": {
+        "fd": 159,
+        "name": "nc",
+        "socket": 34618,
+        "timestamp": "Thu, 13 Oct 2022 13:57:28 GMT"
+      }
+    },
+    {
+      "in_packets": 43,
+      "ip": "138.49.185.40",
+      "out_packets": 34,
+      "program": {
+        "fd": 224,
+        "name": "ssh",
+        "socket": 40510,
+        "timestamp": "Thu, 13 Oct 2022 14:13:56 GMT"
+      }
+    },
+    {
+      "in_packets": 6,
+      "ip": "8.8.8.8",
+      "out_packets": 0,
+      "program": {
+        "fd": 246,
+        "name": "nc",
+        "socket": 60418,
+        "timestamp": "Thu, 13 Oct 2022 14:15:33 GMT"
+      }
+    }
+  ],
+  "prog_nodes": [
+    {
+      "program": {
+        "fd": "no process",
+        "name": "no process",
+        "socket": "no port",
+        "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
+      },
+      "tot_packets": 1598
+    },
+    {
+      "program": {
+        "fd": 159,
+        "name": "nc",
+        "socket": 34618,
+        "timestamp": "Thu, 13 Oct 2022 13:57:28 GMT"
+      },
+      "tot_packets": 11
+    },
+    {
+      "program": {
+        "fd": 224,
+        "name": "ssh",
+        "socket": 40510,
+        "timestamp": "Thu, 13 Oct 2022 14:13:56 GMT"
+      },
+      "tot_packets": 77
+    },
+    {
+      "program": {
+        "fd": 246,
+        "name": "nc",
+        "socket": 60418,
+        "timestamp": "Thu, 13 Oct 2022 14:15:33 GMT"
+      },
+      "tot_packets": 6
+    }
+  ]
+}

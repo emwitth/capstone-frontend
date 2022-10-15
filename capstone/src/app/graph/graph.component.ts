@@ -47,7 +47,7 @@ export class GraphComponent implements OnInit {
     console.log(this.width);
     console.log(this.height);
     this.createSvg();
-    d3.json("/testJSON/test7.json")
+    d3.json("/api/graph-data")
     .then(data => this.makeGraph(data as GraphJSON));
   }
   private createSvg(): void {
@@ -66,7 +66,7 @@ export class GraphComponent implements OnInit {
 
     console.log(allNodes);
 
-    var links: Array<ForceLink> = data.links.map(x => ({source: x.ip, target: x.program}));
+    var links: Array<ForceLink> = data.links.map(x => ({source: x.ip, target: x.program.name + x.program.socket}));
 
     // Initialize the links
     const link = this.svg
@@ -86,7 +86,7 @@ export class GraphComponent implements OnInit {
     var simulation = forceSimulation(allNodes)
     .force("link", d3.forceLink()
       .id(d => { return (d as GenericNode)?.program ? 
-                        (d as GenericNode)?.program + "" : 
+                        (d as GenericNode)?.program?.name + "" + (d as GenericNode)?.program?.socket : 
                         (d as GenericNode).ip + ""; })
       .links(links)
     )
@@ -131,7 +131,11 @@ export class GraphComponent implements OnInit {
     .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
     .style("fill", (
       (d: GenericNode) => {
-       return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/40)
+        if(d.tot_packets > this.maxRadius)
+        {
+          return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/400)
+        }
+        return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)
       }))
       .on("mouseover", (d: { target: any; }) => {
         d3.select(d.target).attr("class", "hover-indication");
@@ -144,7 +148,7 @@ export class GraphComponent implements OnInit {
     g.append("text")
     .style("fill", GRAPH_TEXT_COLOR)
     .text((d: GenericNode) => {
-        return d?.program ? d.program : d?.ip;  
+        return d?.program ? d.program.name : (d as IPNode)?.name;  
     })
     .attr("dominant-baseline", "middle")
     .attr("text-anchor", "middle")
