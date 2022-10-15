@@ -148,7 +148,15 @@ export class GraphComponent implements OnInit {
     g.append("text")
     .style("fill", GRAPH_TEXT_COLOR)
     .text((d: GenericNode) => {
-        return d?.program ? d.program.name : (d as IPNode)?.name;  
+        if(d?.program) {
+          return d.program.name;
+        } 
+        else if ((d as IPNode)?.name !== "no hostname") {
+          return (d as IPNode)?.name;
+        }  
+        else {
+          return (d as IPNode)?.ip;
+        }
     })
     .attr("dominant-baseline", "middle")
     .attr("text-anchor", "middle")
