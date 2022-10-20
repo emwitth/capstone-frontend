@@ -16,6 +16,7 @@ export interface GraphJSON {
 export interface GenericNode {
   tot_packets: number,
   program?: ProgInfo,
+  name?: string,
   ip?: string,
   x?: number,
   y?: number
@@ -33,6 +34,11 @@ export interface ForceLink {
 })
 export class GraphComponent implements OnInit {
   private svg: any;
+  private g: any;
+  private link: any;
+  private simulation: any;
+  private allNodes: Array<GenericNode> = new Array<GenericNode>();
+  private links: Array<ForceLink> = new Array<ForceLink>();
   private width = 500;
   private height = 700;
   private maxRadius = 70;
@@ -43,13 +49,17 @@ export class GraphComponent implements OnInit {
   ngOnInit(): void {
     console.log(this,this.elem.nativeElement)
     this.width = this.elem.nativeElement.offsetWidth;
-    this.height = window.innerHeight-7;
+    // this.height = window.innerHeight-7;
+    this.height = window.innerHeight-40;
     console.log(this.width);
     console.log(this.height);
     this.createSvg();
-    d3.json("/api/graph-data")
+    // this.initializeSimulation();
+    // d3.json("/api/graph-data")
+    d3.json("/testJSON/test32.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
+
   private createSvg(): void {
     this.svg = d3.select("div#graph")
     .append("svg")
@@ -58,76 +68,57 @@ export class GraphComponent implements OnInit {
     .append("g");
   }
 
-  private makeGraph(data: GraphJSON): void {
-    console.log(data);
-
-    var allNodes: Array<GenericNode> = new Array<GenericNode>();
-    allNodes = allNodes.concat(data.ip_nodes, data.prog_nodes);
-
-    console.log(allNodes);
-
-    var links: Array<ForceLink> = data.links.map(x => ({source: x.ip, target: x.program.name + x.program.socket}));
-
-    // Initialize the links
-    const link = this.svg
-    .selectAll("line")
-    .data(links)
-    .enter()
-    .append("line")
-    .style("stroke", "black");
-
-    const g = this.svg
-    .selectAll(null)
-    .data(allNodes)
-    .enter()
-    .append("g");
-
-    // Let's list the force we wanna apply on the network
-    var simulation = forceSimulation(allNodes)
+  private initializeSimulation() {
+    this.simulation = forceSimulation(this.allNodes)
     .force("link", d3.forceLink()
       .id(d => { return (d as GenericNode)?.program ? 
                         (d as GenericNode)?.program?.name + "" + (d as GenericNode)?.program?.socket : 
                         (d as GenericNode).ip + ""; })
-      .links(links)
+      .links(this.links)
     )
-    .force("center", d3.forceCenter(this.width/2, this.height/2))
     .force("charge", d3.forceManyBody().strength(300))
+    .force("x", d3.forceX().x(this.width/2))
+    .force("y", d3.forceY().y(this.height/2))
     .force("collision", d3.forceCollide().radius(
                                 d => { return this.calculateRadius(d as GenericNode) + 30;}))
-    .on("tick", () =>{
-      link
-      .attr("x1", (d: { source: { x: any; }; }) => {
-        var x = this.boundX(d.source.x, 0);
-        d.source.x = x;
-        return x; 
-      })
-      .attr("y1", (d: { source: { y: any; }; }) => {
-        var y = this.boundY(d.source.y, 0);
-        d.source.y = y;
-        return y;
-      })
-      .attr("x2", (d: { target: { x: any; }; }) => {
-        var x = this.boundX(d.target.x, 0);
-        d.target.x = x;
-        return x;
-      })
-      .attr("y2", (d: { target: { y: any; }; }) => {
-        var y = this.boundY(d.target.y, 0);
-        d.target.y = y;
-        return y; 
-      });
-      
-      g
-      .attr("transform", (d: GenericNode) => {
-        return "translate(" 
-        + this.boundX(d.x, d.tot_packets) 
-        + ","
-        + this.boundY(d.y, d.tot_packets) 
-        + ")"
-      })
-    });
+    .on("tick", () => this.tick());
+  }
 
-    g.append("circle")
+  private makeLinksAndNodes(data: GraphJSON) {
+    this.allNodes = new Array<GenericNode>().concat(data.ip_nodes, data.prog_nodes);
+
+    console.log(this.allNodes);
+
+    this.links = data.links.map(x => ({source: x.ip, target: x.program.name + x.program.socket}));
+
+    // Initialize the links
+    this.link = this.svg
+    .selectAll("line")
+    .data(this.links)
+    .join("line")
+    .style("stroke", "black");
+
+    // Initialize the nodes
+    this.g = this.svg
+    .selectAll("g")
+    .data(this.allNodes, (d: any) => {
+      return d.program ? d.program.name + d.program.socket : d.ip;
+    })
+    .join(
+      (enter: any) => { 
+        return enter.append("g");
+      },
+      (update: any) => {
+        return update.transition()
+      },
+      (exit: any) => {
+        return exit.remove()
+      }
+    );
+  }
+
+  private buildNodesCirclesAndText(){
+    this.g.append("circle")
     .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
     .style("fill", (
       (d: GenericNode) => {
@@ -143,9 +134,9 @@ export class GraphComponent implements OnInit {
       .on("mouseout", (d: { target: any; }) => {
         d3.select(d.target).attr("class", "");
       })
-      .call(this.drag(simulation));
+      .call(this.drag(this.simulation));
 
-    g.append("text")
+    this.g.append("text")
     .style("fill", GRAPH_TEXT_COLOR)
     .text((d: GenericNode) => {
         if(d?.program) {
@@ -165,6 +156,37 @@ export class GraphComponent implements OnInit {
     });
   }
 
+  private makeGraph(data: GraphJSON): void {
+    console.log(data);
+
+    this.makeLinksAndNodes(data);
+
+    this.initializeSimulation();
+
+    this.buildNodesCirclesAndText();
+
+    this.simulation.nodes(this.allNodes);
+    this.simulation.force("link").links(this.links);
+    this.simulation.alpha(1).restart();
+  }
+
+  private updateGraph(data: GraphJSON) {
+    console.log(data);
+
+    this.makeLinksAndNodes(data);
+
+    this.buildNodesCirclesAndText();
+
+    this.simulation.nodes(this.allNodes);
+    this.simulation.force("link").links(this.links);
+    this.simulation.alpha(1).restart();
+  }
+
+  public update() {
+    d3.json("/testJSON/test33.json")
+    .then(data => this.makeGraph(data as GraphJSON));
+  }
+
   private drag(simulation: d3.Simulation<GenericNode, any>) {
     return d3.drag()
     .on("start", event => {
@@ -181,6 +203,39 @@ export class GraphComponent implements OnInit {
       event.subject.fx = null;
       event.subject.fy = null;
     });
+  }
+
+  private tick() {
+    this.link
+    .attr("x1", (d: { source: { x: any; }; }) => {
+      var x = this.boundX(d.source.x, 0);
+      d.source.x = x;
+      return x; 
+    })
+    .attr("y1", (d: { source: { y: any; }; }) => {
+      var y = this.boundY(d.source.y, 0);
+      d.source.y = y;
+      return y;
+    })
+    .attr("x2", (d: { target: { x: any; }; }) => {
+      var x = this.boundX(d.target.x, 0);
+      d.target.x = x;
+      return x;
+    })
+    .attr("y2", (d: { target: { y: any; }; }) => {
+      var y = this.boundY(d.target.y, 0);
+      d.target.y = y;
+      return y; 
+    });
+    
+    this.g
+    .attr("transform", (d: GenericNode) => {
+      return "translate(" 
+      + this.boundX(d.x, d.tot_packets) 
+      + ","
+      + this.boundY(d.y, d.tot_packets) 
+      + ")"
+    })
   }
 
   private calculateRadius(node: GenericNode): number {

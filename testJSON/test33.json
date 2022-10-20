@@ -33,7 +33,7 @@
     {
       "ip": "138.49.185.40",
       "name": "no hostname",
-      "tot_packets": 20
+      "tot_packets": 77
     },
     {
       "ip": "fe80::215:5dff:fe93:2b5",
@@ -120,9 +120,9 @@
       }
     },
     {
-      "in_packets": 10,
+      "in_packets": 43,
       "ip": "138.49.185.40",
-      "out_packets": 10,
+      "out_packets": 34,
       "program": {
         "fd": 224,
         "name": "ssh",
@@ -168,7 +168,7 @@
         "socket": 40510,
         "timestamp": "Thu, 13 Oct 2022 14:13:56 GMT"
       },
-      "tot_packets": 20
+      "tot_packets": 77
     },
     {
       "program": {

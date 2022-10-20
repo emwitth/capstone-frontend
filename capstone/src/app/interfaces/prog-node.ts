@@ -1,8 +1,6 @@
 export interface ProgNode {
     program: ProgInfo,
-    tot_packets: number,
-    x?: number,
-    y?: number
+    tot_packets: number
 }
 
 export interface ProgInfo {
