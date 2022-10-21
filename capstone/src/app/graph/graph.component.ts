@@ -179,7 +179,6 @@ export class GraphComponent implements OnInit {
 
     this.simulation.nodes(this.allNodes);
     this.simulation.force("link").links(this.links);
-    this.simulation.alpha(1).restart();
   }
 
   public update() {
