@@ -31,11 +31,6 @@
       "tot_packets": 462
     },
     {
-      "ip": "138.49.185.40",
-      "name": "no hostname",
-      "tot_packets": 40
-    },
-    {
       "ip": "fe80::215:5dff:fe93:2b5",
       "name": "no hostname",
       "tot_packets": 1
@@ -120,17 +115,6 @@
       }
     },
     {
-      "in_packets": 10,
-      "ip": "138.49.185.40",
-      "out_packets": 10,
-      "program": {
-        "fd": 224,
-        "name": "ssh",
-        "socket": 40510,
-        "timestamp": "Thu, 13 Oct 2022 14:13:56 GMT"
-      }
-    },
-    {
       "in_packets": 6,
       "ip": "8.8.8.8",
       "out_packets": 0,
@@ -160,15 +144,6 @@
         "timestamp": "Thu, 13 Oct 2022 13:57:28 GMT"
       },
       "tot_packets": 11
-    },
-    {
-      "program": {
-        "fd": 224,
-        "name": "ssh",
-        "socket": 40510,
-        "timestamp": "Thu, 13 Oct 2022 14:13:56 GMT"
-      },
-      "tot_packets": 40
     },
     {
       "program": {

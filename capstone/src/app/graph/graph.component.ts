@@ -5,7 +5,6 @@ import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR } from '../constants';
 import { ProgNode, ProgInfo } from '../interfaces/prog-node';
 import { IPNode } from '../interfaces/ipnode';
 import { Link } from '../interfaces/link';
-import { of } from 'rxjs';
 
 export interface GraphJSON {
   prog_nodes: Array<ProgNode>,
@@ -13,13 +12,20 @@ export interface GraphJSON {
   links: Array<Link>
 }
 
+export interface GenericNodeNoChords {
+  tot_packets: number,
+  program?: ProgInfo,
+  name?: string,
+  ip?: string
+}
+
 export interface GenericNode {
   tot_packets: number,
   program?: ProgInfo,
   name?: string,
   ip?: string,
-  x?: number,
-  y?: number
+  x: number,
+  y: number
 }
 
 export interface ForceLink {
@@ -34,6 +40,8 @@ export interface ForceLink {
 })
 export class GraphComponent implements OnInit {
   private svg: any;
+  private linkSvg: any;
+  private nodeSvg: any;
   private g: any;
   private link: any;
   private simulation: any;
@@ -59,13 +67,41 @@ export class GraphComponent implements OnInit {
     d3.json("/testJSON/test32.json")
     .then(data => this.makeGraph(data as GraphJSON));
   }
+ 
+  public update() {
+    d3.json("/testJSON/test35.json")
+    .then(data => this.updateGraph(data as GraphJSON));
+  }
 
   private createSvg(): void {
     this.svg = d3.select("div#graph")
     .append("svg")
     .attr("width", this.width)
-    .attr("height", this.height)
-    .append("g");
+    .attr("height", this.height);
+    this.linkSvg = this.svg.append("g").attr("id", "links")
+    this.nodeSvg = this.svg.append("g").attr("id", "nodes");
+  }
+
+  private makeGraph(data: GraphJSON): void {
+    console.log("Data: ", data);
+
+    this.makeLinksAndNodes(data);
+
+    this.initializeSimulation();
+
+    // this.buildNodesCirclesAndText();
+
+    this.simulation.nodes(this.allNodes);
+    this.simulation.force("link").links(this.links);
+    this.simulation.alpha(1).restart();
+  }
+
+  private updateGraph(data: GraphJSON) {
+    this.makeLinksAndNodes(data);
+
+    this.simulation.nodes(this.allNodes);
+    this.simulation.force("link").links(this.links);
+    // this.simulation.alpha(.6).restart();
   }
 
   private initializeSimulation() {
@@ -76,120 +112,139 @@ export class GraphComponent implements OnInit {
                         (d as GenericNode).ip + ""; })
       .links(this.links)
     )
-    .force("charge", d3.forceManyBody().strength(300))
-    .force("x", d3.forceX().x(this.width/2))
-    .force("y", d3.forceY().y(this.height/2))
+    // .force("charge", d3.forceManyBody().strength(300))
+    // .force("x", d3.forceX().x(this.width/2))
+    // .force("y", d3.forceY().y(this.height/2))
     .force("collision", d3.forceCollide().radius(
                                 d => { return this.calculateRadius(d as GenericNode) + 30;}))
     .on("tick", () => this.tick());
   }
 
   private makeLinksAndNodes(data: GraphJSON) {
-    this.allNodes = new Array<GenericNode>().concat(data.ip_nodes, data.prog_nodes);
+    console.log(data);
 
-    console.log(this.allNodes);
+    var allNodesNoChords = new Array<GenericNodeNoChords>().concat(data.ip_nodes, data.prog_nodes);
+    this.allNodes = allNodesNoChords.map(n => {
+        var oldNode = this.allNodes.find(element => {
+          return element.ip === n.ip &&
+          element.name === n.name &&
+          element.program?.name == n.program?.name &&
+          element.program?.socket == n.program?.socket
+        })
+        return {
+          tot_packets: n.tot_packets,
+          program: n?.program,
+          name: n?.name,
+          ip: n?.ip,
+          x: oldNode?.x ? oldNode.x : this.width/2,
+          y: oldNode?.y ? oldNode.y : this.height/2
+        }
+    } );
+
+    console.log("ALL NODES:", this.allNodes);
 
     this.links = data.links.map(x => ({source: x.ip, target: x.program.name + x.program.socket}));
 
+    console.log("LINKS: ", this.links);
+
     // Initialize the links
-    this.link = this.svg
+    this.link = this.linkSvg
     .selectAll("line")
-    .data(this.links)
+    .data(this.links, (l: any) => {return l.source + l.target;})
     .join("line")
     .style("stroke", "black");
 
     // Initialize the nodes
-    this.g = this.svg
+    this.g = this.nodeSvg
     .selectAll("g")
     .data(this.allNodes, (d: any) => {
       return d.program ? d.program.name + d.program.socket : d.ip;
     })
     .join(
       (enter: any) => { 
-        return enter.append("g");
+        return enter.append("g").call((parent: any) => {
+          parent.append("circle")
+          .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
+          .style("fill", (
+            (d: GenericNode) => {
+              if(d.tot_packets > this.maxRadius)
+              {
+                return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/400)
+              }
+              return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)
+            }))
+            .on("mouseover", (d: { target: any; }) => {
+              d3.select(d.target).attr("class", "hover-indication");
+            })
+            .on("mouseout", (d: { target: any; }) => {
+              d3.select(d.target).attr("class", "")
+            })
+            .call(this.drag());
+
+            parent.append("text")
+            .style("fill", GRAPH_TEXT_COLOR)
+            .text((d: GenericNode) => {
+                if(d?.program) {
+                  return d.program.name;
+                } 
+                else if ((d as IPNode)?.name !== "no hostname") {
+                  return (d as IPNode)?.name;
+                }  
+                else {
+                  return (d as IPNode)?.ip;
+                }
+            })
+            .attr("dominant-baseline", "middle")
+            .attr("text-anchor", "middle")
+            .style("font-size", (d: GenericNode) => {
+              return Math.max(8, Math.min(12, d.tot_packets));
+            });
+          });
       },
       (update: any) => {
-        return update.transition()
+        update.select("circle").transition().duration(500)
+        .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
+        .style("fill", (
+          (d: GenericNode) => {
+            if(d.tot_packets > this.maxRadius)
+            {
+              return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/400)
+            }
+            return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)
+          }));
+
+          update.select("text").transition().duration(500)
+          .style("fill", GRAPH_TEXT_COLOR)
+            .text((d: GenericNode) => {
+                if(d?.program) {
+                  return d.program.name;
+                } 
+                else if ((d as IPNode)?.name !== "no hostname") {
+                  return (d as IPNode)?.name;
+                }  
+                else {
+                  return (d as IPNode)?.ip;
+                }
+            })
+            .attr("dominant-baseline", "middle")
+            .attr("text-anchor", "middle")
+            .style("font-size", (d: GenericNode) => {
+              return Math.max(8, Math.min(12, d.tot_packets));
+            });
+
+          return update;
       },
       (exit: any) => {
-        return exit.remove()
+        return exit.remove();
       }
     );
+    console.log("Nodes Initialized");
   }
 
-  private buildNodesCirclesAndText(){
-    this.g.append("circle")
-    .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
-    .style("fill", (
-      (d: GenericNode) => {
-        if(d.tot_packets > this.maxRadius)
-        {
-          return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/400)
-        }
-        return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)
-      }))
-      .on("mouseover", (d: { target: any; }) => {
-        d3.select(d.target).attr("class", "hover-indication");
-      })
-      .on("mouseout", (d: { target: any; }) => {
-        d3.select(d.target).attr("class", "");
-      })
-      .call(this.drag(this.simulation));
-
-    this.g.append("text")
-    .style("fill", GRAPH_TEXT_COLOR)
-    .text((d: GenericNode) => {
-        if(d?.program) {
-          return d.program.name;
-        } 
-        else if ((d as IPNode)?.name !== "no hostname") {
-          return (d as IPNode)?.name;
-        }  
-        else {
-          return (d as IPNode)?.ip;
-        }
-    })
-    .attr("dominant-baseline", "middle")
-    .attr("text-anchor", "middle")
-    .style("font-size", (d: GenericNode) => {
-      return Math.max(8, Math.min(12, d.tot_packets));
-    });
-  }
-
-  private makeGraph(data: GraphJSON): void {
-    console.log(data);
-
-    this.makeLinksAndNodes(data);
-
-    this.initializeSimulation();
-
-    this.buildNodesCirclesAndText();
-
-    this.simulation.nodes(this.allNodes);
-    this.simulation.force("link").links(this.links);
-    this.simulation.alpha(1).restart();
-  }
-
-  private updateGraph(data: GraphJSON) {
-    console.log(data);
-
-    this.makeLinksAndNodes(data);
-
-    this.buildNodesCirclesAndText();
-
-    this.simulation.nodes(this.allNodes);
-    this.simulation.force("link").links(this.links);
-  }
-
-  public update() {
-    d3.json("/testJSON/test33.json")
-    .then(data => this.makeGraph(data as GraphJSON));
-  }
-
-  private drag(simulation: d3.Simulation<GenericNode, any>) {
+  private drag() {
     return d3.drag()
     .on("start", event => {
-      if(!event.active) simulation.alphaTarget(.6).restart();
+      if(!event.active) this.simulation.alphaTarget(0.1).restart();
       event.subject.fx = event.subject.x;
       event.subject.fy = event.subject.y;
     })
@@ -198,7 +253,7 @@ export class GraphComponent implements OnInit {
       event.subject.fy = event.y;
     })
     .on("end", event => {
-      if(!event.active) simulation.alphaTarget(0);
+      if(!event.active) this.simulation.alphaTarget(0);
       event.subject.fx = null;
       event.subject.fy = null;
     });
