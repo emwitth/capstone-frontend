@@ -62,14 +62,12 @@ export class GraphComponent implements OnInit {
     console.log(this.width);
     console.log(this.height);
     this.createSvg();
-    // this.initializeSimulation();
-    // d3.json("/api/graph-data")
-    d3.json("/testJSON/test32.json")
+    d3.json("/api/graph-data")
     .then(data => this.makeGraph(data as GraphJSON));
   }
  
   public update() {
-    d3.json("/testJSON/test35.json")
+    d3.json("/api/graph-data")
     .then(data => this.updateGraph(data as GraphJSON));
   }
 
@@ -93,7 +91,7 @@ export class GraphComponent implements OnInit {
 
     this.simulation.nodes(this.allNodes);
     this.simulation.force("link").links(this.links);
-    this.simulation.alpha(1).restart();
+    this.simulation.alpha(.6).restart();
   }
 
   private updateGraph(data: GraphJSON) {
@@ -101,7 +99,7 @@ export class GraphComponent implements OnInit {
 
     this.simulation.nodes(this.allNodes);
     this.simulation.force("link").links(this.links);
-    // this.simulation.alpha(.6).restart();
+    this.simulation.alpha(.01).restart();
   }
 
   private initializeSimulation() {
@@ -284,11 +282,11 @@ export class GraphComponent implements OnInit {
     
     this.g
     .attr("transform", (d: GenericNode) => {
-      return "translate(" 
-      + this.boundX(d.x, d.tot_packets) 
-      + ","
-      + this.boundY(d.y, d.tot_packets) 
-      + ")"
+      var x = this.boundX(d.x, d.tot_packets);
+      var y = this.boundY(d.y, d.tot_packets);
+      d.x = x;
+      d.y = y;
+      return "translate(" + x + "," + y + ")"
     })
   }
 
