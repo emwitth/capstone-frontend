@@ -54,6 +54,7 @@ export class GraphComponent implements OnInit {
   private height = 700;
   private maxRadius = 70;
   private minRadius = 10;
+  private isSizeChange: boolean = false;
   private graphUpdateSubscription: Subscription = new Subscription();
 
   constructor(private elem: ElementRef, 
@@ -64,7 +65,7 @@ export class GraphComponent implements OnInit {
     console.log(this,this.elem.nativeElement)
     this.width = this.elem.nativeElement.offsetWidth;
     // this.height = window.innerHeight-7;
-    this.height = window.innerHeight-52;
+    this.height = window.innerHeight-62;
     console.log(this.width);
     console.log(this.height);
     // Setup the SVG element the graph will be on.
@@ -130,7 +131,12 @@ export class GraphComponent implements OnInit {
 
     this.simulation.nodes(this.allNodes);
     this.simulation.force("link").links(this.links);
-    this.simulation.alpha(.01).restart();
+    if(this.isSizeChange){
+      this.simulation.alpha(.01).restart();
+    }
+    else {
+      this.simulation.alpha(this.simulation.alpha()).restart();
+    }
   }
 
   /**
@@ -165,13 +171,19 @@ export class GraphComponent implements OnInit {
      * Or sets the values to 0 if the node is new. This is so they do not return to the origin on every update.
      */
     var allNodesNoChords = new Array<GenericNodeNoChords>().concat(data.ip_nodes, data.prog_nodes);
+    this.isSizeChange = false;
     this.allNodes = allNodesNoChords.map(n => {
         var oldNode = this.allNodes.find(element => {
           return element.ip === n.ip &&
           element.name === n.name &&
           element.program?.name == n.program?.name &&
           element.program?.socket == n.program?.socket
-        })
+        });
+
+        if (n.tot_packets != oldNode?.tot_packets) {
+          this.isSizeChange = true;
+        }
+
         return {
           tot_packets: n.tot_packets,
           program: n?.program,
@@ -214,7 +226,7 @@ export class GraphComponent implements OnInit {
               // Darken the node color if larger than max size.
               if(d.tot_packets > this.maxRadius)
               {
-                return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/400)
+                return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker((d.tot_packets-this.maxRadius)/1000)
               }
               return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)
             }))
@@ -262,7 +274,7 @@ export class GraphComponent implements OnInit {
           (d: GenericNode) => {
             if(d.tot_packets > this.maxRadius)
             {
-              return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/400)
+              return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker((d.tot_packets-this.maxRadius)/1000)
             }
             return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)
           }));

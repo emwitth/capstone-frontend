@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Title} from "@angular/platform-browser";
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { StartGraphService } from '../services/start-graph.service';
@@ -12,7 +13,10 @@ import { StopGraphService } from '../services/stop-graph.service';
 export class ToolbarComponent implements OnInit {
 
   constructor(private http: HttpClient, private toastr: ToastrService, 
-    private startGraphService: StartGraphService, private stopGraphService: StopGraphService) { }
+    private startGraphService: StartGraphService, private stopGraphService: StopGraphService,
+    private titleService:Title) {
+      this.titleService.setTitle("Remora Fish");
+    }
 
   ngOnInit(): void {
   }
