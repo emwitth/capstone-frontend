@@ -1,7 +1,10 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { forceSimulation } from 'd3-force';
+import { interval, Subscription } from 'rxjs';
 import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR } from '../constants';
+import { StartGraphService } from '../services/start-graph.service';
+import { StopGraphService } from '../services/stop-graph.service';
 import { ProgNode, ProgInfo } from '../interfaces/prog-node';
 import { IPNode } from '../interfaces/ipnode';
 import { Link } from '../interfaces/link';
@@ -51,8 +54,10 @@ export class GraphComponent implements OnInit {
   private height = 700;
   private maxRadius = 70;
   private minRadius = 10;
+  private graphUpdateSubscription: Subscription = new Subscription();
 
-  constructor(private elem: ElementRef) { }
+  constructor(private elem: ElementRef, 
+    private startGraphService: StartGraphService, private stopGraphService: StopGraphService) { }
 
   ngOnInit(): void {
     console.log(this,this.elem.nativeElement)
@@ -62,8 +67,15 @@ export class GraphComponent implements OnInit {
     console.log(this.width);
     console.log(this.height);
     this.createSvg();
-    d3.json("/api/graph-data")
-    .then(data => this.makeGraph(data as GraphJSON));
+    const graphInterval = interval(2000);
+    this.startGraphService.graphStartEvent.subscribe(() => {
+      d3.json("/api/graph-data")
+      .then(data => this.makeGraph(data as GraphJSON));
+      this.graphUpdateSubscription = graphInterval.subscribe(() => this.update());
+    });
+    this.stopGraphService.graphStopEvent.subscribe(() => {
+      this.graphUpdateSubscription.unsubscribe();
+    })
   }
  
   public update() {
