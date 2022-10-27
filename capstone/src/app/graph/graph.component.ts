@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { forceSimulation } from 'd3-force';
 import { interval, Subscription } from 'rxjs';
-import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR } from '../constants';
+import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR, INDICATION_BORDER_COLOR } from '../constants';
 import { StartGraphService } from '../services/start-graph.service';
 import { StopGraphService } from '../services/stop-graph.service';
 import { ProgNode, ProgInfo } from '../interfaces/prog-node';
@@ -60,29 +60,40 @@ export class GraphComponent implements OnInit {
     private startGraphService: StartGraphService, private stopGraphService: StopGraphService) { }
 
   ngOnInit(): void {
+    // Set the width and height of the graph element.
     console.log(this,this.elem.nativeElement)
     this.width = this.elem.nativeElement.offsetWidth;
     // this.height = window.innerHeight-7;
     this.height = window.innerHeight-52;
     console.log(this.width);
     console.log(this.height);
+    // Setup the SVG element the graph will be on.
     this.createSvg();
+    // Set listener to make graph and start periodic update.
     const graphInterval = interval(2000);
     this.startGraphService.graphStartEvent.subscribe(() => {
       d3.json("/api/graph-data")
       .then(data => this.makeGraph(data as GraphJSON));
       this.graphUpdateSubscription = graphInterval.subscribe(() => this.update());
     });
+    // Set listender to stop periodic update.
     this.stopGraphService.graphStopEvent.subscribe(() => {
       this.graphUpdateSubscription.unsubscribe();
     })
   }
  
+  /**
+   * Gains data from the API and updates the graph.
+   */
   public update() {
     d3.json("/api/graph-data")
     .then(data => this.updateGraph(data as GraphJSON));
   }
 
+  /**
+   * Creates the SVG element that graph elements will be appended to.
+   * Creats two sections one for link and one for nodes so nodes will all appear on top of links.
+   */
   private createSvg(): void {
     this.svg = d3.select("div#graph")
     .append("svg")
@@ -92,6 +103,11 @@ export class GraphComponent implements OnInit {
     this.nodeSvg = this.svg.append("g").attr("id", "nodes");
   }
 
+  /**
+   * Create the graph initially. Initializes the simulation.
+   * 
+   * @param data the JSON data gotten via the API
+   */
   private makeGraph(data: GraphJSON): void {
     console.log("Data: ", data);
 
@@ -99,13 +115,16 @@ export class GraphComponent implements OnInit {
 
     this.initializeSimulation();
 
-    // this.buildNodesCirclesAndText();
-
     this.simulation.nodes(this.allNodes);
     this.simulation.force("link").links(this.links);
     this.simulation.alpha(.6).restart();
   }
 
+  /**
+   * Update the graph with new data.
+   * 
+   * @param data the JSON data gotten via the API
+   */
   private updateGraph(data: GraphJSON) {
     this.makeLinksAndNodes(data);
 
@@ -114,6 +133,9 @@ export class GraphComponent implements OnInit {
     this.simulation.alpha(.01).restart();
   }
 
+  /**
+   * Initializes the simulation. 
+   */
   private initializeSimulation() {
     this.simulation = forceSimulation(this.allNodes)
     .force("link", d3.forceLink()
@@ -130,9 +152,18 @@ export class GraphComponent implements OnInit {
     .on("tick", () => this.tick());
   }
 
+  /**
+   * Runs the d3 code for creating the nodes and links and binding data to them.
+   * 
+   * @param data the JSON gotten via the api
+   */
   private makeLinksAndNodes(data: GraphJSON) {
     console.log(data);
 
+    /* 
+     * This chunk of code sets the nodes X and Y values to the same coordinates as before the update.
+     * Or sets the values to 0 if the node is new. This is so they do not return to the origin on every update.
+     */
     var allNodesNoChords = new Array<GenericNodeNoChords>().concat(data.ip_nodes, data.prog_nodes);
     this.allNodes = allNodesNoChords.map(n => {
         var oldNode = this.allNodes.find(element => {
@@ -151,49 +182,58 @@ export class GraphComponent implements OnInit {
         }
     } );
 
-    console.log("ALL NODES:", this.allNodes);
+    // console.log("ALL NODES:", this.allNodes);
 
+    // Set the links data to the correct type needed for the simulation.
     this.links = data.links.map(x => ({source: x.ip, target: x.program.name + x.program.socket}));
 
-    console.log("LINKS: ", this.links);
+    // console.log("LINKS: ", this.links);
 
-    // Initialize the links
+    // Initialize or update the links.
     this.link = this.linkSvg
     .selectAll("line")
     .data(this.links, (l: any) => {return l.source + l.target;})
     .join("line")
-    .style("stroke", "black");
+    .style("stroke", INDICATION_BORDER_COLOR);
 
-    // Initialize the nodes
+    // Initialize or update the nodes.
     this.g = this.nodeSvg
     .selectAll("g")
     .data(this.allNodes, (d: any) => {
       return d.program ? d.program.name + d.program.socket : d.ip;
     })
     .join(
+      // Enter is for new nodes.
       (enter: any) => { 
         return enter.append("g").call((parent: any) => {
+          // Append a circle element to each node.
           parent.append("circle")
           .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
           .style("fill", (
             (d: GenericNode) => {
+              // Darken the node color if larger than max size.
               if(d.tot_packets > this.maxRadius)
               {
                 return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)?.darker(d.tot_packets/400)
               }
               return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)
             }))
+            .attr("class", "node-border")
+            // Show an indication when the mouse is over a circle.
             .on("mouseover", (d: { target: any; }) => {
-              d3.select(d.target).attr("class", "hover-indication");
+              d3.select(d.target).attr("class", "hover-indication node-border");
             })
             .on("mouseout", (d: { target: any; }) => {
-              d3.select(d.target).attr("class", "")
+              d3.select(d.target).attr("class", "node-border")
             })
+            // Allow user to drag. Needed because sometimes the force sim kinda sucks.
             .call(this.drag());
 
+            // Append some text to the node. Either ip, server name, or program name.
             parent.append("text")
             .style("fill", GRAPH_TEXT_COLOR)
             .text((d: GenericNode) => {
+              // Decide what should be the text in the node.
                 if(d?.program) {
                   return d.program.name;
                 } 
@@ -204,14 +244,18 @@ export class GraphComponent implements OnInit {
                   return (d as IPNode)?.ip;
                 }
             })
+            // Place the text nicely in the middle of the node.
             .attr("dominant-baseline", "middle")
             .attr("text-anchor", "middle")
+            // Vary the size of the text depending on the size of the node.
             .style("font-size", (d: GenericNode) => {
               return Math.max(8, Math.min(12, d.tot_packets));
             });
           });
       },
+      // Update is for nodes that are not new.
       (update: any) => {
+        // Update the radius and color of the circles in the nodes.
         update.select("circle").transition().duration(500)
         .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
         .style("fill", (
@@ -223,6 +267,7 @@ export class GraphComponent implements OnInit {
             return d3.color(d?.program ? PROGRAM_COLOR : IP_COLOR)
           }));
 
+          // Update the size of the the text in the node.
           update.select("text").transition().duration(500)
           .style("fill", GRAPH_TEXT_COLOR)
             .text((d: GenericNode) => {
@@ -244,13 +289,20 @@ export class GraphComponent implements OnInit {
 
           return update;
       },
+      // Exit is for nodes that are no longer with us.
       (exit: any) => {
         return exit.remove();
       }
     );
+
     console.log("Nodes Initialized");
   }
 
+  /**
+   * Called to implement dragging nodes.
+   * 
+   * @returns the d3 drag behavior.
+   */
   private drag() {
     return d3.drag()
     .on("start", event => {
@@ -269,7 +321,12 @@ export class GraphComponent implements OnInit {
     });
   }
 
+  /**
+   * Called by the simulation for behavior each tick. Updates the node and link positions.
+   * Nodes are bound to the graph area so they cannot move off the screen.
+   */
   private tick() {
+    // Update the link svg position.
     this.link
     .attr("x1", (d: { source: { x: any; }; }) => {
       var x = this.boundX(d.source.x, 0);
@@ -292,6 +349,8 @@ export class GraphComponent implements OnInit {
       return y; 
     });
     
+    // Update the node position. 
+    // Uses translate because g svg elements do not have coordinate attributes.
     this.g
     .attr("transform", (d: GenericNode) => {
       var x = this.boundX(d.x, d.tot_packets);
@@ -302,19 +361,46 @@ export class GraphComponent implements OnInit {
     })
   }
 
+  /**
+   * Calculates a radius given a node for easy calling.
+   * Radius must be calculated because a bound is used for nicer visibility.
+   * 
+   * @param node a node data
+   * @returns the radius confined to a bound
+   */
   private calculateRadius(node: GenericNode): number {
     return this.calculateRadiusNum(node.tot_packets);
   }
 
+  /**
+   * Radius must be calculated because a bound is used for nicer visibility.
+   * 
+   * @param radius the unbound radius (the total packets in a node)
+   * @returns a radius confined to a bound
+   */
   private calculateRadiusNum(radius: number): number {
     return Math.min(this.maxRadius, Math.max(radius, this.minRadius));
   }
 
+  /**
+   * Calculates the y position and adjusts if it is outside the bound of the graph area.
+   * 
+   * @param y the y position of a node
+   * @param r the radius of the node
+   * @returns the new position of y that is within the graph area (adjusted by the size of the node)
+   */
   private boundY(y:number|null|undefined, r:number): number {
     var newR: number = this.calculateRadiusNum(r);
     return Math.max(newR, Math.min(this.height-newR, y ? y : 0));
   }
 
+  /**
+   * Calculates the x position and adjusts if it is outside the bound of the graph area.
+   * 
+   * @param x the x position of a node
+   * @param r the radius of the node
+   * @returns the new position of x that is within the graph area (adjusted by the size of the node)
+   */
   private boundX(x:number|null|undefined, r:number): number {
     var newR: number = this.calculateRadiusNum(r);
     return Math.max(newR, Math.min(this.width-newR, x ? x : 0));
