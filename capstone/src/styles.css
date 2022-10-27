@@ -4,6 +4,7 @@
     --COMPLEMENTARY_COLOR: #945b5c;
     --BACKGROUND_COLOR: #757575;
     --GRAPH_TEXT_COLOR: #c2c2c2;
+    --INDICATION_BORDER_COLOR: #262626;
 }
 
 body {
@@ -15,6 +16,29 @@ h2 {
 }
 
 .hover-indication{
-    stroke: black;
+    stroke: var(--INDICATION_BORDER_COLOR);
     stroke-width: 3;
+}
+
+/* Overridden ngx-toast Styles */
+.toast-container .ngx-toastr {
+  box-shadow: 0 0 1px var(--INDICATION_BORDER_COLOR) !important;
+}
+
+.toast-container .toast-success {
+  background-color: var(--MAIN_COLOR) !important;
+}
+
+.toast-container .toast-error {
+  background-color: var(--COMPLEMENTARY_COLOR) !important;
+}
+
+/* Overridden Bootstrap Colors */
+.btn-primary {
+  background-color: var(--background-color) !important;
+  border-color: var(--MAIN_COLOR) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--MAIN_COLOR) !important;
 }

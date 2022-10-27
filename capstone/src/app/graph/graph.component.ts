@@ -58,7 +58,7 @@ export class GraphComponent implements OnInit {
     console.log(this,this.elem.nativeElement)
     this.width = this.elem.nativeElement.offsetWidth;
     // this.height = window.innerHeight-7;
-    this.height = window.innerHeight-40;
+    this.height = window.innerHeight-52;
     console.log(this.width);
     console.log(this.height);
     this.createSvg();
