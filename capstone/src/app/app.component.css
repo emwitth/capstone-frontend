@@ -1,4 +1,12 @@
-.module{
+.module {
     background-color: var(--BACKGROUND_COLOR);
     border-color: var(--COMPLEMENTARY_COLOR) !important;
+}
+
+.toolbar {
+  height: var(--TOOLBAR_HEIGHT);
+}
+
+.main-window {
+  height: calc(100vh - var(--TOOLBAR_HEIGHT));
 }

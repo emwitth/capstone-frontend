@@ -1,3 +1,7 @@
+.main-toolbar {
+  height: calc(var(--TOOLBAR_HEIGHT) - 3px);
+}
+
 .toolbar-btn {
   color: var(--MAIN_COLOR);
 }

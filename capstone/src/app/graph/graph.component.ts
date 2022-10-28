@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, AfterViewInit } from '@angular/core';
 import * as d3 from 'd3';
 import { forceSimulation } from 'd3-force';
 import { interval, Subscription } from 'rxjs';
@@ -41,7 +41,7 @@ export interface ForceLink {
   templateUrl: './graph.component.html',
   styleUrls: ['./graph.component.css']
 })
-export class GraphComponent implements OnInit {
+export class GraphComponent implements OnInit, AfterViewInit {
   private svg: any;
   private linkSvg: any;
   private nodeSvg: any;
@@ -60,12 +60,12 @@ export class GraphComponent implements OnInit {
   constructor(private elem: ElementRef, 
     private startGraphService: StartGraphService, private stopGraphService: StopGraphService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
     // Set the width and height of the graph element.
-    console.log(this,this.elem.nativeElement)
     this.width = this.elem.nativeElement.offsetWidth;
-    // this.height = window.innerHeight-7;
-    this.height = window.innerHeight-62;
+    this.height = this.elem.nativeElement.offsetHeight;
     console.log(this.width);
     console.log(this.height);
     // Setup the SVG element the graph will be on.
@@ -80,7 +80,8 @@ export class GraphComponent implements OnInit {
     // Set listender to stop periodic update.
     this.stopGraphService.graphStopEvent.subscribe(() => {
       this.graphUpdateSubscription.unsubscribe();
-    })
+    });
+
   }
  
   /**
