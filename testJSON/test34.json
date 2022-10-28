@@ -39,6 +39,11 @@
       "ip": "fe80::215:5dff:fe93:2b5",
       "name": "no hostname",
       "tot_packets": 1
+    },
+    {
+      "ip": "390:323:32:43",
+      "name": "test!",
+      "tot_packets": 13
     }
   ],
   "links": [
@@ -140,6 +145,17 @@
         "socket": 60418,
         "timestamp": "Thu, 13 Oct 2022 14:15:33 GMT"
       }
+    },
+    {
+      "in_packets": 13,
+      "ip": "390:323:32:43",
+      "out_packets": 0,
+      "program": {
+        "fd": 444,
+        "name": "testprog",
+        "socket": 123456,
+        "timestamp": "Thu, 13 Oct 2022 14:15:33 GMT"
+      }
     }
   ],
   "prog_nodes": [
@@ -178,6 +194,15 @@
         "timestamp": "Thu, 13 Oct 2022 14:15:33 GMT"
       },
       "tot_packets": 6
+    },
+    {
+      "program": {
+        "fd": 444,
+        "name": "testprog",
+        "socket": 123456,
+        "timestamp": "Thu, 13 Oct 2022 14:15:33 GMT"
+      },
+      "tot_packets": 13
     }
   ]
 }

@@ -33,7 +33,7 @@
     {
       "ip": "138.49.185.40",
       "name": "no hostname",
-      "tot_packets": 20
+      "tot_packets": 40
     },
     {
       "ip": "fe80::215:5dff:fe93:2b5",
@@ -168,7 +168,7 @@
         "socket": 40510,
         "timestamp": "Thu, 13 Oct 2022 14:13:56 GMT"
       },
-      "tot_packets": 20
+      "tot_packets": 40
     },
     {
       "program": {

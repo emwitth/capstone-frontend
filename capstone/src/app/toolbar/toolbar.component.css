@@ -1,0 +1,15 @@
+.toolbar-btn {
+  color: var(--MAIN_COLOR);
+}
+
+.toolbar-btn:hover {
+  color: var(--BACKGROUND_COLOR);
+}
+
+.toolbar-name {
+  color: var(--MAIN_COLOR);
+}
+
+.toolbar-logo {
+  height: 25px;
+}
