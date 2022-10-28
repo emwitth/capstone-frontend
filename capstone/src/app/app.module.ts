@@ -8,7 +8,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GraphComponent } from './graph/graph.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ControlPannelComponent } from './control-pannel/control-pannel.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -16,7 +15,6 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [
     AppComponent,
     GraphComponent,
-    ControlPannelComponent,
     ToolbarComponent
   ],
   imports: [
