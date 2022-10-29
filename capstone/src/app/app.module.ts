@@ -10,12 +10,14 @@ import { GraphComponent } from './graph/graph.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { HttpClientModule } from '@angular/common/http';
+import { InfoPanelComponent } from './info-panel/info-panel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GraphComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    InfoPanelComponent
   ],
   imports: [
     BrowserModule,

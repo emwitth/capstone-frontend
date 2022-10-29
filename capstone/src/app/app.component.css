@@ -10,3 +10,8 @@
 .main-window {
   height: calc(100vh - var(--TOOLBAR_HEIGHT));
 }
+
+.info-panel {
+  resize:horizontal;
+  overflow: auto;
+}
