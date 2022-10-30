@@ -21,6 +21,7 @@
     "@angular/router": "~12.2.0",
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
     "@types/d3": "^7.4.0",
+    "angular-resizable-element": "^6.0.0",
     "bootstrap": "^5.2.1",
     "bootstrap-icons": "^1.9.1",
     "d3": "^7.6.1",
