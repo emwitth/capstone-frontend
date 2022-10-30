@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { ResizableModule } from 'angular-resizable-element';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,7 +25,6 @@ import { InfoPanelComponent } from './info-panel/info-panel.component';
     NgbModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ResizableModule,
     ToastrModule.forRoot({
       positionClass:'toast-top-right'
     })
