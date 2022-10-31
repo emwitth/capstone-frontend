@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InfoPanelService } from '../services/info-panel.service';
 
 @Component({
   selector: 'app-info-panel',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./info-panel.component.css']
 })
 export class InfoPanelComponent implements OnInit {
+  isPanelOpen: boolean = true;
 
-  constructor() { }
+  constructor(private infoPanelService:InfoPanelService) { }
 
   ngOnInit(): void {
+    this.infoPanelService.toggleInfoPanelEvent.subscribe(() => {
+      this.isPanelOpen = !this.isPanelOpen;
+    });
   }
 
 }

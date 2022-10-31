@@ -1,5 +1,5 @@
-<div class="btn-toolbar main-toolbar" role="toolbar">
-  <div class="ms-2 me-2 mt-3 toolbar-name">
+<div class="d-flex" role="toolbar">
+  <div class="ms-2 mt-1 me-2 toolbar-name">
     <img class="toolbar-logo" src="../../assets/RemoraFishLogo_adobe_express.svg">
     REMORA FISH
   </div>
@@ -9,6 +9,12 @@
     </button>
     <button class="btn btn-primary toolbar-btn" (click)="stopSniff()">
       <i class="bi bi-stop-fill"></i>
+    </button>
+  </div>
+  <div class="flex-fill"></div>
+  <div class="btn-group float-right" role="group">
+    <button class="btn btn-primary toolbar-btn" (click)="toggleInfoPanel()">
+      <i class="bi bi-list"></i>
     </button>
   </div>
 </div>
