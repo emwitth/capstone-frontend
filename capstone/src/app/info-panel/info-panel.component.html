@@ -1,4 +1,6 @@
 <div *ngIf="isPanelOpen" class="info-panel">
+  <h5 *ngIf="!isNodeSelected">Info Panel</h5>
+  <p *ngIf="!isNodeSelected">Click a node or link to see it's info and associated packets.</p>
   <h5 *ngIf="isNodeSelected">{{heading}}</h5>
   <p *ngIf="isNodeSelected">{{subHeading}}</p>
   <p *ngIf="isNodeSelected">tot. packets: {{totalPackets}}</p>
