@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NO_PROCESS_INFO } from '../constants';
 import { InfoPanelService } from '../services/info-panel.service';
 import { GenericNode } from '../interfaces/d3-graph-interfaces';
 
@@ -9,18 +10,12 @@ import { GenericNode } from '../interfaces/d3-graph-interfaces';
 })
 export class InfoPanelComponent implements OnInit {
   isPanelOpen: boolean = true;
-  selectedNode: GenericNode = {
-    tot_packets: -1,
-    program: {
-      name: "",
-      socket: "",
-      timestamp: ""
-    },
-    name: "",
-    ip: "",
-    x: 0,
-    y: 0
-  }
+  isNodeSelected: boolean = false;
+  isIPNode: boolean = false;
+  heading = "";
+  subHeading = "";
+  timestamp = "";
+  totalPackets = -1;
 
   constructor(private infoPanelService:InfoPanelService) { }
 
@@ -31,17 +26,23 @@ export class InfoPanelComponent implements OnInit {
 
     this.infoPanelService.updatePanelInfoEvent.subscribe((nodeData: GenericNode) => {
       console.log(nodeData);
+      if (nodeData?.program) {
+        this.heading = nodeData.program.name;
+        this.subHeading = "socket number: " + nodeData.program.socket;
+        this.timestamp = nodeData.program.timestamp;
+        this.isIPNode = false;
+        if (nodeData.program.name === "no process") {
+          this.subHeading = NO_PROCESS_INFO;
+        }
+      }
+      if (nodeData?.ip && nodeData?.name) {
+        this.heading = nodeData.name !== "no hostname" ? nodeData.name : nodeData.ip;
+        this.subHeading = nodeData.name !== "no hostname" ? "ip: " + nodeData.ip : "";
+        this.isIPNode = true;
+      }
+      this.totalPackets = nodeData.tot_packets;
       this.isPanelOpen = true;
-      this.selectedNode = nodeData;
+      this.isNodeSelected = true;
     });
   }
-
-  isProgramThere() {
-    this.selectedNode?.program && this.selectedNode?.program.name != '';
-  }
-
-  getProgName() {
-    return this.selectedNode.program ? this.selectedNode.program.name : "";
-  }
-
 }

@@ -69,6 +69,7 @@ export class GraphComponent implements OnInit, AfterViewInit {
       if(!this.isInfoPanelOpen) {
         this.width -= INFO_PANEL_WIDTH;
       }
+      this.isInfoPanelOpen = true;
       this.svg.attr("width", this.width);
     });
   }

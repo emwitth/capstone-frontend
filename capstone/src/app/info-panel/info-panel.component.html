@@ -1,4 +1,5 @@
 <div *ngIf="isPanelOpen" class="info-panel">
-  <p *ngIf="selectedNode.tot_packets != -1">{{selectedNode.tot_packets}} packets</p>
-  <p *ngIf="selectedNode.program && selectedNode.program.name != ''">{{selectedNode.program.name}}</p>
+  <h5 *ngIf="isNodeSelected">{{heading}}</h5>
+  <p *ngIf="isNodeSelected">{{subHeading}}</p>
+  <p *ngIf="isNodeSelected">tot. packets: {{totalPackets}}</p>
 </div>
