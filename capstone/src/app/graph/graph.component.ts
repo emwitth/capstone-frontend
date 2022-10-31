@@ -218,7 +218,10 @@ export class GraphComponent implements OnInit, AfterViewInit {
     .join(
       // Enter is for new nodes.
       (enter: any) => { 
-        return enter.append("g").call((parent: any) => {
+        return enter.append("g")
+        // Allow user to drag. Needed because sometimes the force sim kinda sucks.
+        .call(this.drag())
+        .call((parent: any) => {
           // Append a circle element to each node.
           parent.append("circle")
           .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
@@ -233,14 +236,12 @@ export class GraphComponent implements OnInit, AfterViewInit {
             }))
             .attr("class", "node-border")
             // Show an indication when the mouse is over a circle.
-            .on("mouseover", (d: { target: any; }) => {
+            .on("mouseover", (d:any) => {
               d3.select(d.target).attr("class", "hover-indication node-border");
             })
-            .on("mouseout", (d: { target: any; }) => {
+            .on("mouseout", (d:any) => {
               d3.select(d.target).attr("class", "node-border")
-            })
-            // Allow user to drag. Needed because sometimes the force sim kinda sucks.
-            .call(this.drag());
+            });
 
             // Append some text to the node. Either ip, server name, or program name.
             parent.append("text")
@@ -256,6 +257,14 @@ export class GraphComponent implements OnInit, AfterViewInit {
                 else {
                   return (d as IPNode)?.ip;
                 }
+            })
+            // Show an indication when the mouse is over a circle.
+            .on("mouseover", (d:any) => {
+              console.log(d);
+              d3.select(d.target.parentNode.firstChild).attr("class", "hover-indication node-border");
+            })
+            .on("mouseout", (d:any) => {
+              d3.select(d.target.parentNode.firstChild).attr("class", "node-border")
             })
             // Place the text nicely in the middle of the node.
             .attr("dominant-baseline", "middle")
