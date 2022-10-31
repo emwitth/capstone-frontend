@@ -2,39 +2,12 @@ import { Component, ElementRef, OnInit, AfterViewInit } from '@angular/core';
 import * as d3 from 'd3';
 import { forceSimulation } from 'd3-force';
 import { interval, Subscription } from 'rxjs';
-import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR, INDICATION_BORDER_COLOR } from '../constants';
+import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR, INDICATION_BORDER_COLOR, INFO_PANEL_WIDTH } from '../constants';
 import { StartGraphService } from '../services/start-graph.service';
 import { StopGraphService } from '../services/stop-graph.service';
-import { ProgNode, ProgInfo } from '../interfaces/prog-node';
+import { InfoPanelService } from '../services/info-panel.service';
 import { IPNode } from '../interfaces/ipnode';
-import { Link } from '../interfaces/link';
-
-export interface GraphJSON {
-  prog_nodes: Array<ProgNode>,
-  ip_nodes: Array<IPNode>,
-  links: Array<Link>
-}
-
-export interface GenericNodeNoChords {
-  tot_packets: number,
-  program?: ProgInfo,
-  name?: string,
-  ip?: string
-}
-
-export interface GenericNode {
-  tot_packets: number,
-  program?: ProgInfo,
-  name?: string,
-  ip?: string,
-  x: number,
-  y: number
-}
-
-export interface ForceLink {
-  source: string,
-  target: string
-}
+import { GraphJSON, GenericNodeNoChords, GenericNode, ForceLink } from '../interfaces/d3-graph-interfaces';
 
 @Component({
   selector: 'app-graph',
@@ -56,8 +29,9 @@ export class GraphComponent implements OnInit, AfterViewInit {
   private minRadius = 10;
   private isSizeChange: boolean = false;
   private graphUpdateSubscription: Subscription = new Subscription();
+  private isInfoPanelOpen: Boolean = true;
 
-  constructor(private elem: ElementRef, 
+  constructor(private elem: ElementRef, private infoPanelService: InfoPanelService,
     private startGraphService: StartGraphService, private stopGraphService: StopGraphService) { }
 
   ngOnInit(): void {}
@@ -77,11 +51,26 @@ export class GraphComponent implements OnInit, AfterViewInit {
       .then(data => this.makeGraph(data as GraphJSON));
       this.graphUpdateSubscription = graphInterval.subscribe(() => this.update());
     });
-    // Set listender to stop periodic update.
+    // Set listener to stop periodic update.
     this.stopGraphService.graphStopEvent.subscribe(() => {
       this.graphUpdateSubscription.unsubscribe();
     });
-
+    // Set subscriptions to update graph width on info panel change
+    this.infoPanelService.toggleInfoPanelEvent.subscribe((isInfoPanelOpen: boolean) => {
+      if(this.isInfoPanelOpen) {
+        this.width += INFO_PANEL_WIDTH;
+      } else {
+        this.width -= INFO_PANEL_WIDTH;
+      }
+      this.isInfoPanelOpen = isInfoPanelOpen;
+      this.svg.attr("width", this.width);
+    });
+    this.infoPanelService.updatePanelInfoEvent.subscribe(() => {
+      if(!this.isInfoPanelOpen) {
+        this.width -= INFO_PANEL_WIDTH;
+      }
+      this.svg.attr("width", this.width);
+    });
   }
  
   /**
@@ -219,6 +208,9 @@ export class GraphComponent implements OnInit, AfterViewInit {
       // Enter is for new nodes.
       (enter: any) => { 
         return enter.append("g")
+        .on("click", (d:any) => {
+          this.nodeClick(d.target.__data__ as GenericNode);
+        })
         // Allow user to drag. Needed because sometimes the force sim kinda sucks.
         .call(this.drag())
         .call((parent: any) => {
@@ -260,7 +252,6 @@ export class GraphComponent implements OnInit, AfterViewInit {
             })
             // Show an indication when the mouse is over a circle.
             .on("mouseover", (d:any) => {
-              console.log(d);
               d3.select(d.target.parentNode.firstChild).attr("class", "hover-indication node-border");
             })
             .on("mouseout", (d:any) => {
@@ -317,7 +308,7 @@ export class GraphComponent implements OnInit, AfterViewInit {
       }
     );
 
-    console.log("Nodes Initialized");
+    // console.log("Nodes Initialized");
   }
 
   /**
@@ -381,6 +372,15 @@ export class GraphComponent implements OnInit, AfterViewInit {
       d.y = y;
       return "translate(" + x + "," + y + ")"
     })
+  }
+
+  /**
+   * Sends node data to info panel.
+   * 
+   * @param data the data from the node
+   */
+  private nodeClick(data: GenericNode) {
+    this.infoPanelService.updatePanelInfo(data);
   }
 
   /**

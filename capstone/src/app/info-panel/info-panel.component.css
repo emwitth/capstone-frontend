@@ -1,0 +1,4 @@
+.info-panel {
+  color: var(--GRAPH_TEXT_COLOR);
+  width: var(--INFO_PANEL_WIDTH);
+}

@@ -1,4 +1,4 @@
-<div></div>
-<div *ngIf="isPanelOpen">
-  <p>info-panel works!</p>
+<div *ngIf="isPanelOpen" class="info-panel">
+  <p *ngIf="selectedNode.tot_packets != -1">{{selectedNode.tot_packets}} packets</p>
+  <p *ngIf="selectedNode.program && selectedNode.program.name != ''">{{selectedNode.program.name}}</p>
 </div>

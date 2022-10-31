@@ -10,3 +10,11 @@
 .main-window {
   height: calc(100vh - var(--TOOLBAR_HEIGHT));
 }
+
+.graph-component-width-info-open {
+  width: calc(100vw - var(--INFO_PANEL_WIDTH) - 5px);
+}
+
+.graph-component-width-info-closed {
+  width: calc(100vw  - 5px);
+}

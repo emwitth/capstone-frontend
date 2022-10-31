@@ -6,3 +6,5 @@ export const INDICATION_BORDER_COLOR: string = "#f6c457";
 
 export const PROGRAM_COLOR = "#72aaaa";
 export const IP_COLOR = "#db4142";
+
+export const INFO_PANEL_WIDTH = 200;
