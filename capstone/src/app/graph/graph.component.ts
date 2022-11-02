@@ -7,7 +7,7 @@ import { StartGraphService } from '../services/start-graph.service';
 import { StopGraphService } from '../services/stop-graph.service';
 import { InfoPanelService } from '../services/info-panel.service';
 import { IPNode } from '../interfaces/ipnode';
-import { GraphJSON, GenericNodeNoChords, GenericNode, ForceLink } from '../interfaces/d3-graph-interfaces';
+import { GraphJSON, GenericNodeNoChords, GenericNode, ForceLink, LinkData } from '../interfaces/d3-graph-interfaces';
 
 @Component({
   selector: 'app-graph',
@@ -65,12 +65,20 @@ export class GraphComponent implements OnInit, AfterViewInit {
       this.isInfoPanelOpen = isInfoPanelOpen;
       this.svg.attr("width", this.width);
     });
-    this.infoPanelService.updatePanelInfoEvent.subscribe(() => {
+    this.infoPanelService.updatePanelNodeInfoEvent.subscribe(() => {
       if(!this.isInfoPanelOpen) {
         this.width -= INFO_PANEL_WIDTH;
       }
       this.isInfoPanelOpen = true;
       this.svg.attr("width", this.width);
+    });
+    this.infoPanelService.updatePanelLinkInfoEvent.subscribe(() => {
+      if(!this.isInfoPanelOpen) {
+        this.width -= INFO_PANEL_WIDTH;
+      }
+      this.isInfoPanelOpen = true;
+      this.svg.attr("width", this.width);
+      this.simulation.alpha(.1).restart();
     });
   }
  
@@ -197,7 +205,18 @@ export class GraphComponent implements OnInit, AfterViewInit {
     .selectAll("line")
     .data(this.links, (l: any) => {return l.source + l.target;})
     .join("line")
-    .style("stroke", INDICATION_BORDER_COLOR);
+    .style("stroke", INDICATION_BORDER_COLOR)
+    .style("stroke-width", "3px")
+    // Show an indication when the mouse is over a line.
+    .on("mouseover", (d:any) => {
+      d3.select(d.target).attr("class", "hover-indication");
+    })
+    .on("mouseout", (d:any) => {
+      d3.select(d.target).attr("class", "")
+    })
+    .on("click", (d:any) => {
+      this.linkClick(d.target.__data__);
+    });
 
     // Initialize or update the nodes.
     this.g = this.nodeSvg
@@ -381,7 +400,16 @@ export class GraphComponent implements OnInit, AfterViewInit {
    * @param data the data from the node
    */
   private nodeClick(data: GenericNode) {
-    this.infoPanelService.updatePanelInfo(data);
+    this.infoPanelService.updatePanelNodeInfo(data);
+  }
+
+  /**
+   * Sends link data to info panel.
+   * 
+   * @param data the data from the node
+   */
+   private linkClick(data: LinkData) {
+    this.infoPanelService.updatePanelLinkInfo(data);
   }
 
   /**

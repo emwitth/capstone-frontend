@@ -21,7 +21,11 @@ export class AppComponent implements OnInit {
       this.isInfoPanelOpen = isPanelOpen;
     });
 
-    this.infoPanelService.updatePanelInfoEvent.subscribe(() => {
+    this.infoPanelService.updatePanelNodeInfoEvent.subscribe(() => {
+      this.isInfoPanelOpen = true;
+    });
+
+    this.infoPanelService.updatePanelLinkInfoEvent.subscribe(() => {
       this.isInfoPanelOpen = true;
     });
   }

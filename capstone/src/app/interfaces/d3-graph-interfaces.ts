@@ -25,6 +25,11 @@ export interface GenericNode {
   y: number
 }
 
+export interface LinkData {
+  source: GenericNode,
+  target: GenericNode
+}
+
 export interface ForceLink {
   source: string,
   target: string

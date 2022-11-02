@@ -1,12 +1,13 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { GenericNode } from '../interfaces/d3-graph-interfaces';
+import { GenericNode, LinkData } from '../interfaces/d3-graph-interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InfoPanelService {
   @Output() toggleInfoPanelEvent = new EventEmitter<boolean>();
-  @Output() updatePanelInfoEvent = new EventEmitter<GenericNode>();
+  @Output() updatePanelNodeInfoEvent = new EventEmitter<GenericNode>();
+  @Output() updatePanelLinkInfoEvent = new EventEmitter<LinkData>();
 
   isPanelOpen: boolean = true;
 
@@ -17,8 +18,13 @@ export class InfoPanelService {
     this.toggleInfoPanelEvent.emit(this.isPanelOpen);
   }
 
-  public updatePanelInfo(nodeData: GenericNode) {
+  public updatePanelNodeInfo(nodeData: GenericNode) {
     this.isPanelOpen = true;
-    this.updatePanelInfoEvent.emit(nodeData);
+    this.updatePanelNodeInfoEvent.emit(nodeData);
+  }
+
+  public updatePanelLinkInfo(linkData: LinkData) {
+    this.isPanelOpen = true;
+    this.updatePanelLinkInfoEvent.emit(linkData);
   }
 }

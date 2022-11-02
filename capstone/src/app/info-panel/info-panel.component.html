@@ -1,7 +1,14 @@
 <div *ngIf="isPanelOpen" class="info-panel">
-  <h5 *ngIf="!isNodeSelected">Info Panel</h5>
-  <p *ngIf="!isNodeSelected">Click a node or link to see it's info and associated packets.</p>
-  <h5 *ngIf="isNodeSelected">{{heading}}</h5>
-  <p *ngIf="isNodeSelected">{{subHeading}}</p>
+  <h5 *ngIf="!isNodeSelected && !isLinkSelected">Info Panel</h5>
+  <p *ngIf="!isNodeSelected && !isLinkSelected">Click a node or link to see its info and associated packets.</p>
+  <h4 *ngIf="isNodeSelected && isIPNode" class="headers">IP Node</h4>
+  <h4 *ngIf="isNodeSelected && !isIPNode" class="headers">Program Node</h4>
+  <h4 *ngIf="isLinkSelected" class="headers">Link from</h4>
+  <h5 *ngIf="isNodeSelected || isLinkSelected">{{heading0}}</h5>
+  <p *ngIf="isNodeSelected || isLinkSelected">{{subheading0}}</p>
   <p *ngIf="isNodeSelected">tot. packets: {{totalPackets}}</p>
+  <h4 *ngIf="isLinkSelected" class="headers">to</h4>
+  <h5 *ngIf="isLinkSelected">{{heading1}}</h5>
+  <p *ngIf="isLinkSelected">{{subheading1}}</p>
+
 </div>
