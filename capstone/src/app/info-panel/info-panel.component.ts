@@ -18,6 +18,8 @@ export class InfoPanelComponent implements OnInit {
   isNodeSelected: boolean = false;
   isLinkSelected: boolean = false;
   isIPNode: boolean = false;
+  isNoProcess: boolean = false;
+  noProcessInfo = NO_PROCESS_INFO;
   heading0 = "";
   subheading0 = "";
   heading1 = "";
@@ -37,6 +39,7 @@ export class InfoPanelComponent implements OnInit {
     this.infoPanelService.updatePanelNodeInfoEvent.subscribe((nodeData: GenericNode) => {
       console.log(nodeData);
       this.isLinkSelected = false;
+      this.isNoProcess = false;
       var headings = this.determineHeadingsFromNode(nodeData, true);
       this.heading0 = headings.heading;
       this.subheading0 = headings.subheading;
@@ -48,6 +51,7 @@ export class InfoPanelComponent implements OnInit {
     this.infoPanelService.updatePanelLinkInfoEvent.subscribe((linkData: LinkData) => {
       console.log(linkData);
       this.isNodeSelected = false;
+      this.isNoProcess = false;
       var headings = this.determineHeadingsFromNode(linkData.source, false);
       this.heading0 = headings.heading;
       this.subheading0 = headings.subheading;
@@ -69,7 +73,8 @@ export class InfoPanelComponent implements OnInit {
       subheading = "socket number: " + node.program.socket;
       this.timestamp = node.program.timestamp;
       if (node.program.name === "no process") {
-        subheading = NO_PROCESS_INFO;
+        subheading = "no associated process";
+        this.isNoProcess = true;
       }
       if(isNodeSelected) {
         this.isIPNode = false;

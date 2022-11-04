@@ -9,4 +9,7 @@ export const IP_COLOR = "#db4142";
 
 export const INFO_PANEL_WIDTH = 400;
 
-export const NO_PROCESS_INFO = "Packets here are ones without a socket. This could be due to them being part of a handshake or other reasons."
+export const NO_PROCESS_INFO = `Packets here are ones without a socket. 
+                                This could be due to them being part of a handshake or other reasons.
+                                Look to see if this server is connected with other programs on your computer
+                                to get a bigger picture story. The packet details might also help.`

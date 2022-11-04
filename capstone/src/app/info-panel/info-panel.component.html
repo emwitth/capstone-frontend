@@ -1,16 +1,25 @@
-<div *ngIf="isPanelOpen" class="info-panel">
-  <h5 *ngIf="!isNodeSelected && !isLinkSelected">Info Panel</h5>
+<div *ngIf="isPanelOpen" class="info-panel container">
+  <!-- Info Before Selection -->
+  <h6 *ngIf="!isNodeSelected && !isLinkSelected">Info Panel</h6>
   <p *ngIf="!isNodeSelected && !isLinkSelected">Click a node or link to see its info and associated packets.</p>
-  <h4 *ngIf="isNodeSelected && isIPNode" class="headers">IP Node</h4>
-  <h4 *ngIf="isNodeSelected && !isIPNode" class="headers">Program Node</h4>
-  <h4 *ngIf="isLinkSelected" class="headers">Link from</h4>
-  <h5 *ngIf="isNodeSelected || isLinkSelected">{{heading0}}</h5>
-  <p *ngIf="isNodeSelected || isLinkSelected">{{subheading0}}</p>
-  <p *ngIf="isLinkSelected">packets: {{totalPackets1}}</p>
-  <p *ngIf="isNodeSelected">tot. packets: {{totalPackets}}</p>
-  <h4 *ngIf="isLinkSelected" class="headers">to</h4>
-  <h5 *ngIf="isLinkSelected">{{heading1}}</h5>
-  <p *ngIf="isLinkSelected">{{subheading1}}</p>
-  <p *ngIf="isLinkSelected">packets: {{totalPackets2}}</p>
+  <!-- First Node (either, or IP when link) -->
+  <h5 *ngIf="isLinkSelected" class="headers">Link from</h5>
+  <h5 *ngIf="isNodeSelected && isIPNode" class="headers">IP Node</h5>
+  <h5 *ngIf="isNodeSelected && !isIPNode" class="headers">Program Node</h5>
+  <h6 *ngIf="isNodeSelected || isLinkSelected">{{heading0}}</h6>
+  <div class="d-flex">
+    <p *ngIf="isNodeSelected || isLinkSelected" class="flex-fill">{{subheading0}}</p>
+    <p *ngIf="isLinkSelected" class="flex-fill">packets: {{totalPackets1}}</p>
+    <p *ngIf="isNodeSelected" class="flex-fill">tot. packets: {{totalPackets}}</p>
+  </div>
+  <p *ngIf="isNoProcess && !isLinkSelected">{{noProcessInfo}}</p>
+  <!-- Second Node (either, or nonexistant when link) -->
+  <h5 *ngIf="isLinkSelected" class="headers">to</h5>
+  <h6 *ngIf="isLinkSelected">{{heading1}}</h6>
+  <div class="d-flex">
+    <p *ngIf="isLinkSelected" class="flex-fill">{{subheading1}}</p>
+    <p *ngIf="isLinkSelected" class="flex-fill">packets: {{totalPackets2}}</p>
+  </div>
+  <p *ngIf="isNoProcess && isLinkSelected">{{noProcessInfo}}</p>
 
 </div>
