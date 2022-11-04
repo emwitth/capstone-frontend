@@ -8,7 +8,7 @@
   <h5 *ngIf="isNodeSelected && !isIPNode" class="headers">Program Node</h5>
   <h6 *ngIf="isNodeSelected || isLinkSelected">{{heading0}}</h6>
   <div class="d-flex">
-    <p *ngIf="isNodeSelected || isLinkSelected" class="flex-fill">{{subheading0}}</p>
+    <p *ngIf="(isNodeSelected || isLinkSelected) && subheading0 !== ''" class="flex-fill">{{subheading0}}</p>
     <p *ngIf="isLinkSelected" class="flex-fill">packets: {{totalPackets1}}</p>
     <p *ngIf="isNodeSelected" class="flex-fill">tot. packets: {{totalPackets}}</p>
   </div>
@@ -17,7 +17,7 @@
   <h5 *ngIf="isLinkSelected" class="headers">to</h5>
   <h6 *ngIf="isLinkSelected">{{heading1}}</h6>
   <div class="d-flex">
-    <p *ngIf="isLinkSelected" class="flex-fill">{{subheading1}}</p>
+    <p *ngIf="isLinkSelected&& subheading1 !== ''" class="flex-fill">{{subheading1}}</p>
     <p *ngIf="isLinkSelected" class="flex-fill">packets: {{totalPackets2}}</p>
   </div>
   <p *ngIf="isNoProcess && isLinkSelected">{{noProcessInfo}}</p>
