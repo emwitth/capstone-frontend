@@ -1,0 +1,12 @@
+.info-panel {
+  color: var(--GRAPH_TEXT_COLOR);
+  width: var(--INFO_PANEL_WIDTH);
+}
+
+.headers {
+  color: var(--INDICATION_BORDER_COLOR);
+}
+
+p {
+  font-size: 12px
+}

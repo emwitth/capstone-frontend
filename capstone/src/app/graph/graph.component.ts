@@ -1,47 +1,20 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, AfterViewInit } from '@angular/core';
 import * as d3 from 'd3';
 import { forceSimulation } from 'd3-force';
 import { interval, Subscription } from 'rxjs';
-import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR, INDICATION_BORDER_COLOR } from '../constants';
+import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR, INDICATION_BORDER_COLOR, INFO_PANEL_WIDTH } from '../constants';
 import { StartGraphService } from '../services/start-graph.service';
 import { StopGraphService } from '../services/stop-graph.service';
-import { ProgNode, ProgInfo } from '../interfaces/prog-node';
+import { InfoPanelService } from '../services/info-panel.service';
 import { IPNode } from '../interfaces/ipnode';
-import { Link } from '../interfaces/link';
-
-export interface GraphJSON {
-  prog_nodes: Array<ProgNode>,
-  ip_nodes: Array<IPNode>,
-  links: Array<Link>
-}
-
-export interface GenericNodeNoChords {
-  tot_packets: number,
-  program?: ProgInfo,
-  name?: string,
-  ip?: string
-}
-
-export interface GenericNode {
-  tot_packets: number,
-  program?: ProgInfo,
-  name?: string,
-  ip?: string,
-  x: number,
-  y: number
-}
-
-export interface ForceLink {
-  source: string,
-  target: string
-}
+import { GraphJSON, GenericNodeNoChords, GenericNode, ForceLink, LinkData } from '../interfaces/d3-graph-interfaces';
 
 @Component({
   selector: 'app-graph',
   templateUrl: './graph.component.html',
   styleUrls: ['./graph.component.css']
 })
-export class GraphComponent implements OnInit {
+export class GraphComponent implements OnInit, AfterViewInit {
   private svg: any;
   private linkSvg: any;
   private nodeSvg: any;
@@ -56,16 +29,17 @@ export class GraphComponent implements OnInit {
   private minRadius = 10;
   private isSizeChange: boolean = false;
   private graphUpdateSubscription: Subscription = new Subscription();
+  private isInfoPanelOpen: Boolean = true;
 
-  constructor(private elem: ElementRef, 
+  constructor(private elem: ElementRef, private infoPanelService: InfoPanelService,
     private startGraphService: StartGraphService, private stopGraphService: StopGraphService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
     // Set the width and height of the graph element.
-    console.log(this,this.elem.nativeElement)
     this.width = this.elem.nativeElement.offsetWidth;
-    // this.height = window.innerHeight-7;
-    this.height = window.innerHeight-62;
+    this.height = this.elem.nativeElement.offsetHeight;
     console.log(this.width);
     console.log(this.height);
     // Setup the SVG element the graph will be on.
@@ -77,10 +51,35 @@ export class GraphComponent implements OnInit {
       .then(data => this.makeGraph(data as GraphJSON));
       this.graphUpdateSubscription = graphInterval.subscribe(() => this.update());
     });
-    // Set listender to stop periodic update.
+    // Set listener to stop periodic update.
     this.stopGraphService.graphStopEvent.subscribe(() => {
       this.graphUpdateSubscription.unsubscribe();
-    })
+    });
+    // Set subscriptions to update graph width on info panel change
+    this.infoPanelService.toggleInfoPanelEvent.subscribe((isInfoPanelOpen: boolean) => {
+      if(this.isInfoPanelOpen) {
+        this.width += INFO_PANEL_WIDTH;
+      } else {
+        this.width -= INFO_PANEL_WIDTH;
+      }
+      this.isInfoPanelOpen = isInfoPanelOpen;
+      this.svg.attr("width", this.width);
+    });
+    this.infoPanelService.updatePanelNodeInfoEvent.subscribe(() => {
+      if(!this.isInfoPanelOpen) {
+        this.width -= INFO_PANEL_WIDTH;
+      }
+      this.isInfoPanelOpen = true;
+      this.svg.attr("width", this.width);
+    });
+    this.infoPanelService.updatePanelLinkInfoEvent.subscribe(() => {
+      if(!this.isInfoPanelOpen) {
+        this.width -= INFO_PANEL_WIDTH;
+      }
+      this.isInfoPanelOpen = true;
+      this.svg.attr("width", this.width);
+      this.simulation.alpha(.1).restart();
+    });
   }
  
   /**
@@ -197,7 +196,7 @@ export class GraphComponent implements OnInit {
     // console.log("ALL NODES:", this.allNodes);
 
     // Set the links data to the correct type needed for the simulation.
-    this.links = data.links.map(x => ({source: x.ip, target: x.program.name + x.program.socket}));
+    this.links = data.links.map(x => ({source: x.ip, target: x.program.name + x.program.socket, in_packets: x.in_packets, out_packets: x.out_packets}));
 
     // console.log("LINKS: ", this.links);
 
@@ -206,7 +205,18 @@ export class GraphComponent implements OnInit {
     .selectAll("line")
     .data(this.links, (l: any) => {return l.source + l.target;})
     .join("line")
-    .style("stroke", INDICATION_BORDER_COLOR);
+    .style("stroke", INDICATION_BORDER_COLOR)
+    .style("stroke-width", "3px")
+    // Show an indication when the mouse is over a line.
+    .on("mouseover", (d:any) => {
+      d3.select(d.target).attr("class", "hover-indication");
+    })
+    .on("mouseout", (d:any) => {
+      d3.select(d.target).attr("class", "")
+    })
+    .on("click", (d:any) => {
+      this.linkClick(d.target.__data__);
+    });
 
     // Initialize or update the nodes.
     this.g = this.nodeSvg
@@ -217,7 +227,13 @@ export class GraphComponent implements OnInit {
     .join(
       // Enter is for new nodes.
       (enter: any) => { 
-        return enter.append("g").call((parent: any) => {
+        return enter.append("g")
+        .on("click", (d:any) => {
+          this.nodeClick(d.target.__data__ as GenericNode);
+        })
+        // Allow user to drag. Needed because sometimes the force sim kinda sucks.
+        .call(this.drag())
+        .call((parent: any) => {
           // Append a circle element to each node.
           parent.append("circle")
           .attr("r", ((d: GenericNode) => this.calculateRadius(d)))
@@ -232,14 +248,12 @@ export class GraphComponent implements OnInit {
             }))
             .attr("class", "node-border")
             // Show an indication when the mouse is over a circle.
-            .on("mouseover", (d: { target: any; }) => {
+            .on("mouseover", (d:any) => {
               d3.select(d.target).attr("class", "hover-indication node-border");
             })
-            .on("mouseout", (d: { target: any; }) => {
+            .on("mouseout", (d:any) => {
               d3.select(d.target).attr("class", "node-border")
-            })
-            // Allow user to drag. Needed because sometimes the force sim kinda sucks.
-            .call(this.drag());
+            });
 
             // Append some text to the node. Either ip, server name, or program name.
             parent.append("text")
@@ -255,6 +269,13 @@ export class GraphComponent implements OnInit {
                 else {
                   return (d as IPNode)?.ip;
                 }
+            })
+            // Show an indication when the mouse is over a circle.
+            .on("mouseover", (d:any) => {
+              d3.select(d.target.parentNode.firstChild).attr("class", "hover-indication node-border");
+            })
+            .on("mouseout", (d:any) => {
+              d3.select(d.target.parentNode.firstChild).attr("class", "node-border")
             })
             // Place the text nicely in the middle of the node.
             .attr("dominant-baseline", "middle")
@@ -307,7 +328,7 @@ export class GraphComponent implements OnInit {
       }
     );
 
-    console.log("Nodes Initialized");
+    // console.log("Nodes Initialized");
   }
 
   /**
@@ -371,6 +392,24 @@ export class GraphComponent implements OnInit {
       d.y = y;
       return "translate(" + x + "," + y + ")"
     })
+  }
+
+  /**
+   * Sends node data to info panel.
+   * 
+   * @param data the data from the node
+   */
+  private nodeClick(data: GenericNode) {
+    this.infoPanelService.updatePanelNodeInfo(data);
+  }
+
+  /**
+   * Sends link data to info panel.
+   * 
+   * @param data the data from the node
+   */
+   private linkClick(data: LinkData) {
+    this.infoPanelService.updatePanelLinkInfo(data);
   }
 
   /**
