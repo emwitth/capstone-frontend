@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 import { NO_PROCESS_INFO } from '../constants';
 import { InfoPanelService } from '../services/info-panel.service';
 import { GenericNode, LinkData } from '../interfaces/d3-graph-interfaces';
@@ -29,7 +31,8 @@ export class InfoPanelComponent implements OnInit {
   totalPackets1 = "";
   totalPackets2 = "";
 
-  constructor(private infoPanelService:InfoPanelService) { }
+  constructor(private infoPanelService:InfoPanelService, private http: HttpClient,
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.infoPanelService.toggleInfoPanelEvent.subscribe((isPanelOpen: boolean) => {
@@ -46,6 +49,7 @@ export class InfoPanelComponent implements OnInit {
       this.totalPackets = nodeData.tot_packets;
       this.isPanelOpen = true;
       this.isNodeSelected = true;
+      this.getNodePacketInfo(nodeData);
     });
 
     this.infoPanelService.updatePanelLinkInfoEvent.subscribe((linkData: LinkData) => {
@@ -91,6 +95,30 @@ export class InfoPanelComponent implements OnInit {
       heading: heading,
       subheading: subheading
     }
+  }
+
+  private getNodePacketInfo(node: GenericNode) {
+    var body = {};
+    if(this.isIPNode) {
+      body = {
+        isIP: true,
+        ip: node.ip
+      }
+    } else {
+      body = {
+        isIP: false,
+        fd: node.program?.socket,
+        name: node.program?.name,
+        socket: node.program?.socket
+      }
+    }
+    this.http.post<any>("api/node_packets" , body, { observe: "response" }).subscribe(result => {
+      console.log(result.body);
+      
+      }, err => {
+        this.toastr.error(err.status + " " + err.statusText, 'Error');
+        console.log(err);
+      });
   }
   
 }
