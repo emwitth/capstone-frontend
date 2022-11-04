@@ -196,7 +196,7 @@ export class GraphComponent implements OnInit, AfterViewInit {
     // console.log("ALL NODES:", this.allNodes);
 
     // Set the links data to the correct type needed for the simulation.
-    this.links = data.links.map(x => ({source: x.ip, target: x.program.name + x.program.socket}));
+    this.links = data.links.map(x => ({source: x.ip, target: x.program.name + x.program.socket, in_packets: x.in_packets, out_packets: x.out_packets}));
 
     // console.log("LINKS: ", this.links);
 

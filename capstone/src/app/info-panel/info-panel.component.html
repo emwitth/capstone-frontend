@@ -6,9 +6,11 @@
   <h4 *ngIf="isLinkSelected" class="headers">Link from</h4>
   <h5 *ngIf="isNodeSelected || isLinkSelected">{{heading0}}</h5>
   <p *ngIf="isNodeSelected || isLinkSelected">{{subheading0}}</p>
+  <p *ngIf="isLinkSelected">packets: {{totalPackets1}}</p>
   <p *ngIf="isNodeSelected">tot. packets: {{totalPackets}}</p>
   <h4 *ngIf="isLinkSelected" class="headers">to</h4>
   <h5 *ngIf="isLinkSelected">{{heading1}}</h5>
   <p *ngIf="isLinkSelected">{{subheading1}}</p>
+  <p *ngIf="isLinkSelected">packets: {{totalPackets2}}</p>
 
 </div>

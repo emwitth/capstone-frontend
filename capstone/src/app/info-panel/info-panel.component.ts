@@ -24,6 +24,8 @@ export class InfoPanelComponent implements OnInit {
   subheading1 = "";
   timestamp = "";
   totalPackets = -1;
+  totalPackets1 = "";
+  totalPackets2 = "";
 
   constructor(private infoPanelService:InfoPanelService) { }
 
@@ -49,9 +51,11 @@ export class InfoPanelComponent implements OnInit {
       var headings = this.determineHeadingsFromNode(linkData.source, false);
       this.heading0 = headings.heading;
       this.subheading0 = headings.subheading;
+      this.totalPackets1 = linkData.out_packets + "";
       headings = this.determineHeadingsFromNode(linkData.target, false);
       this.heading1 = headings.heading;
       this.subheading1 = headings.subheading;
+      this.totalPackets2 = linkData.in_packets + "";
       this.isLinkSelected = true;
       this.isPanelOpen = true;
     });

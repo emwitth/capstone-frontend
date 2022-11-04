@@ -27,10 +27,14 @@ export interface GenericNode {
 
 export interface LinkData {
   source: GenericNode,
-  target: GenericNode
+  target: GenericNode,
+  in_packets: number,
+  out_packets: number
 }
 
 export interface ForceLink {
   source: string,
-  target: string
+  target: string,
+  in_packets: number,
+  out_packets: number
 }
