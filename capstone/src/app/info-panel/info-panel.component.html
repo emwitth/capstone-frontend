@@ -6,13 +6,15 @@
   <h5 *ngIf="isLinkSelected" class="headers">Link from</h5>
   <h5 *ngIf="isNodeSelected && isIPNode" class="headers">IP Node</h5>
   <h5 *ngIf="isNodeSelected && !isIPNode" class="headers">Program Node</h5>
-  <h6 *ngIf="isNodeSelected || isLinkSelected">{{heading0}}</h6>
+  <div class="d-flex">
+    <h6 *ngIf="isNodeSelected || isLinkSelected">{{heading0}}</h6>
+    <i *ngIf="isNoProcess && !isLinkSelected" class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" title="{{noProcessInfo}}"></i>
+  </div>
   <div class="d-flex">
     <p *ngIf="(isNodeSelected || isLinkSelected) && subheading0 !== ''" class="flex-fill">{{subheading0}}</p>
     <p *ngIf="isLinkSelected" class="flex-fill">packets: {{totalPackets1}}</p>
     <p *ngIf="isNodeSelected" class="flex-fill">tot. packets: {{totalPackets}}</p>
   </div>
-  <p *ngIf="isNoProcess && !isLinkSelected">{{noProcessInfo}}</p>
   <!-- Second Node (either, or nonexistant when link) -->
   <h5 *ngIf="isLinkSelected" class="headers">to</h5>
   <h6 *ngIf="isLinkSelected">{{heading1}}</h6>
@@ -22,4 +24,8 @@
   </div>
   <p *ngIf="isNoProcess && isLinkSelected">{{noProcessInfo}}</p>
 
+  <!-- List of Packets -->
+  <div class="packet-container">
+    <app-packet-info-display class="packet-info" *ngFor="let packet of packets" [packetInfo]="packet"></app-packet-info-display>
+  </div>
 </div>

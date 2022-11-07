@@ -11,13 +11,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
+import { PacketInfoDisplayComponent } from './packet-info-display/packet-info-display.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GraphComponent,
     ToolbarComponent,
-    InfoPanelComponent
+    InfoPanelComponent,
+    PacketInfoDisplayComponent
   ],
   imports: [
     BrowserModule,

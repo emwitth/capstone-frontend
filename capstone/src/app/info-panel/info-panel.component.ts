@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NO_PROCESS_INFO } from '../constants';
 import { InfoPanelService } from '../services/info-panel.service';
 import { GenericNode, LinkData } from '../interfaces/d3-graph-interfaces';
+import { PacketInfo } from '../interfaces/packet-info';
 
 export interface info {
   heading: string,
@@ -30,6 +31,8 @@ export class InfoPanelComponent implements OnInit {
   totalPackets = -1;
   totalPackets1 = "";
   totalPackets2 = "";
+
+  packets: Array<PacketInfo> = new Array<PacketInfo>();
 
   constructor(private infoPanelService:InfoPanelService, private http: HttpClient,
     private toastr: ToastrService) { }
@@ -72,6 +75,7 @@ export class InfoPanelComponent implements OnInit {
   private determineHeadingsFromNode(node: GenericNode, isNodeSelected: boolean) {
     var heading = "";
     var subheading = "";
+    this.packets = [];
     if (node?.program) {
       heading = node.program.name;
       subheading = "socket number: " + node.program.socket;
@@ -112,9 +116,9 @@ export class InfoPanelComponent implements OnInit {
         socket: node.program?.socket
       }
     }
-    this.http.post<any>("api/node_packets" , body, { observe: "response" }).subscribe(result => {
+    this.http.post<Array<PacketInfo>>("api/node_packets" , body, { observe: "response" }).subscribe(result => {
       console.log(result.body);
-      
+      this.packets = result.body ? result.body : [];
       }, err => {
         this.toastr.error(err.status + " " + err.statusText, 'Error');
         console.log(err);

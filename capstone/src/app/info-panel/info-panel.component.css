@@ -1,6 +1,7 @@
 .info-panel {
   color: var(--GRAPH_TEXT_COLOR);
   width: var(--INFO_PANEL_WIDTH);
+  height: calc(100vh - var(--TOOLBAR_HEIGHT) - 10px);
 }
 
 .headers {
@@ -9,4 +10,14 @@
 
 p {
   font-size: 12px
+}
+
+.packet-container {
+  height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.packet-info {
+  width: 70px;
 }

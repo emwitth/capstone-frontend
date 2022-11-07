@@ -1,0 +1,8 @@
+.info-panel {
+  font-size: 12px;
+  color: var(--GRAPH_TEXT_COLOR);
+}
+
+.info-panel-header {
+  background-color: var(--COMPLEMENTARY_COLOR);
+}
