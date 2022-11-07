@@ -107,7 +107,7 @@ export class InfoPanelComponent implements OnInit {
     } else {
       body = {
         isIP: false,
-        fd: node.program?.socket,
+        fd: node.program?.fd,
         name: node.program?.name,
         socket: node.program?.socket
       }

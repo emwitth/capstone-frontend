@@ -6,5 +6,6 @@ export interface ProgNode {
 export interface ProgInfo {
     name: string,
     socket: string,
+    fd: string,
     timestamp: string
 }
