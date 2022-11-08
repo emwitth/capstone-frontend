@@ -14,30 +14,56 @@ export class PacketInfoDisplayComponent implements OnInit {
     src_name: "string",
     dest_name: "string"
   };
-  isSummaryLong: boolean = false;
-  truncatedSummary: string = "";
   isExpanded: boolean = false;
-  packetInfoHeaderClasses = [
-    "info-top-closed",
-    "info-top-open"
-  ];
+  isSrcLocalhost: boolean = false;
+  isDestLocalhost: boolean = false;
 
   constructor() { }
 
   ngOnInit(): void {
-    if(this.packetInfo.summary.length > 55) {
-      this.truncatedSummary = this.packetInfo.summary.substring(0,55) + "...";
-      this.isSummaryLong = true;
+    if(this.packetInfo.dest_name === "localhost") {
+      this.isSrcLocalhost = true;
+    }
+    else if(this.packetInfo.src_name === "localhost") {
+      this.isDestLocalhost = true;
     }
   }
 
   setOpenClass() {
     if(this.isExpanded) {
-      return this.packetInfoHeaderClasses[1];
+      if(this.isSrcLocalhost) {
+        return "info-top-open-src-localhost";
+      }
+      else if(this.isDestLocalhost) {
+        return "info-top-open-dest-localhost";
+      }
+      else {
+        return "info-top-open";
+      }
     }
     else {
-      return this.packetInfoHeaderClasses[0];
+      if(this.isSrcLocalhost) {
+        return "info-top-closed-src-localhost";
+      }
+      else if(this.isDestLocalhost) {
+        return "info-top-closed-dest-localhost";
+      }
+      else {
+        return "info-top-closed";
+      }
     }
+  }
+
+    setBorderClass() {
+      if(this.isSrcLocalhost) {
+        return "info-panel-border-src-localhost";
+      }
+      else if(this.isDestLocalhost) {
+        return "info-panel-border-dest-localhost";
+      }
+      else {
+        return "info-panel-border";
+      }
   }
 
 }
