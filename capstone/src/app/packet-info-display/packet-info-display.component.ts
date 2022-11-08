@@ -14,10 +14,30 @@ export class PacketInfoDisplayComponent implements OnInit {
     src_name: "string",
     dest_name: "string"
   };
+  isSummaryLong: boolean = false;
+  truncatedSummary: string = "";
+  isExpanded: boolean = false;
+  packetInfoHeaderClasses = [
+    "info-top-closed",
+    "info-top-open"
+  ];
 
   constructor() { }
 
   ngOnInit(): void {
+    if(this.packetInfo.summary.length > 55) {
+      this.truncatedSummary = this.packetInfo.summary.substring(0,55) + "...";
+      this.isSummaryLong = true;
+    }
+  }
+
+  setOpenClass() {
+    if(this.isExpanded) {
+      return this.packetInfoHeaderClasses[1];
+    }
+    else {
+      return this.packetInfoHeaderClasses[0];
+    }
   }
 
 }

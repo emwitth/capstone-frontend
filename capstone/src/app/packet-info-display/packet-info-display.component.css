@@ -1,8 +1,19 @@
 .info-panel {
-  font-size: 12px;
-  color: var(--GRAPH_TEXT_COLOR);
+  font-size: 15px;
+  color: var(--GRAPH_TEXT_COLOR)!important;
+  border-color: var(--INDICATION_BORDER_COLOR)!important;
 }
 
-.info-panel-header {
-  background-color: var(--COMPLEMENTARY_COLOR);
+.info-top-closed {
+  background-color: var(--BACKGROUND_COLOR);
+  color: var(--INDICATION_BORDER_COLOR);
+}
+
+.info-top-open{
+  background-color: var(--INDICATION_BORDER_COLOR);
+  color: var(--BACKGROUND_COLOR);
+}
+
+.small-summary{
+  font-size: 11px;
 }

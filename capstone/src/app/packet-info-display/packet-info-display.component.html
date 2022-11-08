@@ -1,3 +1,11 @@
-<div class="info-panel mw-75">
-  <div>{{packetInfo.summary}}</div>
+<div class="info-panel border border-1 mb-2">
+  <div (click)="isExpanded = !isExpanded" [ngClass]="setOpenClass()">
+    {{isSummaryLong ? truncatedSummary : packetInfo.summary}}
+  </div>
+  <div *ngIf="isExpanded">
+    <div *ngIf="isExpanded && isSummaryLong" class="small-summary">Full Summary:</div>
+    <div *ngIf="isExpanded && isSummaryLong" class="small-summary mb-1">{{packetInfo.summary}}</div>
+    <div *ngIf="isExpanded">Src: {{packetInfo.src}} ({{packetInfo.src_name}})</div>
+    <div *ngIf="isExpanded">Dest: {{packetInfo.dest}} ({{packetInfo.dest_name}})</div>
+  </div>
 </div>
