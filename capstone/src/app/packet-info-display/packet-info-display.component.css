@@ -1,0 +1,59 @@
+.info-panel {
+  font-size: 15px;
+  color: var(--GRAPH_TEXT_COLOR);
+}
+
+.info-panel-border-src-localhost {
+  border-color: var(--MAIN_COLOR)!important;
+}
+
+.info-panel-border-dest-localhost {
+  border-color: var(--COMPLEMENTARY_COLOR)!important;
+}
+
+.info-panel-border {
+  border-color: var(--INDICATION_BORDER_COLOR)!important;
+}
+
+.info-top-closed {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: var(--BACKGROUND_COLOR);
+  color: var(--INDICATION_BORDER_COLOR);
+}
+
+.info-top-open {
+  background-color: var(--INDICATION_BORDER_COLOR);
+  color: var(--BACKGROUND_COLOR);
+}
+
+.info-top-closed-dest-localhost {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: var(--BACKGROUND_COLOR);
+  color: var(--COMPLEMENTARY_COLOR);
+}
+
+.info-top-open-dest-localhost {
+  background-color: var(--COMPLEMENTARY_COLOR);
+  color: var(--BACKGROUND_COLOR);
+}
+
+.info-top-closed-src-localhost {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: var(--BACKGROUND_COLOR);
+  color: var(--MAIN_COLOR);
+}
+
+.info-top-open-src-localhost {
+  background-color: var(--MAIN_COLOR);
+  color: var(--BACKGROUND_COLOR);
+}
+
+.small-summary{
+  font-size: 11px;
+}

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import * as d3 from 'd3';
 import { forceSimulation } from 'd3-force';
 import { interval, Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import { GraphJSON, GenericNodeNoChords, GenericNode, ForceLink, LinkData } from
   templateUrl: './graph.component.html',
   styleUrls: ['./graph.component.css']
 })
-export class GraphComponent implements OnInit, AfterViewInit {
+export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
   private svg: any;
   private linkSvg: any;
   private nodeSvg: any;
@@ -80,6 +80,11 @@ export class GraphComponent implements OnInit, AfterViewInit {
       this.svg.attr("width", this.width);
       this.simulation.alpha(.1).restart();
     });
+  }
+
+  ngOnDestroy() {
+    // unsubscribe from calling graph update on reload, etc
+    this.graphUpdateSubscription.unsubscribe();
   }
  
   /**

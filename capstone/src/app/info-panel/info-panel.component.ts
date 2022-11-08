@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 import { NO_PROCESS_INFO } from '../constants';
 import { InfoPanelService } from '../services/info-panel.service';
 import { GenericNode, LinkData } from '../interfaces/d3-graph-interfaces';
+import { PacketInfo } from '../interfaces/packet-info';
+import { Link } from '../interfaces/link';
 
-export interface info {
-  heading: string,
-  subheading: string
+export interface PacketsAndLinks {
+  packets: Array<PacketInfo>,
+  links: Array<Link>
 }
 
 @Component({
@@ -29,7 +33,13 @@ export class InfoPanelComponent implements OnInit {
   totalPackets1 = "";
   totalPackets2 = "";
 
-  constructor(private infoPanelService:InfoPanelService) { }
+  packets: Array<PacketInfo> = new Array<PacketInfo>();
+  links: Array<Link> = new Array<Link>();
+
+  selectedLink?: Link;
+
+  constructor(private infoPanelService:InfoPanelService, private http: HttpClient,
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.infoPanelService.toggleInfoPanelEvent.subscribe((isPanelOpen: boolean) => {
@@ -46,6 +56,7 @@ export class InfoPanelComponent implements OnInit {
       this.totalPackets = nodeData.tot_packets;
       this.isPanelOpen = true;
       this.isNodeSelected = true;
+      this.getNodePacketInfo(nodeData);
     });
 
     this.infoPanelService.updatePanelLinkInfoEvent.subscribe((linkData: LinkData) => {
@@ -68,6 +79,7 @@ export class InfoPanelComponent implements OnInit {
   private determineHeadingsFromNode(node: GenericNode, isNodeSelected: boolean) {
     var heading = "";
     var subheading = "";
+    this.packets = [];
     if (node?.program) {
       heading = node.program.name;
       subheading = "socket number: " + node.program.socket;
@@ -91,6 +103,41 @@ export class InfoPanelComponent implements OnInit {
       heading: heading,
       subheading: subheading
     }
+  }
+
+  private getNodePacketInfo(node: GenericNode) {
+    var body = {};
+    if(this.isIPNode) {
+      body = {
+        isIP: true,
+        ip: node.ip
+      }
+    } else {
+      body = {
+        isIP: false,
+        fd: node.program?.fd,
+        name: node.program?.name,
+        socket: node.program?.socket
+      }
+    }
+    this.http.post<PacketsAndLinks>("api/node_packets" , body, { observe: "response" }).subscribe(result => {
+      console.log(result.body);
+      this.packets = result.body ? result.body.packets : [];
+      this.links = result.body ? result.body.links : [];
+      }, err => {
+        this.toastr.error(err.status + " " + err.statusText, 'Error');
+        console.log(err);
+      });
+  }
+
+  setLink(link: Link) {
+    this.selectedLink = link;
+    this.infoPanelService.selectLink(link);
+  }
+
+  deselectLink() {
+    this.selectedLink = undefined;
+    this.infoPanelService.showAllPackets();
   }
   
 }

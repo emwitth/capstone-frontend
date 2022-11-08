@@ -1,0 +1,7 @@
+<div *ngIf="isNotHidden" class="info-panel border border-1 mb-2" [ngClass]="setBorderClass()">
+  <div (click)="isExpanded = !isExpanded" [ngClass]="setOpenClass()">{{packetInfo.summary}}</div>
+  <div *ngIf="isExpanded">
+    <div *ngIf="isExpanded">Src: {{packetInfo.src}} ({{packetInfo.src_name}})</div>
+    <div *ngIf="isExpanded">Dest: {{packetInfo.dest}} ({{packetInfo.dest_name}})</div>
+  </div>
+</div>

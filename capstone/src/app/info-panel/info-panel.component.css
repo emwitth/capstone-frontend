@@ -1,6 +1,7 @@
 .info-panel {
   color: var(--GRAPH_TEXT_COLOR);
   width: var(--INFO_PANEL_WIDTH);
+  height: calc(100vh - var(--TOOLBAR_HEIGHT) - 10px);
 }
 
 .headers {
@@ -9,4 +10,32 @@
 
 p {
   font-size: 12px
+}
+
+.btn-dropdown {
+  color: var(--INDICATION_BORDER_COLOR);
+  background-color: var(--BACKGROUND_COLOR);
+  border-color: var(--INDICATION_BORDER_COLOR);
+}
+
+.btn-dropdown:hover {
+  color: var(--BACKGROUND_COLOR);
+  background-color: var(--INDICATION_BORDER_COLOR);
+  border-color: var(--INDICATION_BORDER_COLOR);
+}
+
+.dropdown {
+  color: var(--BACKGROUND_COLOR);
+  background-color: var(--BACKGROUND_COLOR);
+  border-color: var(--INDICATION_BORDER_COLOR);
+}
+
+.packet-container {
+  height: calc(100vh - var(--TOOLBAR_HEIGHT) - 155px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.packet-info {
+  width: 70px;
 }
