@@ -13,7 +13,7 @@ p {
 }
 
 .packet-container {
-  height: 600px;
+  height: calc(100vh - var(--TOOLBAR_HEIGHT) - 105px);
   overflow-y: auto;
   overflow-x: hidden;
 }
