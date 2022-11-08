@@ -48,10 +48,6 @@ export class PacketInfoDisplayComponent implements OnInit {
     }
   }
 
-  // private progEquals(program: prog) {
-
-  // }
-
   setOpenClass() {
     if(this.isExpanded) {
       if(this.isSrcLocalhost) {
