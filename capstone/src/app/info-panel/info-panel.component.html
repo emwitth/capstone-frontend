@@ -24,6 +24,20 @@
   </div>
   <p *ngIf="isNoProcess && isLinkSelected">{{noProcessInfo}}</p>
 
+  <!-- Dropdown of Connections -->
+
+  <div *ngIf="isNodeSelected" class="mb-2" ngbDropdown>
+    <button class="btn btn-dropdown" id="con-dropdown" ngbDropdownToggle>
+      {{selectedLink ? (!isIPNode ? selectedLink.ip : (selectedLink.program.name + "(" + selectedLink.program.socket + ")")) : "All Packets Shown"}}
+    </button>
+    <div ngbDropdownMenu="con-dropdown" class="dropdown border border-1">
+      <button ngbDropdownItem class="btn-dropdown" (click)="deselectLink()">Show All Packets</button>
+      <button ngbDropdownItem class="btn-dropdown" *ngFor="let link of links" (click)="setLink(link)">
+        {{!isIPNode ? link.ip : (link.program.name + "(" + link.program.socket + ")")}}
+      </button>
+    </div>
+  </div>
+
   <!-- List of Packets -->
   <div class="packet-container">
     <app-packet-info-display class="packet-info" *ngFor="let packet of packets" [packetInfo]="packet"></app-packet-info-display>

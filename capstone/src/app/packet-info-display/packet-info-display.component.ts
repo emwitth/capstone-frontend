@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PacketInfo } from '../interfaces/packet-info';
+import { InfoPanelService } from '../services/info-panel.service';
+import { Link } from '../interfaces/link';
 
 @Component({
   selector: 'app-packet-info-display',
@@ -12,13 +14,15 @@ export class PacketInfoDisplayComponent implements OnInit {
     src: "string",
     dest: "string",
     src_name: "string",
-    dest_name: "string"
+    dest_name: "string",
+    port: "string"
   };
   isExpanded: boolean = false;
   isSrcLocalhost: boolean = false;
   isDestLocalhost: boolean = false;
+  isNotHidden: boolean = true;
 
-  constructor() { }
+  constructor(private infoPanelService: InfoPanelService) { }
 
   ngOnInit(): void {
     if(this.packetInfo.dest_name === "localhost") {
@@ -27,7 +31,26 @@ export class PacketInfoDisplayComponent implements OnInit {
     else if(this.packetInfo.src_name === "localhost") {
       this.isDestLocalhost = true;
     }
+    {
+      this.infoPanelService.showAllPacketsEvent.subscribe(() => {
+        this.isNotHidden = true;
+      });
+      this.infoPanelService.linkSelectedEvent.subscribe((link: Link) => {
+        if(
+        (link.ip === this.packetInfo.src || link.ip === this.packetInfo.dest) &&
+        (link.program.socket === this.packetInfo.port)) {
+          this.isNotHidden = true;
+        }
+        else {
+          this.isNotHidden = false;
+        }
+      });
+    }
   }
+
+  // private progEquals(program: prog) {
+
+  // }
 
   setOpenClass() {
     if(this.isExpanded) {

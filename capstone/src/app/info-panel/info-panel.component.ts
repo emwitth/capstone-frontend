@@ -5,10 +5,11 @@ import { NO_PROCESS_INFO } from '../constants';
 import { InfoPanelService } from '../services/info-panel.service';
 import { GenericNode, LinkData } from '../interfaces/d3-graph-interfaces';
 import { PacketInfo } from '../interfaces/packet-info';
+import { Link } from '../interfaces/link';
 
-export interface info {
-  heading: string,
-  subheading: string
+export interface PacketsAndLinks {
+  packets: Array<PacketInfo>,
+  links: Array<Link>
 }
 
 @Component({
@@ -33,6 +34,9 @@ export class InfoPanelComponent implements OnInit {
   totalPackets2 = "";
 
   packets: Array<PacketInfo> = new Array<PacketInfo>();
+  links: Array<Link> = new Array<Link>();
+
+  selectedLink?: Link;
 
   constructor(private infoPanelService:InfoPanelService, private http: HttpClient,
     private toastr: ToastrService) { }
@@ -116,13 +120,24 @@ export class InfoPanelComponent implements OnInit {
         socket: node.program?.socket
       }
     }
-    this.http.post<Array<PacketInfo>>("api/node_packets" , body, { observe: "response" }).subscribe(result => {
+    this.http.post<PacketsAndLinks>("api/node_packets" , body, { observe: "response" }).subscribe(result => {
       console.log(result.body);
-      this.packets = result.body ? result.body : [];
+      this.packets = result.body ? result.body.packets : [];
+      this.links = result.body ? result.body.links : [];
       }, err => {
         this.toastr.error(err.status + " " + err.statusText, 'Error');
         console.log(err);
       });
+  }
+
+  setLink(link: Link) {
+    this.selectedLink = link;
+    this.infoPanelService.selectLink(link);
+  }
+
+  deselectLink() {
+    this.selectedLink = undefined;
+    this.infoPanelService.showAllPackets();
   }
   
 }

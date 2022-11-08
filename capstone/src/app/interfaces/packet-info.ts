@@ -3,5 +3,6 @@ export interface PacketInfo {
   src: string,
   dest: string,
   src_name: string,
-  dest_name: string
+  dest_name: string,
+  port: string
 }
