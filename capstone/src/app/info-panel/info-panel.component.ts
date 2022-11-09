@@ -56,6 +56,7 @@ export class InfoPanelComponent implements OnInit {
       this.totalPackets = nodeData.tot_packets;
       this.isPanelOpen = true;
       this.isNodeSelected = true;
+      this.deselectLink();
       this.getNodePacketInfo(nodeData);
     });
 
