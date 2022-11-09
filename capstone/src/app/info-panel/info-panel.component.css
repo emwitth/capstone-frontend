@@ -31,9 +31,16 @@ p {
 }
 
 .packet-container {
-  height: calc(100vh - var(--TOOLBAR_HEIGHT) - 155px);
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.packet-container-node-height {
+  height: calc(100vh - var(--TOOLBAR_HEIGHT) - 155px);
+}
+
+.packet-container-link-height {
+  height: calc(100vh - var(--TOOLBAR_HEIGHT) - 205px);
 }
 
 .packet-info {

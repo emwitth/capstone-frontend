@@ -17,12 +17,14 @@
   </div>
   <!-- Second Node (either, or nonexistant when link) -->
   <h5 *ngIf="isLinkSelected" class="headers">to</h5>
-  <h6 *ngIf="isLinkSelected">{{heading1}}</h6>
   <div class="d-flex">
-    <p *ngIf="isLinkSelected&& subheading1 !== ''" class="flex-fill">{{subheading1}}</p>
+    <h6 *ngIf="isLinkSelected">{{heading1}}</h6>
+    <i *ngIf="isNoProcess && isLinkSelected" class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" title="{{noProcessInfo}}"></i>
+  </div>
+  <div class="d-flex">
+    <p *ngIf="isLinkSelected && subheading1 !== ''" class="flex-fill">{{subheading1}}</p>
     <p *ngIf="isLinkSelected" class="flex-fill">packets: {{totalPackets2}}</p>
   </div>
-  <p *ngIf="isNoProcess && isLinkSelected">{{noProcessInfo}}</p>
 
   <!-- Dropdown of Connections -->
 
@@ -38,8 +40,14 @@
     </div>
   </div>
 
+  <!-- Spinner for loading packets -->
+  <div *ngIf="isPacketInfoLoading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
   <!-- List of Packets -->
-  <div class="packet-container">
+  <div class="packet-container" [ngClass]="isNodeSelected ? 'packet-container-node-height' : 'packet-container-link-height'">
     <app-packet-info-display class="packet-info" *ngFor="let packet of packets" [packetInfo]="packet"></app-packet-info-display>
   </div>
 </div>
