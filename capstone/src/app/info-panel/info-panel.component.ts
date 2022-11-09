@@ -73,6 +73,7 @@ export class InfoPanelComponent implements OnInit {
       this.totalPackets2 = linkData.in_packets + "";
       this.isLinkSelected = true;
       this.isPanelOpen = true;
+      this.getLinkPacketInfo(linkData);
     });
   }
 
@@ -124,6 +125,23 @@ export class InfoPanelComponent implements OnInit {
       console.log(result.body);
       this.packets = result.body ? result.body.packets : [];
       this.links = result.body ? result.body.links : [];
+      }, err => {
+        this.toastr.error(err.status + " " + err.statusText, 'Error');
+        console.log(err);
+      });
+  }
+
+  private getLinkPacketInfo(link: LinkData) {
+    var body = {
+      ip: link.source.ip ? link.source.ip : link.target.ip,
+      fd: link.source.program ? link.source.program.fd : link.target.program?.fd,
+      name: link.source.program ? link.source.program.name : link.target.program?.name,
+      socket: link.source.program ? link.source.program.socket : link.target.program?.socket
+    };
+    
+    this.http.post<Array<PacketInfo>>("api/link_packets" , body, { observe: "response" }).subscribe(result => {
+      console.log(result.body);
+      this.packets = result.body ? result.body : [];
       }, err => {
         this.toastr.error(err.status + " " + err.statusText, 'Error');
         console.log(err);
