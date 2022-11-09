@@ -23,6 +23,7 @@ export class InfoPanelComponent implements OnInit {
   isLinkSelected: boolean = false;
   isIPNode: boolean = false;
   isNoProcess: boolean = false;
+  isPacketInfoLoading: boolean = false;
   noProcessInfo = NO_PROCESS_INFO;
   heading0 = "";
   subheading0 = "";
@@ -122,11 +123,14 @@ export class InfoPanelComponent implements OnInit {
         socket: node.program?.socket
       }
     }
+    this.isPacketInfoLoading = true;
     this.http.post<PacketsAndLinks>("api/node_packets" , body, { observe: "response" }).subscribe(result => {
       console.log(result.body);
+      this.isPacketInfoLoading = false;
       this.packets = result.body ? result.body.packets : [];
       this.links = result.body ? result.body.links : [];
       }, err => {
+        this.isPacketInfoLoading = false;
         this.toastr.error(err.status + " " + err.statusText, 'Error');
         console.log(err);
       });
@@ -139,11 +143,13 @@ export class InfoPanelComponent implements OnInit {
       name: link.source.program ? link.source.program.name : link.target.program?.name,
       socket: link.source.program ? link.source.program.socket : link.target.program?.socket
     };
-    
+    this.isPacketInfoLoading = true;
     this.http.post<Array<PacketInfo>>("api/link_packets" , body, { observe: "response" }).subscribe(result => {
       console.log(result.body);
+      this.isPacketInfoLoading = false;
       this.packets = result.body ? result.body : [];
       }, err => {
+        this.isPacketInfoLoading = false;
         this.toastr.error(err.status + " " + err.statusText, 'Error');
         console.log(err);
       });

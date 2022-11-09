@@ -40,8 +40,13 @@
     </div>
   </div>
 
+  <!-- Spinner for loading packets -->
+  <div *ngIf="isPacketInfoLoading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
   <!-- List of Packets -->
-  <div class="spinner-border"></div>
   <div class="packet-container" [ngClass]="isNodeSelected ? 'packet-container-node-height' : 'packet-container-link-height'">
     <app-packet-info-display class="packet-info" *ngFor="let packet of packets" [packetInfo]="packet"></app-packet-info-display>
   </div>
