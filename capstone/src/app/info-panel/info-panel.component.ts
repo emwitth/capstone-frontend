@@ -39,6 +39,20 @@ export class InfoPanelComponent implements OnInit {
 
   selectedLink?: Link;
 
+  currentNode: GenericNode = {
+    tot_packets: -1,
+    program: {
+      name: "string",
+      socket: "string",
+      fd: "string",
+      timestamp: "string"
+    },
+    name: "string",
+    ip: "string",
+    x: -1,
+    y: -1
+  };
+
   constructor(private infoPanelService:InfoPanelService, private http: HttpClient,
     private toastr: ToastrService) { }
 
@@ -57,6 +71,7 @@ export class InfoPanelComponent implements OnInit {
       this.totalPackets = nodeData.tot_packets;
       this.isPanelOpen = true;
       this.isNodeSelected = true;
+      this.currentNode = nodeData;
       this.deselectLink();
       this.getNodePacketInfo(nodeData);
     });
@@ -163,6 +178,25 @@ export class InfoPanelComponent implements OnInit {
   deselectLink() {
     this.selectedLink = undefined;
     this.infoPanelService.showAllPackets();
+  }
+
+  hideNode() {
+    var body = {};
+    if(this.currentNode.ip && this.currentNode.name) {
+      body = {
+        type: "ip",
+        ip_name: this.currentNode.name,
+        ip: this.currentNode.ip
+      };
+    } else if (this.currentNode.program) {
+      body = {
+        type: "program",
+        prog_name: this.currentNode.program.name,
+        socket: this.currentNode.program.socket,
+        fd: this.currentNode.program.fd
+      }
+    }
+    console.log(body);
   }
   
 }
