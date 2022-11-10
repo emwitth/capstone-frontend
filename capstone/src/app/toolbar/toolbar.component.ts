@@ -42,6 +42,7 @@ export class ToolbarComponent implements OnInit {
       this.stopGraphService.stopGraph();
       }, err => {
         this.toastr.error(err.status + " " + err.statusText, 'Error');
+        this.stopGraphService.stopGraph();
         console.log(err);
       });
   }
