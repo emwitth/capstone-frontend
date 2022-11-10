@@ -12,13 +12,17 @@ p {
   font-size: 12px
 }
 
-.btn-dropdown {
+.yellow-border {
+  border-color: var(--INDICATION_BORDER_COLOR) !important;
+}
+
+.btn-info-panel {
   color: var(--INDICATION_BORDER_COLOR);
   background-color: var(--BACKGROUND_COLOR);
   border-color: var(--INDICATION_BORDER_COLOR);
 }
 
-.btn-dropdown:hover {
+.btn-info-panel:hover {
   color: var(--BACKGROUND_COLOR);
   background-color: var(--INDICATION_BORDER_COLOR);
   border-color: var(--INDICATION_BORDER_COLOR);

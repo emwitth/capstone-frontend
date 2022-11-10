@@ -2,42 +2,61 @@
   <!-- Info Before Selection -->
   <h6 *ngIf="!isNodeSelected && !isLinkSelected">Info Panel</h6>
   <p *ngIf="!isNodeSelected && !isLinkSelected">Click a node or link to see its info and associated packets.</p>
-  <!-- First Node (either, or IP when link) -->
-  <h5 *ngIf="isLinkSelected" class="headers">Link from</h5>
-  <h5 *ngIf="isNodeSelected && isIPNode" class="headers">IP Node</h5>
-  <h5 *ngIf="isNodeSelected && !isIPNode" class="headers">Program Node</h5>
-  <div class="d-flex">
-    <h6 *ngIf="isNodeSelected || isLinkSelected">{{heading0}}</h6>
-    <i *ngIf="isNoProcess && !isLinkSelected" class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" title="{{noProcessInfo}}"></i>
-  </div>
-  <div class="d-flex">
-    <p *ngIf="(isNodeSelected || isLinkSelected) && subheading0 !== ''" class="flex-fill">{{subheading0}}</p>
-    <p *ngIf="isLinkSelected" class="flex-fill">packets: {{totalPackets1}}</p>
-    <p *ngIf="isNodeSelected" class="flex-fill">tot. packets: {{totalPackets}}</p>
-  </div>
-  <!-- Second Node (either, or nonexistant when link) -->
-  <h5 *ngIf="isLinkSelected" class="headers">to</h5>
-  <div class="d-flex">
-    <h6 *ngIf="isLinkSelected">{{heading1}}</h6>
-    <i *ngIf="isNoProcess && isLinkSelected" class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" title="{{noProcessInfo}}"></i>
-  </div>
-  <div class="d-flex">
-    <p *ngIf="isLinkSelected && subheading1 !== ''" class="flex-fill">{{subheading1}}</p>
-    <p *ngIf="isLinkSelected" class="flex-fill">packets: {{totalPackets2}}</p>
-  </div>
-
-  <!-- Dropdown of Connections -->
-
-  <div *ngIf="isNodeSelected" class="mb-2" ngbDropdown>
-    <button class="btn btn-dropdown" id="con-dropdown" ngbDropdownToggle>
-      {{selectedLink ? (!isIPNode ? selectedLink.ip : (selectedLink.program.name + "(" + selectedLink.program.socket + ")")) : "All Packets Shown"}}
-    </button>
-    <div ngbDropdownMenu="con-dropdown" class="dropdown border border-1">
-      <button ngbDropdownItem class="btn-dropdown" (click)="deselectLink()">Show All Packets</button>
-      <button ngbDropdownItem class="btn-dropdown" *ngFor="let link of links" (click)="setLink(link)">
-        {{!isIPNode ? link.ip : (link.program.name + "(" + link.program.socket + ")")}}
-      </button>
+  <div class="d-flex justify-content-between">
+    <!-- First Node (either, or IP when link) -->
+    <div>
+      <h5 *ngIf="isLinkSelected" class="headers">Link from</h5>
+      <h5 *ngIf="isNodeSelected && isIPNode" class="headers">IP Node</h5>
+      <h5 *ngIf="isNodeSelected && !isIPNode" class="headers">Program Node</h5>
+      <div class="d-flex">
+        <h6 *ngIf="isNodeSelected || isLinkSelected">{{heading0}}</h6>
+        <i *ngIf="isNoProcess && !isLinkSelected" class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" title="{{noProcessInfo}}"></i>
+      </div>
+      <div class="d-flex">
+        <p *ngIf="(isNodeSelected || isLinkSelected) && subheading0 !== ''" class="me-2">{{subheading0}}</p>
+        <p *ngIf="isLinkSelected" class="me-2">packets: {{totalPackets1}}</p>
+        <p *ngIf="isNodeSelected" class="me-2">tot. packets: {{totalPackets}}</p>
+      </div>
     </div>
+    <!-- Divider -->
+    <!-- <div *ngIf="isLinkSelected" class="border-start border-1 yellow-border"></div> -->
+    <!-- Second Node (either, or nonexistant when link) -->
+    <div *ngIf="isLinkSelected">
+      <h5 *ngIf="isLinkSelected" class="headers">to</h5>
+      <div class="d-flex">
+        <h6 *ngIf="isLinkSelected">{{heading1}}</h6>
+        <i *ngIf="isNoProcess && isLinkSelected" class="bi bi-info-circle ms-1" data-bs-toggle="tooltip" title="{{noProcessInfo}}"></i>
+      </div>
+      <div class="d-flex">
+        <p *ngIf="isLinkSelected && subheading1 !== ''" class="me-2">{{subheading1}}</p>
+        <p *ngIf="isLinkSelected" class="me-2">packets: {{totalPackets2}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isNodeSelected || isLinkSelected" class="d-flex">
+    <!-- Dropdown of Connections -->
+    <div *ngIf="isNodeSelected" class="mb-2 me-2" ngbDropdown>
+      <button class="btn btn-info-panel" id="con-dropdown" ngbDropdownToggle data-bs-toggle="tooltip" title="Filter packets by link.">
+        {{selectedLink ? (!isIPNode ? selectedLink.ip : (selectedLink.program.name + "(" + selectedLink.program.socket + ")")) : "All Packets Shown"}}
+      </button>
+      <div ngbDropdownMenu="con-dropdown" class="dropdown border border-1">
+        <button ngbDropdownItem class="btn-info-panel" (click)="deselectLink()">Show All Packets</button>
+        <button ngbDropdownItem class="btn-info-panel" *ngFor="let link of links" (click)="setLink(link)">
+          {{!isIPNode ? link.ip : (link.program.name + "(" + link.program.socket + ")")}}
+        </button>
+      </div>
+    </div>
+    <!-- Hide Node Button -->
+    <button *ngIf="isNodeSelected" class="btn btn-info-panel me-2 mb-2" (click)="hideNode()"
+    data-bs-toggle="tooltip" title="Hide this node in the graph view.">
+      <i class="bi bi-eye-slash-fill"></i>
+    </button>
+    <!-- Hide Link Button -->
+    <button *ngIf="isLinkSelected" class="btn btn-info-panel me-2 mb-2" (click)="hideLink()"
+    data-bs-toggle="tooltip" title="Hide this link in the graph view.">
+      <i class="bi bi-eye-slash-fill"></i>
+    </button>
   </div>
 
   <!-- Spinner for loading packets -->

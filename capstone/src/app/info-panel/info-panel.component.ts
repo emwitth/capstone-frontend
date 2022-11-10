@@ -39,6 +39,51 @@ export class InfoPanelComponent implements OnInit {
 
   selectedLink?: Link;
 
+  currentNode: GenericNode = {
+    tot_packets: -1,
+    program: {
+      name: "string",
+      socket: "string",
+      fd: "string",
+      timestamp: "string"
+    },
+    name: "string",
+    ip: "string",
+    x: -1,
+    y: -1
+  };
+
+  currentLink: LinkData = {
+  source: {
+    tot_packets: -1,
+    program: {
+      name: "string",
+      socket: "string",
+      fd: "string",
+      timestamp: "string"
+    },
+    name: "string",
+    ip: "string",
+    x: -1,
+    y: -1
+  },
+  target: {
+    tot_packets: -1,
+    program: {
+      name: "string",
+      socket: "string",
+      fd: "string",
+      timestamp: "string"
+    },
+    name: "string",
+    ip: "string",
+    x: -1,
+    y: -1
+  },
+  in_packets: -1,
+  out_packets: -1
+  }
+
   constructor(private infoPanelService:InfoPanelService, private http: HttpClient,
     private toastr: ToastrService) { }
 
@@ -57,6 +102,7 @@ export class InfoPanelComponent implements OnInit {
       this.totalPackets = nodeData.tot_packets;
       this.isPanelOpen = true;
       this.isNodeSelected = true;
+      this.currentNode = nodeData;
       this.deselectLink();
       this.getNodePacketInfo(nodeData);
     });
@@ -75,6 +121,7 @@ export class InfoPanelComponent implements OnInit {
       this.totalPackets2 = linkData.in_packets + "";
       this.isLinkSelected = true;
       this.isPanelOpen = true;
+      this.currentLink = linkData;
       this.getLinkPacketInfo(linkData);
     });
   }
@@ -163,6 +210,47 @@ export class InfoPanelComponent implements OnInit {
   deselectLink() {
     this.selectedLink = undefined;
     this.infoPanelService.showAllPackets();
+  }
+
+  hideNode() {
+    var body = {};
+    if(this.currentNode.ip && this.currentNode.name) {
+      body = {
+        type: "ip",
+        ip_name: this.currentNode.name,
+        ip: this.currentNode.ip
+      };
+    } else if (this.currentNode.program) {
+      body = {
+        type: "program",
+        prog_name: this.currentNode.program.name,
+        socket: this.currentNode.program.socket,
+        fd: this.currentNode.program.fd
+      }
+    }
+    console.log(body);
+  }
+
+  hideLink() {
+    var progNode: GenericNode;
+    var ipNode: GenericNode;
+    if(this.currentLink.source.program) {
+      progNode = this.currentLink.source;
+      ipNode = this.currentLink.target;
+    } 
+    else {
+      progNode = this.currentLink.target;
+      ipNode = this.currentLink.source;
+    }
+    var body = {
+      type: "link",
+      prog_name: progNode.program?.name,
+      socket: progNode.program?.socket,
+      fd: progNode.program?.fd,
+      ip_name: ipNode.name,
+      ip: ipNode.ip
+    };
+    console.log(body);
   }
   
 }
