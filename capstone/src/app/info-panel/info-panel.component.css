@@ -12,6 +12,10 @@ p {
   font-size: 12px
 }
 
+.yellow-border {
+  border-color: var(--INDICATION_BORDER_COLOR) !important;
+}
+
 .btn-info-panel {
   color: var(--INDICATION_BORDER_COLOR);
   background-color: var(--BACKGROUND_COLOR);
