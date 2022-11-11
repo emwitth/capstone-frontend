@@ -3,8 +3,7 @@ import * as d3 from 'd3';
 import { forceSimulation } from 'd3-force';
 import { interval, Subscription } from 'rxjs';
 import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR, INDICATION_BORDER_COLOR, INFO_PANEL_WIDTH } from '../constants';
-import { StartGraphService } from '../services/start-graph.service';
-import { StopGraphService } from '../services/stop-graph.service';
+import { GraphService } from '../services/start-graph.service';
 import { InfoPanelService } from '../services/info-panel.service';
 import { IPNode } from '../interfaces/ipnode';
 import { GraphJSON, GenericNodeNoChords, GenericNode, ForceLink, LinkData } from '../interfaces/d3-graph-interfaces';
@@ -32,7 +31,7 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
   private isInfoPanelOpen: Boolean = true;
 
   constructor(private elem: ElementRef, private infoPanelService: InfoPanelService,
-    private startGraphService: StartGraphService, private stopGraphService: StopGraphService) { }
+    private graphService: GraphService) { }
 
   ngOnInit(): void {}
 
@@ -46,13 +45,13 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
     this.createSvg();
     // Set listener to make graph and start periodic update.
     const graphInterval = interval(2000);
-    this.startGraphService.graphStartEvent.subscribe(() => {
+    this.graphService.graphStartEvent.subscribe(() => {
       d3.json("/api/graph-data")
       .then(data => this.makeGraph(data as GraphJSON));
       this.graphUpdateSubscription = graphInterval.subscribe(() => this.update());
     });
     // Set listener to stop periodic update.
-    this.stopGraphService.graphStopEvent.subscribe(() => {
+    this.graphService.graphStopEvent.subscribe(() => {
       this.graphUpdateSubscription.unsubscribe();
     });
     // Set subscriptions to update graph width on info panel change
