@@ -6,6 +6,7 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 export class GraphService {
   @Output() graphStartEvent = new EventEmitter();
   @Output() graphStopEvent = new EventEmitter();
+  @Output() graphUpdateEvent = new EventEmitter();
 
   constructor() { }
 
@@ -15,5 +16,9 @@ export class GraphService {
 
   public stopGraph() {
     this.graphStopEvent.emit();
+  }
+
+  public updateGraph() {
+    this.graphUpdateEvent.emit();
   }
 }

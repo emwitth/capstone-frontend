@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import { forceSimulation } from 'd3-force';
 import { interval, Subscription } from 'rxjs';
 import { PROGRAM_COLOR, IP_COLOR, GRAPH_TEXT_COLOR, INDICATION_BORDER_COLOR, INFO_PANEL_WIDTH } from '../constants';
-import { GraphService } from '../services/start-graph.service';
+import { GraphService } from '../services/graph.service';
 import { InfoPanelService } from '../services/info-panel.service';
 import { IPNode } from '../interfaces/ipnode';
 import { GraphJSON, GenericNodeNoChords, GenericNode, ForceLink, LinkData } from '../interfaces/d3-graph-interfaces';
@@ -53,6 +53,10 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
     // Set listener to stop periodic update.
     this.graphService.graphStopEvent.subscribe(() => {
       this.graphUpdateSubscription.unsubscribe();
+    });
+    // Get a graph update when event occurs
+    this.graphService.graphUpdateEvent.subscribe(() => {
+      this.update();
     });
     // Set subscriptions to update graph width on info panel change
     this.infoPanelService.toggleInfoPanelEvent.subscribe((isInfoPanelOpen: boolean) => {

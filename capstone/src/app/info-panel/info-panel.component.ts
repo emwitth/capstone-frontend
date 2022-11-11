@@ -6,6 +6,7 @@ import { InfoPanelService } from '../services/info-panel.service';
 import { GenericNode, LinkData } from '../interfaces/d3-graph-interfaces';
 import { PacketInfo } from '../interfaces/packet-info';
 import { Link } from '../interfaces/link';
+import { GraphService } from '../services/graph.service';
 
 export interface PacketsAndLinks {
   packets: Array<PacketInfo>,
@@ -85,7 +86,7 @@ export class InfoPanelComponent implements OnInit {
   }
 
   constructor(private infoPanelService:InfoPanelService, private http: HttpClient,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService, private graphService: GraphService) { }
 
   ngOnInit(): void {
     this.infoPanelService.toggleInfoPanelEvent.subscribe((isPanelOpen: boolean) => {
@@ -230,6 +231,7 @@ export class InfoPanelComponent implements OnInit {
     }
     this.http.post<any>("api/hide" , body, { observe: "response" }).subscribe(result => {
       console.log(result.body);
+      this.graphService.updateGraph()
     }, err => {
       this.toastr.error(err.status + " " + err.statusText, 'Error');
       console.log(err);
@@ -257,6 +259,7 @@ export class InfoPanelComponent implements OnInit {
     };
     this.http.post<any>("api/hide" , body, { observe: "response" }).subscribe(result => {
       console.log(result.body);
+      this.graphService.updateGraph()
     }, err => {
       this.toastr.error(err.status + " " + err.statusText, 'Error');
       console.log(err);

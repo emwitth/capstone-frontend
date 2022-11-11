@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { GraphService } from '../services/start-graph.service';
+import { GraphService } from '../services/graph.service';
 import { InfoPanelService } from '../services/info-panel.service';
 
 @Component({
