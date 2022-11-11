@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { StopGraphService } from './stop-graph.service';
+import { GraphService } from './graph.service';
 
-describe('StopGraphService', () => {
-  let service: StopGraphService;
+describe('StartGraphService', () => {
+  let service: GraphService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(StopGraphService);
+    service = TestBed.inject(GraphService);
   });
 
   it('should be created', () => {
