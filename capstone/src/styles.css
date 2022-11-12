@@ -42,10 +42,19 @@ h2 {
 
 /* Overridden Bootstrap Colors */
 .btn-primary {
-  background-color: var(--background-color) !important;
+  background-color: var(--BACKGROUND_COLOR) !important;
   border-color: var(--MAIN_COLOR) !important;
 }
 
 .btn-primary:hover {
   background-color: var(--MAIN_COLOR) !important;
+}
+
+.theme-modal .modal-content {
+  background-color: var(--BACKGROUND_COLOR);
+  border-color: var(--INDICATION_BORDER_COLOR);
+  color: var(--GRAPH_TEXT_COLOR);
+}
+.theme-modal .close {
+  color: var(--GRAPH_TEXT_COLOR);
 }
