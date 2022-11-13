@@ -60,9 +60,10 @@ export class HiddenItemsListComponent implements OnInit {
         ip: item.ip
       };
     }
-    this.http.post<any>("api/show" , body, { observe: "response" }).subscribe(result => {
+    this.http.post<GraphJSON>("api/show" , body, { observe: "response" }).subscribe(result => {
       console.log(result.body);
-      this.graphService.updateGraph()
+      this.graphService.updateGraph();
+      this.hiddenItems = result.body ? result.body : this.hiddenItems;
     }, err => {
       this.toastr.error(err.status + " " + err.statusText, 'Error');
       console.log(err);
