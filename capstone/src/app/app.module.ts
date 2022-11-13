@@ -12,6 +12,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import { PacketInfoDisplayComponent } from './packet-info-display/packet-info-display.component';
+import { HiddenItemsListComponent } from './hidden-items-list/hidden-items-list.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { PacketInfoDisplayComponent } from './packet-info-display/packet-info-di
     GraphComponent,
     ToolbarComponent,
     InfoPanelComponent,
-    PacketInfoDisplayComponent
+    PacketInfoDisplayComponent,
+    HiddenItemsListComponent
   ],
   imports: [
     BrowserModule,

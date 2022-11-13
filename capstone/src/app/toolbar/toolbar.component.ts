@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GraphService } from '../services/graph.service';
 import { InfoPanelService } from '../services/info-panel.service';
+import { HiddenItemsListComponent } from '../hidden-items-list/hidden-items-list.component';
+
 
 @Component({
   selector: 'app-toolbar',
@@ -13,7 +16,7 @@ import { InfoPanelService } from '../services/info-panel.service';
 export class ToolbarComponent implements OnInit {
 
   constructor(private http: HttpClient, private toastr: ToastrService, 
-    private graphService: GraphService,
+    private graphService: GraphService, private modalService: NgbModal,
     private infoPanelService:InfoPanelService, private titleService:Title) {
       this.titleService.setTitle("Remora Fish");
     }
@@ -48,6 +51,12 @@ export class ToolbarComponent implements OnInit {
 
   public toggleInfoPanel() {
     this.infoPanelService.toggleInfoPanel();
+  }
+
+  public openHiddenItemsList() {
+    const modalRef = this.modalService.open(
+      HiddenItemsListComponent,
+      { size: 'xl', centered: true, modalDialogClass: 'theme-modal'});
   }
 
 }

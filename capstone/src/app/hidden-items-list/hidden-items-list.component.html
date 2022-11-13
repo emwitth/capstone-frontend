@@ -1,0 +1,45 @@
+<div class="container d-flex mt-2 mb-2">
+  <div class="w-50 me-1">
+    <!-- List of hidden program nodes -->
+    <div>
+      <h3 class="title">Hidden Program Nodes</h3>
+      <div *ngFor="let prog of hiddenItems.prog_nodes" class="d-flex justify-content-between program border">
+        <p>{{prog.program.name}}(fd: {{prog.program.fd}}, on {{prog.program.socket}})</p>
+        <p>total packets: {{prog.tot_packets}}</p>
+        <button class="btn program-button">
+          <i class="bi bi-eye-fill"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- List of hidden ip nodes -->
+    <div>
+      <h3 class="title">Hidden IP Nodes</h3>
+      <div *ngFor="let ip of hiddenItems.ip_nodes" class="d-flex justify-content-between ip border">
+        <p>{{ip.ip}}({{ip.name}})</p>
+        <p>total packets: {{ip.tot_packets}}</p>
+        <button class="btn ip-button">
+          <i class="bi bi-eye-fill"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-50 ms-1">
+    <!-- List of hidden links -->
+    <h3 class="title">Hidden Links</h3>
+    <div *ngFor="let link of hiddenItems.links" class="d-flex justify-content-between link border">
+      <div>
+        <p>{{link.program.name}}(fd: {{link.program.fd}}, on {{link.program.socket}})</p>
+        <p>{{link.ip}}({{link.ip_name}})</p>
+      </div>
+      <div>
+        <p>packets to: {{link.in_packets}}</p>
+        <p>packets to: {{link.out_packets}}</p>
+      </div>
+      <button class="btn link-button">
+        <i class="bi bi-eye-fill"></i>
+      </button>
+    </div>
+  </div>
+</div>

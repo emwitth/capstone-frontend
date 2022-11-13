@@ -1,0 +1,66 @@
+.title {
+  color: var(--INDICATION_BORDER_COLOR);
+}
+
+.program {
+  border-color: var(--MAIN_COLOR)!important;
+  color: var(--MAIN_COLOR)!important;
+}
+
+.program:hover {
+  border-color: var(--MAIN_COLOR)!important;
+  color: var(--BACKGROUND_COLOR)!important;
+  background-color: var(--MAIN_COLOR)!important;
+}
+
+.program-button {
+  color: inherit!important;
+  background-color: inherit!important;
+}
+
+.program-button:hover {
+  color: var(--MAIN_COLOR)!important;
+  background-color: var(--BACKGROUND_COLOR)!important;
+}
+
+.ip {
+  border-color: var(--COMPLEMENTARY_COLOR)!important;
+  color: var(--COMPLEMENTARY_COLOR)!important;
+}
+
+.ip:hover {
+  border-color: var(--COMPLEMENTARY_COLOR)!important;
+  color: var(--BACKGROUND_COLOR)!important;
+  background-color: var(--COMPLEMENTARY_COLOR)!important;
+}
+
+.ip-button {
+  color: inherit!important;
+  background-color: inherit!important;
+}
+
+.ip-button:hover {
+  color: var(--COMPLEMENTARY_COLOR)!important;
+  background-color: var(--BACKGROUND_COLOR)!important;
+}
+
+.link {
+  border-color: var(--INDICATION_BORDER_COLOR)!important;
+  color: var(--INDICATION_BORDER_COLOR)!important;
+}
+
+.link:hover {
+  border-color: var(--INDICATION_BORDER_COLOR)!important;
+  color: var(--BACKGROUND_COLOR)!important;
+  background-color: var(--INDICATION_BORDER_COLOR)!important;
+}
+
+.link-button {
+  color: inherit!important;
+  background-color: inherit!important;
+}
+
+.link-button:hover {
+  color: var(--INDICATION_BORDER_COLOR)!important;
+  background-color: var(--BACKGROUND_COLOR)!important;
+}
