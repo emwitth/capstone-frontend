@@ -6,7 +6,7 @@
       <div *ngFor="let prog of hiddenItems.prog_nodes" class="d-flex justify-content-between program border">
         <p>{{prog.program.name}}(fd: {{prog.program.fd}}, on {{prog.program.socket}})</p>
         <p>total packets: {{prog.tot_packets}}</p>
-        <button class="btn program-button">
+        <button class="btn program-button" (click)="showItem(prog)">
           <i class="bi bi-eye-fill"></i>
         </button>
       </div>
@@ -18,7 +18,7 @@
       <div *ngFor="let ip of hiddenItems.ip_nodes" class="d-flex justify-content-between ip border">
         <p>{{ip.ip}}({{ip.name}})</p>
         <p>total packets: {{ip.tot_packets}}</p>
-        <button class="btn ip-button">
+        <button class="btn ip-button" (click)="showItem(ip)">
           <i class="bi bi-eye-fill"></i>
         </button>
       </div>
@@ -37,7 +37,7 @@
         <p>packets to: {{link.in_packets}}</p>
         <p>packets to: {{link.out_packets}}</p>
       </div>
-      <button class="btn link-button">
+      <button class="btn link-button" (click)="showItem(link)">
         <i class="bi bi-eye-fill"></i>
       </button>
     </div>
