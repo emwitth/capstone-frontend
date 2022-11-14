@@ -257,7 +257,7 @@ export class InfoPanelComponent implements OnInit {
       ip_name: ipNode.name,
       ip: ipNode.ip
     };
-    this.http.post<any>("api/hide" , body, { observe: "response" }).subscribe(result => {
+    this.http.post<any>("api/hide", body, { observe: "response" }).subscribe(result => {
       console.log(result.body);
       this.graphService.updateGraph()
     }, err => {
