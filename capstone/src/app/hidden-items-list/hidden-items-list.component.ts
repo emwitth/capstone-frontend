@@ -4,9 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { GraphJSON } from './../interfaces/d3-graph-interfaces';
 import { GraphService } from '../services/graph.service';
-// import { ProgNode } from '../interfaces/prog-node';
-// import { IPNode } from '../interfaces/ipnode';
-// import { Link } from '../interfaces/link';
 
 @Component({
   selector: 'app-hidden-items-list',

@@ -56,7 +56,7 @@ export class ToolbarComponent implements OnInit {
   public openHiddenItemsList() {
     const modalRef = this.modalService.open(
       HiddenItemsListComponent,
-      { size: 'xl', centered: true, modalDialogClass: 'theme-modal'});
+      { size: 'xl', modalDialogClass: 'theme-modal'});
   }
 
 }
