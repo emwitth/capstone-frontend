@@ -15,7 +15,8 @@ export class PacketInfoDisplayComponent implements OnInit {
     dest: "string",
     src_name: "string",
     dest_name: "string",
-    port: "string"
+    port: "string",
+    hex: "string"
   };
   isExpanded: boolean = false;
   isSrcLocalhost: boolean = false;
