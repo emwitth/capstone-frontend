@@ -54,6 +54,9 @@
   color: var(--BACKGROUND_COLOR);
 }
 
-.small-summary{
-  font-size: 11px;
+.hex-info{
+  font-size: 11.6px;
+  white-space: pre;
+  font-family: monospace;
+  font-variant-numeric: tabular-nums;
 }
