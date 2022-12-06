@@ -153,7 +153,7 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
     this.simulation = forceSimulation(this.allNodes)
     .force("link", d3.forceLink()
       .id(d => { return (d as GenericNode)?.program ? 
-                        (d as GenericNode)?.program?.name + "" + (d as GenericNode)?.program?.socket : 
+                        (d as GenericNode)?.program?.name + "" + (d as GenericNode)?.program?.fd : 
                         (d as GenericNode).ip + ""; })
       .links(this.links)
     )
@@ -184,7 +184,7 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
           return element.ip === n.ip &&
           element.name === n.name &&
           element.program?.name == n.program?.name &&
-          element.program?.socket == n.program?.socket
+          element.program?.fd == n.program?.fd
         });
 
         if (n.tot_packets != oldNode?.tot_packets) {
@@ -204,7 +204,7 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
     // console.log("ALL NODES:", this.allNodes);
 
     // Set the links data to the correct type needed for the simulation.
-    this.links = data.links.map(x => ({source: x.ip, target: x.program.name + x.program.socket, in_packets: x.in_packets, out_packets: x.out_packets}));
+    this.links = data.links.map(x => ({source: x.ip, target: x.program.name + x.program.fd, in_packets: x.in_packets, out_packets: x.out_packets}));
 
     // console.log("LINKS: ", this.links);
 
