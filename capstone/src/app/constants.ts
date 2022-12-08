@@ -15,5 +15,6 @@ export const NO_PROCESS_INFO = "Packets here are ones without a socket. " +
                                 "to get a more complete picture. The packet details might also help.";
 
 export const NON_PROG_NODE_TYPES: Array<String> = [
-  "ARP PACKETS"
+  "ARP PACKETS",
+  "DNS PACKETS"
 ]
