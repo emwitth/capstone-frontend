@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { NO_PROCESS_INFO } from '../constants';
+import { NO_PROCESS_INFO, NON_PROG_NODE_TYPES } from '../constants';
 import { InfoPanelService } from '../services/info-panel.service';
 import { GenericNode, LinkData } from '../interfaces/d3-graph-interfaces';
 import { PacketInfo } from '../interfaces/packet-info';
@@ -22,6 +22,7 @@ export class InfoPanelComponent implements OnInit {
   isPanelOpen: boolean = true;
   isNodeSelected: boolean = false;
   isLinkSelected: boolean = false;
+  isCustomNode: boolean = false;
   isIPNode: boolean = false;
   isNoProcess: boolean = false;
   isPacketInfoLoading: boolean = false;
@@ -131,13 +132,18 @@ export class InfoPanelComponent implements OnInit {
     var heading = "";
     var subheading = "";
     this.packets = [];
+    this.isCustomNode = false;
     if (node?.program) {
+      this.determineSpecialNode(node)
       heading = node.program.name;
       subheading = "socket number: " + node.program.socket;
       this.timestamp = node.program.timestamp;
       if (node.program.name === "no process") {
         subheading = "no associated process";
         this.isNoProcess = true;
+      }
+      if(this.isCustomNode) {
+        subheading = node.program.name ? node.program.name : "";
       }
       if(isNodeSelected) {
         this.isIPNode = false;
@@ -154,6 +160,14 @@ export class InfoPanelComponent implements OnInit {
       heading: heading,
       subheading: subheading
     }
+  }
+
+  private determineSpecialNode(node: GenericNode) {
+    NON_PROG_NODE_TYPES.forEach((type: String) => {
+      if(node?.program?.name == type) {
+        this.isCustomNode = true;
+      }
+    });
   }
 
   private getNodePacketInfo(node: GenericNode) {
