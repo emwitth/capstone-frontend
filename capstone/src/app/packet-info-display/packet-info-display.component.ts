@@ -16,6 +16,8 @@ export class PacketInfoDisplayComponent implements OnInit {
     src_name: "string",
     dest_name: "string",
     port: "string",
+    program_name: "string",
+    program_fd: "string",
     hex: "string"
   };
   isExpanded: boolean = false;
@@ -54,12 +56,12 @@ export class PacketInfoDisplayComponent implements OnInit {
       this.infoPanelService.progNodeLinkSelectedEvent.subscribe((link: Link) => {
         console.log(link);
         console.log(this.packetInfo);
-        // if(link.program.name == this.packetInfo.) {
-        //   this.isNotHidden = true;
-        // }
-        // else {
-        //   this.isNotHidden = false;
-        // }
+        if(link.program.name == this.packetInfo.program_name && link.program.fd == this.packetInfo.program_fd) {
+          this.isNotHidden = true;
+        }
+        else {
+          this.isNotHidden = false;
+        }
       });
     }
   }
