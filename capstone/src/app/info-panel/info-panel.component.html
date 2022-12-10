@@ -42,8 +42,8 @@
         {{selectedLink ? (!isIPNode ? selectedLink.ip : (selectedLink.program.name + "(" + selectedLink.program.socket + ")")) : "All Packets Shown"}}
       </button>
       <div ngbDropdownMenu="con-dropdown" class="dropdown border border-1">
-        <button ngbDropdownItem class="btn-info-panel" (click)="deselectLink()">Show All Packets</button>
-        <button ngbDropdownItem class="btn-info-panel" *ngFor="let link of links" (click)="setLink(link)">
+        <button ngbDropdownItem class="btn-info-panel" (click)="deselectAllInDropdown()">Show All Packets</button>
+        <button ngbDropdownItem class="btn-info-panel" *ngFor="let link of links" (click)="setLinkInDropdown(link)">
           {{!isIPNode ? link.ip : (link.program.name + "(" + link.program.socket + ")")}}
         </button>
       </div>

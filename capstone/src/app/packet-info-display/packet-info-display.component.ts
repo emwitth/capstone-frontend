@@ -33,10 +33,14 @@ export class PacketInfoDisplayComponent implements OnInit {
       this.isDestLocalhost = true;
     }
     {
+      // if all links selected
       this.infoPanelService.showAllPacketsEvent.subscribe(() => {
         this.isNotHidden = true;
       });
-      this.infoPanelService.linkSelectedEvent.subscribe((link: Link) => {
+      // if some particular links to ip node selected
+      this.infoPanelService.ipNodeLinkSelectedEvent.subscribe((link: Link) => {
+        console.log(link);
+        console.log(this.packetInfo);
         if(
         (link.ip === this.packetInfo.src || link.ip === this.packetInfo.dest) &&
         (link.program.socket === this.packetInfo.port)) {
@@ -45,6 +49,17 @@ export class PacketInfoDisplayComponent implements OnInit {
         else {
           this.isNotHidden = false;
         }
+      });
+      // if some particular links to prog node selected
+      this.infoPanelService.progNodeLinkSelectedEvent.subscribe((link: Link) => {
+        console.log(link);
+        console.log(this.packetInfo);
+        // if(link.program.name == this.packetInfo.) {
+        //   this.isNotHidden = true;
+        // }
+        // else {
+        //   this.isNotHidden = false;
+        // }
       });
     }
   }

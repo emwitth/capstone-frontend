@@ -105,7 +105,7 @@ export class InfoPanelComponent implements OnInit {
       this.isPanelOpen = true;
       this.isNodeSelected = true;
       this.currentNode = nodeData;
-      this.deselectLink();
+      this.deselectAllInDropdown();
       this.getNodePacketInfo(nodeData);
     });
 
@@ -217,12 +217,19 @@ export class InfoPanelComponent implements OnInit {
     });
   }
 
-  setLink(link: Link) {
+  setLinkInDropdown(link: Link) {
     this.selectedLink = link;
-    this.infoPanelService.selectLink(link);
+    if(!this.isIPNode)
+    {
+      this.infoPanelService.selectIpNodeInDropdown(link);
+    }
+    else
+    {
+      this.infoPanelService.selectProgNodeInDropdown(link);
+    }
   }
 
-  deselectLink() {
+  deselectAllInDropdown() {
     this.selectedLink = undefined;
     this.infoPanelService.showAllPackets();
   }
