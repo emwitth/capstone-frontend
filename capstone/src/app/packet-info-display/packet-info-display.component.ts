@@ -41,8 +41,6 @@ export class PacketInfoDisplayComponent implements OnInit {
       });
       // if some particular links to ip node selected
       this.infoPanelService.ipNodeLinkSelectedEvent.subscribe((link: Link) => {
-        console.log(link);
-        console.log(this.packetInfo);
         if(
         (link.ip === this.packetInfo.src || link.ip === this.packetInfo.dest) &&
         (link.program.port === this.packetInfo.port)) {
