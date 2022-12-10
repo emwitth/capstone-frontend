@@ -230,7 +230,7 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
     this.g = this.nodeSvg
     .selectAll("g")
     .data(this.allNodes, (d: any) => {
-      return d.program ? d.program.name + d.program.socket : d.ip;
+      return d.program ? d.program.name + d.program.port : d.ip;
     })
     .join(
       // Enter is for new nodes.

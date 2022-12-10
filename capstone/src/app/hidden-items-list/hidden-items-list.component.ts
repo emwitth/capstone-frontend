@@ -36,7 +36,7 @@ export class HiddenItemsListComponent implements OnInit {
       body = {
         type: "link",
         prog_name: item.program.name,
-        socket: item.program.socket,
+        port: item.program.port,
         fd: item.program.fd,
         ip_name: item.ip_name,
         ip: item.ip
@@ -46,7 +46,7 @@ export class HiddenItemsListComponent implements OnInit {
       body = {
         type: "program",
         prog_name: item.program.name,
-        socket: item.program.socket,
+        port: item.program.port,
         fd: item.program.fd
       };
     }

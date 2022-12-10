@@ -5,7 +5,7 @@
       <h3 class="title">Hidden Program Nodes</h3>
       <p *ngIf="hiddenItems.prog_nodes.length == 0">There are no program nodes hidden right now.</p>
       <div *ngFor="let prog of hiddenItems.prog_nodes" class="d-flex justify-content-between program border">
-        <p>{{prog.program.name}}(fd: {{prog.program.fd}}, on {{prog.program.socket}})</p>
+        <p>{{prog.program.name}}(fd: {{prog.program.fd}}, on {{prog.program.port}})</p>
         <p>total packets: {{prog.tot_packets}}</p>
         <button class="btn program-button" (click)="showItem(prog)">
           <i class="bi bi-eye-fill"></i>
@@ -33,7 +33,7 @@
     <p *ngIf="hiddenItems.links.length == 0">There are no links hidden right now.</p>
     <div *ngFor="let link of hiddenItems.links" class="d-flex justify-content-between link border">
       <div>
-        <p>{{link.program.name}}(fd: {{link.program.fd}}, on {{link.program.socket}})</p>
+        <p>{{link.program.name}}(fd: {{link.program.fd}}, on {{link.program.port}})</p>
         <p>{{link.ip}}({{link.ip_name}})</p>
       </div>
       <div>

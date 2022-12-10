@@ -39,12 +39,12 @@
     <!-- Dropdown of Connections -->
     <div *ngIf="isNodeSelected" class="mb-2 me-2" ngbDropdown>
       <button class="btn btn-info-panel" id="con-dropdown" ngbDropdownToggle data-bs-toggle="tooltip" title="Filter packets by link.">
-        {{selectedLink ? (!isIPNode ? selectedLink.ip : (selectedLink.program.name + "(" + selectedLink.program.socket + ")")) : "All Packets Shown"}}
+        {{selectedLink ? (!isIPNode ? selectedLink.ip : (selectedLink.program.name + "(" + selectedLink.program.port + ")")) : "All Packets Shown"}}
       </button>
       <div ngbDropdownMenu="con-dropdown" class="dropdown border border-1">
         <button ngbDropdownItem class="btn-info-panel" (click)="deselectAllInDropdown()">Show All Packets</button>
         <button ngbDropdownItem class="btn-info-panel" *ngFor="let link of links" (click)="setLinkInDropdown(link)">
-          {{!isIPNode ? link.ip : (link.program.name + "(" + link.program.socket + ")")}}
+          {{!isIPNode ? link.ip : (link.program.name + "(" + link.program.port + ")")}}
         </button>
       </div>
     </div>

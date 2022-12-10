@@ -45,7 +45,7 @@ export class PacketInfoDisplayComponent implements OnInit {
         console.log(this.packetInfo);
         if(
         (link.ip === this.packetInfo.src || link.ip === this.packetInfo.dest) &&
-        (link.program.socket === this.packetInfo.port)) {
+        (link.program.port === this.packetInfo.port)) {
           this.isNotHidden = true;
         }
         else {

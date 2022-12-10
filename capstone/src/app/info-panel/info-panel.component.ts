@@ -45,7 +45,7 @@ export class InfoPanelComponent implements OnInit {
     tot_packets: -1,
     program: {
       name: "string",
-      socket: "string",
+      port: "string",
       fd: "string",
       timestamp: "string"
     },
@@ -60,7 +60,7 @@ export class InfoPanelComponent implements OnInit {
     tot_packets: -1,
     program: {
       name: "string",
-      socket: "string",
+      port: "string",
       fd: "string",
       timestamp: "string"
     },
@@ -73,7 +73,7 @@ export class InfoPanelComponent implements OnInit {
     tot_packets: -1,
     program: {
       name: "string",
-      socket: "string",
+      port: "string",
       fd: "string",
       timestamp: "string"
     },
@@ -136,7 +136,7 @@ export class InfoPanelComponent implements OnInit {
     if (node?.program) {
       this.determineSpecialNode(node)
       heading = node.program.name;
-      subheading = "socket number: " + node.program.socket;
+      subheading = "port: " + node.program.port;
       this.timestamp = node.program.timestamp;
       if (node.program.name === "no process") {
         subheading = "no associated process";
@@ -182,7 +182,7 @@ export class InfoPanelComponent implements OnInit {
         isIP: false,
         fd: node.program?.fd,
         name: node.program?.name,
-        socket: node.program?.socket
+        port: node.program?.port
       }
     }
     this.isPacketInfoLoading = true;
@@ -203,7 +203,7 @@ export class InfoPanelComponent implements OnInit {
       ip: link.source.ip ? link.source.ip : link.target.ip,
       fd: link.source.program ? link.source.program.fd : link.target.program?.fd,
       name: link.source.program ? link.source.program.name : link.target.program?.name,
-      socket: link.source.program ? link.source.program.socket : link.target.program?.socket
+      port: link.source.program ? link.source.program.port : link.target.program?.port
     };
     this.isPacketInfoLoading = true;
     this.http.post<Array<PacketInfo>>("api/link_packets" , body, { observe: "response" }).subscribe(result => {
@@ -246,7 +246,7 @@ export class InfoPanelComponent implements OnInit {
       body = {
         type: "program",
         prog_name: this.currentNode.program.name,
-        socket: this.currentNode.program.socket,
+        port: this.currentNode.program.port,
         fd: this.currentNode.program.fd
       }
     }
@@ -273,7 +273,7 @@ export class InfoPanelComponent implements OnInit {
     var body = {
       type: "link",
       prog_name: progNode.program?.name,
-      socket: progNode.program?.socket,
+      port: progNode.program?.port,
       fd: progNode.program?.fd,
       ip_name: ipNode.name,
       ip: ipNode.ip
