@@ -9,7 +9,8 @@ export class InfoPanelService {
   @Output() toggleInfoPanelEvent = new EventEmitter<boolean>();
   @Output() updatePanelNodeInfoEvent = new EventEmitter<GenericNode>();
   @Output() updatePanelLinkInfoEvent = new EventEmitter<LinkData>();
-  @Output() linkSelectedEvent = new EventEmitter<Link>();
+  @Output() ipNodeLinkSelectedEvent = new EventEmitter<Link>();
+  @Output() progNodeLinkSelectedEvent = new EventEmitter<Link>();
   @Output() showAllPacketsEvent = new EventEmitter();
 
   isPanelOpen: boolean = true;
@@ -31,8 +32,12 @@ export class InfoPanelService {
     this.updatePanelLinkInfoEvent.emit(linkData);
   }
 
-  public selectLink(link: Link) {
-    this.linkSelectedEvent.emit(link);
+  public selectIpNodeInDropdown(link: Link) {
+    this.ipNodeLinkSelectedEvent.emit(link);
+  }
+
+  public selectProgNodeInDropdown(link: Link) {
+    this.progNodeLinkSelectedEvent.emit(link);
   }
 
   public showAllPackets() {

@@ -54,7 +54,7 @@
       "program": {
         "fd": "no process",
         "name": "no process",
-        "socket": "no port",
+        "port": "no port",
         "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
       }
     },
@@ -65,7 +65,7 @@
       "program": {
         "fd": "no process",
         "name": "no process",
-        "socket": "no port",
+        "port": "no port",
         "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
       }
     },
@@ -76,7 +76,7 @@
       "program": {
         "fd": "no process",
         "name": "no process",
-        "socket": "no port",
+        "port": "no port",
         "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
       }
     },
@@ -87,7 +87,7 @@
       "program": {
         "fd": "no process",
         "name": "no process",
-        "socket": "no port",
+        "port": "no port",
         "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
       }
     },
@@ -98,7 +98,7 @@
       "program": {
         "fd": "no process",
         "name": "no process",
-        "socket": "no port",
+        "port": "no port",
         "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
       }
     },
@@ -109,7 +109,7 @@
       "program": {
         "fd": "no process",
         "name": "no process",
-        "socket": "no port",
+        "port": "no port",
         "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
       }
     },
@@ -120,7 +120,7 @@
       "program": {
         "fd": 159,
         "name": "nc",
-        "socket": 34618,
+        "port": 34618,
         "timestamp": "Thu, 13 Oct 2022 13:57:28 GMT"
       }
     },
@@ -131,7 +131,7 @@
       "program": {
         "fd": 224,
         "name": "ssh",
-        "socket": 40510,
+        "port": 40510,
         "timestamp": "Thu, 13 Oct 2022 14:13:56 GMT"
       }
     },
@@ -142,7 +142,7 @@
       "program": {
         "fd": 246,
         "name": "nc",
-        "socket": 60418,
+        "port": 60418,
         "timestamp": "Thu, 13 Oct 2022 14:15:33 GMT"
       }
     },
@@ -153,7 +153,7 @@
       "program": {
         "fd": 444,
         "name": "testprog",
-        "socket": 123456,
+        "port": 123456,
         "timestamp": "Thu, 13 Oct 2022 14:15:33 GMT"
       }
     }
@@ -163,7 +163,7 @@
       "program": {
         "fd": "no process",
         "name": "no process",
-        "socket": "no port",
+        "port": "no port",
         "timestamp": "Thu, 13 Oct 2022 13:56:50 GMT"
       },
       "tot_packets": 1598
@@ -172,7 +172,7 @@
       "program": {
         "fd": 159,
         "name": "nc",
-        "socket": 34618,
+        "port": 34618,
         "timestamp": "Thu, 13 Oct 2022 13:57:28 GMT"
       },
       "tot_packets": 11
@@ -181,7 +181,7 @@
       "program": {
         "fd": 224,
         "name": "ssh",
-        "socket": 40510,
+        "port": 40510,
         "timestamp": "Thu, 13 Oct 2022 14:13:56 GMT"
       },
       "tot_packets": 20
@@ -190,7 +190,7 @@
       "program": {
         "fd": 246,
         "name": "nc",
-        "socket": 60418,
+        "port": 60418,
         "timestamp": "Thu, 13 Oct 2022 14:15:33 GMT"
       },
       "tot_packets": 6
@@ -199,7 +199,7 @@
       "program": {
         "fd": 444,
         "name": "testprog",
-        "socket": 123456,
+        "port": 123456,
         "timestamp": "Thu, 13 Oct 2022 14:15:33 GMT"
       },
       "tot_packets": 13
