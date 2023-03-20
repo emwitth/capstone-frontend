@@ -49,7 +49,7 @@ export class InfoPanelComponent implements OnInit {
       fd: "string",
       timestamp: "string"
     },
-    name: "string",
+    name: ["string"],
     ip: "string",
     x: -1,
     y: -1
@@ -64,7 +64,7 @@ export class InfoPanelComponent implements OnInit {
       fd: "string",
       timestamp: "string"
     },
-    name: "string",
+    name: ["string"],
     ip: "string",
     x: -1,
     y: -1
@@ -77,7 +77,7 @@ export class InfoPanelComponent implements OnInit {
       fd: "string",
       timestamp: "string"
     },
-    name: "string",
+    name: ["string"],
     ip: "string",
     x: -1,
     y: -1
@@ -150,8 +150,8 @@ export class InfoPanelComponent implements OnInit {
       }
     }
     if (node?.ip && node?.name) {
-      heading = node.name !== "no hostname" ? node.name : node.ip;
-      subheading = node.name !== "no hostname" ? "ip: " + node.ip : "";
+      heading = node.name[0] !== "no hostname" ? node.name[0] : node.ip;
+      subheading = node.name[0] !== "no hostname" ? "ip: " + node.ip : "";
       if(isNodeSelected) {
         this.isIPNode = true;
       }

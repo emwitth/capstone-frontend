@@ -271,8 +271,8 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
                 if(d?.program) {
                   return d.program.name;
                 } 
-                else if ((d as IPNode)?.name !== "no hostname") {
-                  return (d as IPNode)?.name;
+                else if ((d as IPNode)?.name[0] !== "no hostname") {
+                  return (d as IPNode)?.name[0];
                 }  
                 else {
                   return (d as IPNode)?.ip;
@@ -315,8 +315,8 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
                 if(d?.program) {
                   return d.program.name;
                 } 
-                else if ((d as IPNode)?.name !== "no hostname") {
-                  return (d as IPNode)?.name;
+                else if ((d as IPNode)?.name[0] !== "no hostname") {
+                  return (d as IPNode)?.name[0];
                 }  
                 else {
                   return (d as IPNode)?.ip;
