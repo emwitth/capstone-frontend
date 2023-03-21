@@ -50,10 +50,9 @@ export class HiddenItemsListComponent implements OnInit {
         fd: item.program.fd
       };
     }
-    else if(item.ip && item.name) {
+    else if(item.ip) {
       body = {
         type: "ip",
-        ip_name: item.name,
         ip: item.ip
       };
     }
