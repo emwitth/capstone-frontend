@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { GraphJSON } from '../interfaces/d3-graph-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -31,26 +32,51 @@ export class GraphService {
   }
 
   public showNoProcNode() {
+    this.unhideNoProcNodeIfHidden()
     this.isProcNodeMinimized = false;
     this.isProcNodeHidden = false;
   }
 
   public minNoProcNode() {
+    this.unhideNoProcNodeIfHidden()
     this.isProcNodeMinimized = true;
     this.isProcNodeHidden = false;
   }
 
   public hideNoProcNode() {
     var body = {
-      type: "ip",
-      ip_name: "no hostname",
-      ip: "no ip"
+      type: "program",
+      prog_name: "no process",
+      port: "no port",
+      fd: "no process"
     };
     this.http.post<any>("api/hide" , body, { observe: "response" }).subscribe(result => {
       console.log(result.body);
       this.updateGraph();
       this.isProcNodeMinimized = false;
       this.isProcNodeHidden = true;
+    }, err => {
+      this.toastr.error(err.status + " " + err.statusText, 'Error');
+      console.log(err);
+    });
+  }
+
+  private unhideNoProcNodeIfHidden() {
+    if(this.isProcNodeHidden) {
+      this.unhideNoProcNode();
+    }
+  }
+
+  private unhideNoProcNode(){
+    var body = {
+      type: "program",
+      prog_name: "no process",
+      port: "no port",
+      fd: "no process"
+    }; 
+    this.http.post<GraphJSON>("api/show" , body, { observe: "response" }).subscribe(result => {
+      console.log(result.body);
+      this.updateGraph();
     }, err => {
       this.toastr.error(err.status + " " + err.statusText, 'Error');
       console.log(err);
