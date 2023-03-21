@@ -12,14 +12,14 @@ export interface GraphJSON {
 export interface GenericNodeNoChords {
   tot_packets: number,
   program?: ProgInfo,
-  name?: Array<string>,
+  names?: Array<string>,
   ip?: string
 }
 
 export interface GenericNode {
   tot_packets: number,
   program?: ProgInfo,
-  name?: Array<string>,
+  names?: Array<string>,
   ip?: string,
   x: number,
   y: number

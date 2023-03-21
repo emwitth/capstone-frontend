@@ -182,7 +182,6 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
     this.allNodes = allNodesNoChords.map(n => {
         var oldNode = this.allNodes.find(element => {
           return element.ip === n.ip &&
-          element.name === n.name &&
           element.program?.name == n.program?.name &&
           element.program?.fd == n.program?.fd
         });
@@ -194,7 +193,7 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
         return {
           tot_packets: n.tot_packets,
           program: n?.program,
-          name: n?.name,
+          names: n?.names,
           ip: n?.ip,
           x: oldNode?.x ? oldNode.x : this.width/2,
           y: oldNode?.y ? oldNode.y : this.height/2
@@ -268,11 +267,12 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
             .style("fill", GRAPH_TEXT_COLOR)
             .text((d: GenericNode) => {
               // Decide what should be the text in the node.
+                console.log(d.names);
                 if(d?.program) {
                   return d.program.name;
-                } 
-                else if ((d as IPNode)?.name[0] !== "no hostname") {
-                  return (d as IPNode)?.name[0];
+                }
+                else if ((d as IPNode)?.names[0] !== "no hostname" && (d.ip !== "no ip")) {
+                  return (d as IPNode)?.names[0];
                 }  
                 else {
                   return (d as IPNode)?.ip;
@@ -315,8 +315,8 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
                 if(d?.program) {
                   return d.program.name;
                 } 
-                else if ((d as IPNode)?.name[0] !== "no hostname") {
-                  return (d as IPNode)?.name[0];
+                else if ((d as IPNode)?.names[0] !== "no hostname" && (d.ip !== "no ip")) {
+                  return (d as IPNode)?.names[0];
                 }  
                 else {
                   return (d as IPNode)?.ip;
