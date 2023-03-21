@@ -21,3 +21,11 @@
 .toolbar-logo {
   height: 25px;
 }
+
+.toolbar-btn-selected {
+  background-color: var(--MAIN_COLOR_INDICATION) !important;
+}
+
+.toolbar-btn-selected:hover {
+  background-color: var(--MAIN_COLOR) !important;
+}

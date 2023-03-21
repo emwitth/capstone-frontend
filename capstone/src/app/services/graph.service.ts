@@ -16,6 +16,7 @@ export class GraphService {
   HIDE_NO_PROC_NODE:string = "Hide 'no process' node"
   isProcNodeMinimized:boolean = true;
   isProcNodeHidden:boolean = false;
+  areAllNodesMinimized:boolean = false;
 
   constructor(private http: HttpClient,private toastr: ToastrService) { }
 
@@ -29,6 +30,11 @@ export class GraphService {
 
   public updateGraph() {
     this.graphUpdateEvent.emit();
+  }
+
+  public minNodesToggle() {
+    this.areAllNodesMinimized = !this.areAllNodesMinimized;
+    this.updateGraph();
   }
 
   public showNoProcNode() {

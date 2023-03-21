@@ -14,6 +14,7 @@ import { HiddenItemsListComponent } from '../hidden-items-list/hidden-items-list
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
+  isSniffing:boolean = false;
 
   constructor(private http: HttpClient, private toastr: ToastrService, 
     public graphService: GraphService, private modalService: NgbModal,
@@ -30,6 +31,7 @@ export class ToolbarComponent implements OnInit {
       this.toastr.success(result.body, "Success!");
       console.log(result.body);
       this.graphService.startGraph();
+      this.isSniffing = true;
       }, err => {
         this.toastr.error(err.status + " " + err.statusText, "Error!");
         console.log(err);
@@ -42,6 +44,7 @@ export class ToolbarComponent implements OnInit {
       this.toastr.success(result.body, "Success!");
       console.log(result.body);
       this.graphService.stopGraph();
+      this.isSniffing = false;
       }, err => {
         this.toastr.error(err.status + " " + err.statusText, 'Error');
         this.graphService.stopGraph();

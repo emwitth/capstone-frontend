@@ -428,7 +428,10 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
    * @returns the radius confined to a bound
    */
   private calculateRadius(node: GenericNode): number {
-    if(node.program?.name === "no process" && this.graphService.isProcNodeMinimized) {
+    if(this.graphService.areAllNodesMinimized) {
+      return this.calculateRadiusNum(5);
+    }
+    if(this.graphService.isProcNodeMinimized && node.program?.name === "no process") {
       return this.calculateRadiusNum(5);
     }
     return this.calculateRadiusNum(node.tot_packets);
