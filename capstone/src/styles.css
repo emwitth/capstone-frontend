@@ -27,6 +27,16 @@ h2 {
   filter: drop-shadow(0px 0px 5px var(--INDICATION_BORDER_COLOR));
 }
 
+.dropdown {
+  background-color: var(--BACKGROUND_COLOR);
+}
+
+.toolbar-btn:hover {
+  color: var(--BACKGROUND_COLOR);
+  background-color: var(--MAIN_COLOR);
+  border-color: var(--MAIN_COLOR);
+}
+
 /* Overridden ngx-toast Styles */
 .toast-container .ngx-toastr {
   box-shadow: 0 0 1px var(--INDICATION_BORDER_COLOR) !important;

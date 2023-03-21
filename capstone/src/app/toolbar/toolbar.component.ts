@@ -16,7 +16,7 @@ import { HiddenItemsListComponent } from '../hidden-items-list/hidden-items-list
 export class ToolbarComponent implements OnInit {
 
   constructor(private http: HttpClient, private toastr: ToastrService, 
-    private graphService: GraphService, private modalService: NgbModal,
+    public graphService: GraphService, private modalService: NgbModal,
     private infoPanelService:InfoPanelService, private titleService:Title) {
       this.titleService.setTitle("Remora Fish");
     }
