@@ -59,4 +59,16 @@ export class ToolbarComponent implements OnInit {
       { size: 'xl', modalDialogClass: 'theme-modal'});
   }
 
+  public getNoProcNodeDropdownTitle() {
+    if (this.graphService.isProcNodeHidden) {
+      return this.graphService.HIDE_NO_PROC_NODE_TITLE;
+    }
+    else if (this.graphService.isProcNodeMinimized) {
+      return this.graphService.MIN_NO_PROC_NODE_TITLE;
+    }
+    else {
+      return this.graphService.SHOW_NO_PROC_NODE_TITLE;
+    }
+  }
+
 }

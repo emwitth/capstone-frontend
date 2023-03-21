@@ -22,7 +22,7 @@
   <div class="btn-group me-2" role="group" ngbDropdown>
     <button class="btn btn-primary toolbar-btn" id="no-proc-dropdown" ngbDropdownToggle 
     data-bs-toggle="tooltip" title="Toggle 'no process' node handle behavior.">
-      button
+      {{getNoProcNodeDropdownTitle()}}
     </button>
     <div ngbDropdownMenu="no-proc-dropdown" class="dropdown border border-1">
       <button ngbDropdownItem class="toolbar-btn" (click)="graphService.showNoProcNode()">{{graphService.SHOW_NO_PROC_NODE}}</button>

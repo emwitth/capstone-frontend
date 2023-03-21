@@ -14,6 +14,9 @@ export class GraphService {
   SHOW_NO_PROC_NODE:string = "Show full 'no process' node"
   MIN_NO_PROC_NODE:string = "Minimize 'no process' node"
   HIDE_NO_PROC_NODE:string = "Hide 'no process' node"
+  SHOW_NO_PROC_NODE_TITLE:string = "'no process' node shown"
+  MIN_NO_PROC_NODE_TITLE:string = "'no process' node minimized"
+  HIDE_NO_PROC_NODE_TITLE:string = "'no process' node hidden"
   isProcNodeMinimized:boolean = true;
   isProcNodeHidden:boolean = false;
 
