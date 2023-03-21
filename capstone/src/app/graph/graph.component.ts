@@ -394,8 +394,8 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
     // Uses translate because g svg elements do not have coordinate attributes.
     this.g
     .attr("transform", (d: GenericNode) => {
-      var x = this.boundX(d.x, d.tot_packets);
-      var y = this.boundY(d.y, d.tot_packets);
+      var x = this.boundX(d.x, this.calculateRadius(d));
+      var y = this.boundY(d.y, this.calculateRadius(d));
       d.x = x;
       d.y = y;
       return "translate(" + x + "," + y + ")"
@@ -428,6 +428,9 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
    * @returns the radius confined to a bound
    */
   private calculateRadius(node: GenericNode): number {
+    if(node.program?.name === "no process" && this.graphService.isProcNodeMinimized) {
+      return this.calculateRadiusNum(5);
+    }
     return this.calculateRadiusNum(node.tot_packets);
   }
 
@@ -449,8 +452,7 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
    * @returns the new position of y that is within the graph area (adjusted by the size of the node)
    */
   private boundY(y:number|null|undefined, r:number): number {
-    var newR: number = this.calculateRadiusNum(r);
-    return Math.max(newR, Math.min(this.height-newR, y ? y : 0));
+    return Math.max(r, Math.min(this.height-r, y ? y : 0));
   }
 
   /**
@@ -461,8 +463,7 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
    * @returns the new position of x that is within the graph area (adjusted by the size of the node)
    */
   private boundX(x:number|null|undefined, r:number): number {
-    var newR: number = this.calculateRadiusNum(r);
-    return Math.max(newR, Math.min(this.width-newR, x ? x : 0));
+    return Math.max(r, Math.min(this.width-r, x ? x : 0));
   }
 
 }
