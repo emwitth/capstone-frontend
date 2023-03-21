@@ -1,4 +1,6 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class GraphService {
   isProcNodeMinimized:boolean = true;
   isProcNodeHidden:boolean = false;
 
-  constructor() { }
+  constructor(private http: HttpClient,private toastr: ToastrService) { }
 
   public startGraph() {
     this.graphStartEvent.emit();
@@ -39,7 +41,19 @@ export class GraphService {
   }
 
   public hideNoProcNode() {
-    this.isProcNodeMinimized = false;
-    this.isProcNodeHidden = true;
+    var body = {
+      type: "ip",
+      ip_name: "no hostname",
+      ip: "no ip"
+    };
+    this.http.post<any>("api/hide" , body, { observe: "response" }).subscribe(result => {
+      console.log(result.body);
+      this.updateGraph();
+      this.isProcNodeMinimized = false;
+      this.isProcNodeHidden = true;
+    }, err => {
+      this.toastr.error(err.status + " " + err.statusText, 'Error');
+      console.log(err);
+    });
   }
 }
