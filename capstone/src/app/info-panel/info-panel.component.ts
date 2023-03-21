@@ -152,14 +152,28 @@ export class InfoPanelComponent implements OnInit {
     if (node?.ip && node?.names) {
       if(node.names.length > 1) {
         heading = node.ip;
+        var first = true;
         node.names.every(name => {
           if(name !== "no hostname") {
-            heading = name;
-            return false;
+            if(first) {
+              heading = "";
+              first = false;
+            }
+            else {
+              heading += ", ";
+            }
+            if(heading.length >= 50) {
+              heading += "...";
+              return false;
+            }
+            else {
+              heading += name;
+            }
           }
           return true;
         })
-        subheading = heading === node.ip ? "ip: " + node.ip : "";
+        subheading = heading !== node.ip ? "ip: " + node.ip : "";
+        console.log(subheading)
       }
       else {
         heading = node.names[0] !== "no hostname" ? node.names[0] : node.ip;
