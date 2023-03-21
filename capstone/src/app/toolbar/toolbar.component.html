@@ -22,12 +22,18 @@
   <div class="btn-group me-2" role="group" ngbDropdown>
     <button class="btn btn-primary toolbar-btn" id="no-proc-dropdown" ngbDropdownToggle 
     data-bs-toggle="tooltip" title="Toggle 'no process' node handle behavior.">
-      {{getNoProcNodeDropdownTitle()}}
+      <i [ngClass]="getNoProcNodeDropdownClass()"></i>
     </button>
     <div ngbDropdownMenu="no-proc-dropdown" class="dropdown border border-1">
-      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.showNoProcNode()">{{graphService.SHOW_NO_PROC_NODE}}</button>
-      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.minNoProcNode()">{{graphService.MIN_NO_PROC_NODE}}</button>
-      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.hideNoProcNode()">{{graphService.HIDE_NO_PROC_NODE}}</button>
+      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.showNoProcNode()">
+        <i class="bi bi-eye-fill"></i>
+      </button>
+      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.minNoProcNode()">
+        <i class="bi bi-dash-circle-fill"></i>
+      </button>
+      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.hideNoProcNode()">
+        <i class="bi bi-eye-slash-fill"></i>
+      </button>
     </div>
   </div>
   <div class="flex-fill"></div>
