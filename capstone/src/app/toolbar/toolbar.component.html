@@ -1,8 +1,10 @@
 <div class="d-flex" role="toolbar">
-  <div class="ms-2 mt-1 me-2 toolbar-name">
+  <!-- Remorafish Logo -->
+  <div class="ms-2 mt-1 me-2 toolbar-text">
     <img class="toolbar-logo" src="../../assets/RemoraFishLogo_adobe_express.svg">
     REMORA FISH
   </div>
+  <!-- Start Sniffing Button -->
   <div class="btn-group me-2" role="group">
     <button class="btn btn-primary toolbar-btn" (click)="startSniff()" 
     data-bs-toggle="tooltip" title="start sniffing for packets">
@@ -13,30 +15,41 @@
       <i class="bi bi-stop-fill"></i>
     </button>
   </div>
+  <!-- Stop Sniffing Button -->
   <div class="btn-group me-2" role="group">
     <button class="btn btn-primary toolbar-btn" (click)="openHiddenItemsList()" 
     data-bs-toggle="tooltip" title="see hidden nodes and links">
       <i class="bi bi-eye-fill"></i>
     </button>
   </div>
+  <!-- No Process Node Options -->
   <div class="btn-group me-2" role="group" ngbDropdown>
+    <div class="ms-2 mt-1 me-2 toolbar-text toolbar-label-text d-flex flex-column align-items-end">
+      <div>'No Process'</div>
+      <div>Node Options</div>
+    </div>
     <button class="btn btn-primary toolbar-btn" id="no-proc-dropdown" ngbDropdownToggle 
     data-bs-toggle="tooltip" title="Toggle 'no process' node handle behavior.">
       <i [ngClass]="getNoProcNodeDropdownClass()"></i>
     </button>
     <div ngbDropdownMenu="no-proc-dropdown" class="dropdown border border-1">
-      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.showNoProcNode()">
-        <i class="bi bi-eye-fill"></i>
+      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.showNoProcNode()"
+      data-bs-toggle="tooltip" title="Show 'no process' node.">
+        <i class="bi bi-eye-fill"></i> Show
       </button>
-      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.minNoProcNode()">
-        <i class="bi bi-dash-circle-fill"></i>
+      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.minNoProcNode()"
+      data-bs-toggle="tooltip" title="Minimize 'no process' node.">
+        <i class="bi bi-dash-circle-fill"></i> Min
       </button>
-      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.hideNoProcNode()">
-        <i class="bi bi-eye-slash-fill"></i>
+      <button ngbDropdownItem class="toolbar-btn" (click)="graphService.hideNoProcNode()"
+      data-bs-toggle="tooltip" title="Hide 'no process' node.">
+        <i class="bi bi-eye-slash-fill"></i> Hide
       </button>
     </div>
   </div>
+  <!-- Filler Div -->
   <div class="flex-fill"></div>
+  <!-- Toggle Info Panel Button -->
   <div class="btn-group float-right" role="group">
     <button class="btn btn-primary toolbar-btn" (click)="toggleInfoPanel()" 
     data-bs-toggle="tooltip" title="open info panel">

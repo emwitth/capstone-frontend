@@ -31,6 +31,10 @@ h2 {
   background-color: var(--BACKGROUND_COLOR);
 }
 
+.dropdown-menu.show {
+  min-width: fit-content;
+}
+
 .toolbar-btn:hover {
   color: var(--BACKGROUND_COLOR);
   background-color: var(--MAIN_COLOR);
