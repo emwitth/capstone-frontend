@@ -1,5 +1,5 @@
 export interface IPNode {
     ip: string,
-    name: string,
+    names: Array<string>,
     tot_packets: number
 }

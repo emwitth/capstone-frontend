@@ -18,7 +18,7 @@
       <h3 class="title">Hidden IP Nodes</h3>
       <p *ngIf="hiddenItems.ip_nodes.length == 0">There are no ip nodes hidden right now.</p>
       <div *ngFor="let ip of hiddenItems.ip_nodes" class="d-flex justify-content-between ip border">
-        <p>{{ip.ip}}({{ip.name}})</p>
+        <p>{{ip.ip}}({{ip.names[0]}})</p>
         <p>total packets: {{ip.tot_packets}}</p>
         <button class="btn ip-button" (click)="showItem(ip)">
           <i class="bi bi-eye-fill"></i>

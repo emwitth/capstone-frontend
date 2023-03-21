@@ -49,7 +49,7 @@ export class InfoPanelComponent implements OnInit {
       fd: "string",
       timestamp: "string"
     },
-    name: "string",
+    names: ["string"],
     ip: "string",
     x: -1,
     y: -1
@@ -64,7 +64,7 @@ export class InfoPanelComponent implements OnInit {
       fd: "string",
       timestamp: "string"
     },
-    name: "string",
+    names: ["string"],
     ip: "string",
     x: -1,
     y: -1
@@ -77,7 +77,7 @@ export class InfoPanelComponent implements OnInit {
       fd: "string",
       timestamp: "string"
     },
-    name: "string",
+    names: ["string"],
     ip: "string",
     x: -1,
     y: -1
@@ -149,9 +149,36 @@ export class InfoPanelComponent implements OnInit {
         this.isIPNode = false;
       }
     }
-    if (node?.ip && node?.name) {
-      heading = node.name !== "no hostname" ? node.name : node.ip;
-      subheading = node.name !== "no hostname" ? "ip: " + node.ip : "";
+    if (node?.ip && node?.names) {
+      if(node.names.length > 1) {
+        heading = node.ip;
+        var first = true;
+        node.names.every(name => {
+          if(name !== "no hostname") {
+            if(first) {
+              heading = "";
+              first = false;
+            }
+            else {
+              heading += ", ";
+            }
+            if(heading.length >= 50) {
+              heading += "...";
+              return false;
+            }
+            else {
+              heading += name;
+            }
+          }
+          return true;
+        })
+        subheading = heading !== node.ip ? "ip: " + node.ip : "";
+        console.log(subheading)
+      }
+      else {
+        heading = node.names[0] !== "no hostname" ? node.names[0] : node.ip;
+        subheading = node.names[0] !== "no hostname" ? "ip: " + node.ip : "";
+      }
       if(isNodeSelected) {
         this.isIPNode = true;
       }
@@ -236,10 +263,10 @@ export class InfoPanelComponent implements OnInit {
 
   hideNode() {
     var body = {};
-    if(this.currentNode.ip && this.currentNode.name) {
+    if(this.currentNode.ip && this.currentNode.names) {
       body = {
         type: "ip",
-        ip_name: this.currentNode.name,
+        ip_name: this.currentNode.names,
         ip: this.currentNode.ip
       };
     } else if (this.currentNode.program) {
@@ -275,7 +302,7 @@ export class InfoPanelComponent implements OnInit {
       prog_name: progNode.program?.name,
       port: progNode.program?.port,
       fd: progNode.program?.fd,
-      ip_name: ipNode.name,
+      ip_name: ipNode.names,
       ip: ipNode.ip
     };
     this.http.post<any>("api/hide", body, { observe: "response" }).subscribe(result => {
