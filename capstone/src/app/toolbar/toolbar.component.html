@@ -31,20 +31,20 @@
       <div>Node Options</div>
     </div>
     <button class="btn btn-primary toolbar-btn" id="no-proc-dropdown" ngbDropdownToggle 
-    data-bs-toggle="tooltip" title="Toggle 'no process' node handle behavior.">
+    data-bs-toggle="tooltip" title="toggle 'no process' node handle behavior">
       <i [ngClass]="getNoProcNodeDropdownClass()"></i>
     </button>
     <div ngbDropdownMenu="no-proc-dropdown" class="dropdown border border-1">
       <button ngbDropdownItem class="toolbar-btn" (click)="graphService.showNoProcNode()"
-      data-bs-toggle="tooltip" title="Show 'no process' node.">
+      data-bs-toggle="tooltip" title="show 'no process' node">
         <i class="bi bi-eye-fill"></i> Show
       </button>
       <button ngbDropdownItem class="toolbar-btn" (click)="graphService.minNoProcNode()"
-      data-bs-toggle="tooltip" title="Minimize 'no process' node.">
+      data-bs-toggle="tooltip" title="minimize 'no process' node">
         <i class="bi bi-dash-circle-fill"></i> Min
       </button>
       <button ngbDropdownItem class="toolbar-btn" (click)="graphService.hideNoProcNode()"
-      data-bs-toggle="tooltip" title="Hide 'no process' node.">
+      data-bs-toggle="tooltip" title="hide 'no process' node">
         <i class="bi bi-eye-slash-fill"></i> Hide
       </button>
     </div>
@@ -57,7 +57,7 @@
     </div>
     <button class="btn btn-primary toolbar-btn" (click)="graphService.minNodesToggle()" 
     [ngClass]="{'toolbar-btn-selected':graphService.areAllNodesMinimized}"
-    data-bs-toggle="tooltip" title="Minimize all nodes.">
+    data-bs-toggle="tooltip" title="minimize all nodes">
       <i class="bi bi-dash-circle-fill"></i>
     </button>
   </div>
