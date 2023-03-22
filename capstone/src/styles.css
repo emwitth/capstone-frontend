@@ -1,6 +1,7 @@
 /* Custom Styles for a consistent theme */
 :root {
     --MAIN_COLOR: #72aaaa;
+    --MAIN_COLOR_INDICATION: #384e4e;
     --COMPLEMENTARY_COLOR: #945b5c;
     --BACKGROUND_COLOR: #191919;
     --GRAPH_TEXT_COLOR: #c2c2c2;
@@ -25,6 +26,20 @@ h2 {
 
 .hover-indication {
   filter: drop-shadow(0px 0px 5px var(--INDICATION_BORDER_COLOR));
+}
+
+.dropdown {
+  background-color: var(--BACKGROUND_COLOR);
+}
+
+.dropdown-menu.show {
+  min-width: fit-content;
+}
+
+.toolbar-btn:hover {
+  color: var(--BACKGROUND_COLOR);
+  background-color: var(--MAIN_COLOR);
+  border-color: var(--MAIN_COLOR);
 }
 
 /* Overridden ngx-toast Styles */

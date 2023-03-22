@@ -10,10 +10,22 @@
   color: var(--BACKGROUND_COLOR);
 }
 
-.toolbar-name {
+.toolbar-text {
   color: var(--MAIN_COLOR);
+}
+
+.toolbar-label-text {
+  font-size: x-small;
 }
 
 .toolbar-logo {
   height: 25px;
+}
+
+.toolbar-btn-selected {
+  background-color: var(--MAIN_COLOR_INDICATION) !important;
+}
+
+.toolbar-btn-selected:hover {
+  background-color: var(--MAIN_COLOR) !important;
 }

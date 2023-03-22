@@ -14,9 +14,10 @@ import { HiddenItemsListComponent } from '../hidden-items-list/hidden-items-list
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
+  isSniffing:boolean = false;
 
   constructor(private http: HttpClient, private toastr: ToastrService, 
-    private graphService: GraphService, private modalService: NgbModal,
+    public graphService: GraphService, private modalService: NgbModal,
     private infoPanelService:InfoPanelService, private titleService:Title) {
       this.titleService.setTitle("Remora Fish");
     }
@@ -30,6 +31,7 @@ export class ToolbarComponent implements OnInit {
       this.toastr.success(result.body, "Success!");
       console.log(result.body);
       this.graphService.startGraph();
+      this.isSniffing = true;
       }, err => {
         this.toastr.error(err.status + " " + err.statusText, "Error!");
         console.log(err);
@@ -42,6 +44,7 @@ export class ToolbarComponent implements OnInit {
       this.toastr.success(result.body, "Success!");
       console.log(result.body);
       this.graphService.stopGraph();
+      this.isSniffing = false;
       }, err => {
         this.toastr.error(err.status + " " + err.statusText, 'Error');
         this.graphService.stopGraph();
@@ -57,6 +60,18 @@ export class ToolbarComponent implements OnInit {
     const modalRef = this.modalService.open(
       HiddenItemsListComponent,
       { size: 'xl', modalDialogClass: 'theme-modal'});
+  }
+
+  public getNoProcNodeDropdownClass() {
+    if (this.graphService.isProcNodeHidden) {
+      return "bi bi-eye-slash-fill";
+    }
+    else if (this.graphService.isProcNodeMinimized) {
+      return "bi bi-dash-circle-fill";
+    }
+    else {
+      return "bi bi-eye-fill";
+    }
   }
 
 }
