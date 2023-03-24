@@ -42,6 +42,26 @@ h2 {
   border-color: var(--MAIN_COLOR);
 }
 
+.blue-btn {
+  color: var(--MAIN_COLOR);
+}
+
+.blue-btn:hover {
+  color: var(--BACKGROUND_COLOR) !important;
+}
+
+.form-control {
+  background-color: var(--BACKGROUND_COLOR);
+  color: var(--INDICATION_BORDER_COLOR) !important;
+}
+
+.form-control:focus {
+  background-color: var(--BACKGROUND_COLOR);
+  border-color: var(--INDICATION_BORDER_COLOR);
+  color: var(--INDICATION_BORDER_COLOR) !important;
+  box-shadow: 0 1px 1px var(--INDICATION_BORDER_COLOR), 0 0 8px var(--INDICATION_BORDER_COLOR);
+}
+
 /* Overridden ngx-toast Styles */
 .toast-container .ngx-toastr {
   box-shadow: 0 0 1px var(--INDICATION_BORDER_COLOR) !important;

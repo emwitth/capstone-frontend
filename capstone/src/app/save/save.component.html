@@ -1,1 +1,20 @@
-<p>save works!</p>
+<div class="container mt-2 mb-2">
+  <div>Would you like to save this session?</div>
+  <div class="d-flex mt-2">
+    <button type="button" class="btn btn-primary blue-btn"
+    (click)="wantSave = true">Yes</button>
+    <button type="button" class="btn btn-primary blue-btn ms-2" 
+    (click)="activeModal.dismiss()">No</button>
+  </div>
+  <form *ngIf="wantSave">
+    <hr>
+    <div class="d-flex">
+      <label for="session" class="form-label">Session Name:</label>
+      <div class="ms-2">
+        <input type="text" class="form-control" id="session" placeholder="Enter session name" name="session">
+      </div>
+      <button type="button" class="btn btn-primary blue-btn ms-2"
+      (click)="save()">Save</button>
+    </div>
+  </form>
+</div>
