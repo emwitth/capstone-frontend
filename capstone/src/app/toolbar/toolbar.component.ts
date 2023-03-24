@@ -1,3 +1,4 @@
+import { SaveComponent } from './../save/save.component';
 import { Component, OnInit } from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import { HttpClient } from '@angular/common/http';
@@ -39,17 +40,19 @@ export class ToolbarComponent implements OnInit {
   }
 
   public stopSniff() {
-    var body = {};
-    this.http.post<any>("api/sniff/false" , body, { observe: "response" }).subscribe(result => {
-      this.toastr.success(result.body, "Success!");
-      console.log(result.body);
-      this.graphService.stopGraph();
-      this.isSniffing = false;
-      }, err => {
-        this.toastr.error(err.status + " " + err.statusText, 'Error');
-        this.graphService.stopGraph();
-        console.log(err);
-      });
+    const modalRef = this.modalService.open(
+      SaveComponent, { modalDialogClass: 'theme-modal'});
+    // var body = {};
+    // this.http.post<any>("api/sniff/false" , body, { observe: "response" }).subscribe(result => {
+    //   this.toastr.success(result.body, "Success!");
+    //   console.log(result.body);
+    //   this.graphService.stopGraph();
+    //   this.isSniffing = false;
+    //   }, err => {
+    //     this.toastr.error(err.status + " " + err.statusText, 'Error');
+    //     this.graphService.stopGraph();
+    //     console.log(err);
+    //   });
   }
 
   public toggleInfoPanel() {

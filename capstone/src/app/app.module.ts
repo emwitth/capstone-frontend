@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import { PacketInfoDisplayComponent } from './packet-info-display/packet-info-display.component';
 import { HiddenItemsListComponent } from './hidden-items-list/hidden-items-list.component';
+import { SaveComponent } from './save/save.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HiddenItemsListComponent } from './hidden-items-list/hidden-items-list.
     ToolbarComponent,
     InfoPanelComponent,
     PacketInfoDisplayComponent,
-    HiddenItemsListComponent
+    HiddenItemsListComponent,
+    SaveComponent
   ],
   imports: [
     BrowserModule,
