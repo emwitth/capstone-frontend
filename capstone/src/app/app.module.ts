@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import { PacketInfoDisplayComponent } from './packet-info-display/packet-info-display.component';
 import { HiddenItemsListComponent } from './hidden-items-list/hidden-items-list.component';
+import { SaveComponent } from './save/save.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HiddenItemsListComponent } from './hidden-items-list/hidden-items-list.
     ToolbarComponent,
     InfoPanelComponent,
     PacketInfoDisplayComponent,
-    HiddenItemsListComponent
+    HiddenItemsListComponent,
+    SaveComponent
   ],
   imports: [
     BrowserModule,
@@ -29,6 +31,7 @@ import { HiddenItemsListComponent } from './hidden-items-list/hidden-items-list.
     NgbModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     ToastrModule.forRoot({
       positionClass:'toast-top-right'
     })
