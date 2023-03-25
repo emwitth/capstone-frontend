@@ -25,13 +25,14 @@ export class SaveComponent implements OnInit {
   }
 
   save() {
-    console.log(this.form.get("sessionName")?.value);
-    this.closeModalAndStopSniff();
+    this.closeModalAndStopSniff(this.form.get("sessionName")?.value);
   }
 
-  closeModalAndStopSniff() {
+  closeModalAndStopSniff(sessionName:string = "") {
     this.activeModal.close();
-    var body = {};
+    var body = {
+      sessionName: sessionName
+    };
     this.http.post<any>("api/sniff/false" , body, { observe: "response" }).subscribe(result => {
       this.toastr.success(result.body, "Success!");
       console.log(result.body);
