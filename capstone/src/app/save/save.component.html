@@ -4,17 +4,20 @@
     <button type="button" class="btn btn-primary blue-btn"
     (click)="wantSave = true">Yes</button>
     <button type="button" class="btn btn-primary blue-btn ms-2" 
-    (click)="activeModal.dismiss()">No</button>
+    (click)="closeModalAndStopSniff()">No</button>
   </div>
-  <form *ngIf="wantSave">
+  <form *ngIf="wantSave" [formGroup]="form">
     <hr>
     <div class="d-flex">
       <label for="session" class="form-label">Session Name:</label>
       <div class="ms-2">
-        <input type="text" class="form-control" id="session" placeholder="Enter session name" name="session">
+        <input type="text" class="form-control" formControlName="sessionName"
+        id="session" placeholder="Enter session name" name="session">
       </div>
       <button type="button" class="btn btn-primary blue-btn ms-2"
-      (click)="save()">Save</button>
+      (click)="save()" [disabled]="form.pristine || form.invalid">
+      Save</button>
     </div>
+    <p *ngIf="this.form.get('sessionName')?.hasError('pattern')">Session names can only have aphanumaric values.<p>
   </form>
 </div>

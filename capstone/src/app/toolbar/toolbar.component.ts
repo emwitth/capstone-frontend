@@ -24,9 +24,16 @@ export class ToolbarComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    this.graphService.graphStopEvent.subscribe(() => {
+      this.isSniffing = false;
+    });
   }
 
   public startSniff() {
+    if(this.isSniffing) {
+      return;
+    }
+
     var body = {};
     this.http.post<any>("api/sniff/true" , body, { observe: "response" }).subscribe(result => {
       this.toastr.success(result.body, "Success!");
@@ -40,19 +47,13 @@ export class ToolbarComponent implements OnInit {
   }
 
   public stopSniff() {
+    if (!this.isSniffing) {
+      return;
+    }
+
     const modalRef = this.modalService.open(
       SaveComponent, { modalDialogClass: 'theme-modal'});
-    // var body = {};
-    // this.http.post<any>("api/sniff/false" , body, { observe: "response" }).subscribe(result => {
-    //   this.toastr.success(result.body, "Success!");
-    //   console.log(result.body);
-    //   this.graphService.stopGraph();
-    //   this.isSniffing = false;
-    //   }, err => {
-    //     this.toastr.error(err.status + " " + err.statusText, 'Error');
-    //     this.graphService.stopGraph();
-    //     console.log(err);
-    //   });
+    modalRef.result
   }
 
   public toggleInfoPanel() {
