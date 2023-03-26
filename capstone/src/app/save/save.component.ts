@@ -13,6 +13,7 @@ import { GraphService } from '../services/graph.service';
 export class SaveComponent implements OnInit {
   wantSave:boolean = false;
   form: FormGroup;
+  error: string = "";
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder,
     private http: HttpClient, private toastr: ToastrService, public graphService: GraphService) { 
@@ -29,7 +30,6 @@ export class SaveComponent implements OnInit {
   }
 
   closeModalAndStopSniff(sessionName:string = "") {
-    this.activeModal.close();
     var body = {
       sessionName: sessionName
     };
@@ -37,9 +37,14 @@ export class SaveComponent implements OnInit {
       this.toastr.success(result.body, "Success!");
       console.log(result.body);
       this.graphService.stopGraph();
+      this.activeModal.close();
       }, err => {
-        this.toastr.error(err.status + " " + err.statusText, 'Error');
-        this.graphService.stopGraph();
+        if(err.status == 400) {
+          this.error = err.error.message
+        }
+        else {
+          this.toastr.error(err.status + " " + err.statusText, 'Error');
+        }
         console.log(err);
       });
   }

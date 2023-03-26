@@ -19,5 +19,6 @@
       Save</button>
     </div>
     <p *ngIf="this.form.get('sessionName')?.hasError('pattern')">Session names can only have aphanumaric values.<p>
+    <p *ngIf="error != ''">{{error}}<p>
   </form>
 </div>
