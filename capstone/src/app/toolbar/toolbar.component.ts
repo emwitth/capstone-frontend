@@ -70,7 +70,7 @@ export class ToolbarComponent implements OnInit {
   public openSessionList() {
     const modalRef = this.modalService.open(
       SessionListComponent,
-      { size: 'xl', modalDialogClass: 'theme-modal'});
+      {modalDialogClass: 'theme-modal'});
   }
 
   public getNoProcNodeDropdownClass() {
