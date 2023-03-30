@@ -18,7 +18,8 @@ export class SaveComponent implements OnInit {
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder,
     private http: HttpClient, private toastr: ToastrService, public graphService: GraphService) { 
     this.form = this.fb.group({
-      sessionName: ['', [Validators.required, Validators.pattern("[A-Za-z0-9]*")]]
+      sessionName: ['', [Validators.required, Validators.pattern("[A-Za-z0-9]*")]],
+      description: ['', [Validators.pattern("[A-Za-z0-9 .!?+=-]*")]]
     }, {});
   }
 
@@ -26,12 +27,13 @@ export class SaveComponent implements OnInit {
   }
 
   save() {
-    this.closeModalAndStopSniff(this.form.get("sessionName")?.value);
+    this.closeModalAndStopSniff(this.form.get("sessionName")?.value, this.form.get("description")?.value);
   }
 
-  closeModalAndStopSniff(sessionName:string = "") {
+  closeModalAndStopSniff(sessionName:string = "", description:string = "") {
     var body = {
-      sessionName: sessionName
+      sessionName: sessionName,
+      description: description
     };
     this.http.post<any>("api/sniff/false" , body, { observe: "response" }).subscribe(result => {
       this.toastr.success(result.body, "Success!");
