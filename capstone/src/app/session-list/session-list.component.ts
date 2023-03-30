@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Session } from '../interfaces/sessions';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-session-list',
@@ -38,6 +39,22 @@ export class SessionListComponent implements OnInit {
       console.log(err);
     });
     this.loadSessions();
+  }
+
+  getPcap(name:string) {
+    console.log(name)
+    this.http.post("api/sessions/" + name + "/pcap" ,{}, { responseType: 'blob' }).subscribe(result => {
+      console.log(result);
+      if(result) {
+        FileSaver.saveAs(result, name+".pcap");
+      }
+      else {
+        this.toastr.error("Something went wrong! File is null");
+      }
+    }, err => {
+      this.toastr.error(err.status + " " + err.statusText, "Error!");
+      console.log(err);
+    });
   }
 
 }
