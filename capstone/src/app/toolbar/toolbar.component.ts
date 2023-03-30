@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GraphService } from '../services/graph.service';
 import { InfoPanelService } from '../services/info-panel.service';
 import { HiddenItemsListComponent } from '../hidden-items-list/hidden-items-list.component';
+import { SessionListComponent } from '../session-list/session-list.component';
 
 
 @Component({
@@ -63,6 +64,12 @@ export class ToolbarComponent implements OnInit {
   public openHiddenItemsList() {
     const modalRef = this.modalService.open(
       HiddenItemsListComponent,
+      { size: 'xl', modalDialogClass: 'theme-modal'});
+  }
+
+  public openSessionList() {
+    const modalRef = this.modalService.open(
+      SessionListComponent,
       { size: 'xl', modalDialogClass: 'theme-modal'});
   }
 
