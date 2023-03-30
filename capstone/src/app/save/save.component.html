@@ -9,8 +9,7 @@
   <form *ngIf="wantSave" [formGroup]="form">
     <hr>
     <div class="d-flex">
-      <label for="session" class="form-label">Session Name:</label>
-      <div class="ms-2">
+      <div class="ms-2 flex-fill">
         <input type="text" class="form-control" formControlName="sessionName"
         id="session" placeholder="Enter session name" name="session">
       </div>
@@ -18,6 +17,12 @@
       (click)="save()" [disabled]="form.pristine || form.invalid">
       Save</button>
     </div>
-    <p *ngIf="this.form.get('sessionName')?.hasError('pattern')">Session names can only have aphanumaric values.<p>
+    <div class="ms-2 mt-2">
+      <input type="text" class="form-control" formControlName="description"
+      id="description" placeholder="Enter Description (optional)" name="description">
+    </div>
+    <p *ngIf="this.form.get('sessionName')?.hasError('pattern')">Session names can only have aphanumaric values (and no spaces).<p>
+    <p *ngIf="this.form.get('description')?.hasError('pattern')">description can only have alpahnumeric values and these: .!?+=- (including spaces).<p></p>
+    <p *ngIf="error != ''">{{error}}<p>
   </form>
 </div>

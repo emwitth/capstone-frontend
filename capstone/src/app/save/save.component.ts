@@ -13,11 +13,13 @@ import { GraphService } from '../services/graph.service';
 export class SaveComponent implements OnInit {
   wantSave:boolean = false;
   form: FormGroup;
+  error: string = "";
 
   constructor(public activeModal: NgbActiveModal, private fb: FormBuilder,
     private http: HttpClient, private toastr: ToastrService, public graphService: GraphService) { 
     this.form = this.fb.group({
-      sessionName: ['', [Validators.required, Validators.pattern("[A-Za-z0-9]*")]]
+      sessionName: ['', [Validators.required, Validators.pattern("[A-Za-z0-9]*")]],
+      description: ['', [Validators.pattern("[A-Za-z0-9 .!?+=-]*")]]
     }, {});
   }
 
@@ -25,20 +27,26 @@ export class SaveComponent implements OnInit {
   }
 
   save() {
-    console.log(this.form.get("sessionName")?.value);
-    this.closeModalAndStopSniff();
+    this.closeModalAndStopSniff(this.form.get("sessionName")?.value, this.form.get("description")?.value);
   }
 
-  closeModalAndStopSniff() {
-    this.activeModal.close();
-    var body = {};
+  closeModalAndStopSniff(sessionName:string = "", description:string = "") {
+    var body = {
+      sessionName: sessionName,
+      description: description
+    };
     this.http.post<any>("api/sniff/false" , body, { observe: "response" }).subscribe(result => {
       this.toastr.success(result.body, "Success!");
       console.log(result.body);
       this.graphService.stopGraph();
+      this.activeModal.close();
       }, err => {
-        this.toastr.error(err.status + " " + err.statusText, 'Error');
-        this.graphService.stopGraph();
+        if(err.status == 400) {
+          this.error = err.error.message
+        }
+        else {
+          this.toastr.error(err.status + " " + err.statusText, 'Error');
+        }
         console.log(err);
       });
   }
