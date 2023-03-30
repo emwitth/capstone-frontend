@@ -1,0 +1,22 @@
+<div class="container">
+  <h3 class="title">Saved Sessions</h3>
+  <p *ngIf="sessions.length == 0">You have no saved sessions.</p>
+  <div *ngFor="let session of sessions" class="session container border mt-2 mb-2">
+    <div class="d-flex  mt-2">
+      <div>{{session.name}}</div>
+      <div class="timestamp ms-3">{{session.timestamp}}</div>
+      <div class="flex-fill"></div>
+      <button class="btn btn-primary session-button" (click)="getPcap(session.name)"
+      data-bs-toggle="tooltip" title="download PCAP file">
+        <i class="bi bi-file-earmark-arrow-down-fill"></i>
+      </button>
+      <button class="btn btn-primary session-button ms-2" (click)="delete(session.name)"
+      data-bs-toggle="tooltip" title="delete session">
+        <i class="bi bi-trash-fill"></i>
+      </button>
+    </div>
+    <div>
+      {{session.description}}
+    </div>
+  </div>
+</div>

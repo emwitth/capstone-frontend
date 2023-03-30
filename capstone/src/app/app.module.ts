@@ -14,6 +14,8 @@ import { InfoPanelComponent } from './info-panel/info-panel.component';
 import { PacketInfoDisplayComponent } from './packet-info-display/packet-info-display.component';
 import { HiddenItemsListComponent } from './hidden-items-list/hidden-items-list.component';
 import { SaveComponent } from './save/save.component';
+import { SessionListComponent } from './session-list/session-list.component';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { SaveComponent } from './save/save.component';
     InfoPanelComponent,
     PacketInfoDisplayComponent,
     HiddenItemsListComponent,
-    SaveComponent
+    SaveComponent,
+    SessionListComponent
   ],
   imports: [
     BrowserModule,
