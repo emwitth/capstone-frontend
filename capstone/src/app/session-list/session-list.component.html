@@ -3,9 +3,8 @@
   <p *ngIf="sessions.length == 0">You have no saved sessions.</p>
   <div *ngFor="let session of sessions" class="session container border mt-2 mb-2">
     <div class="d-flex  mt-2">
-      <div>
-        {{session.name}}
-      </div>
+      <div>{{session.name}}</div>
+      <div class="timestamp ms-3">{{session.timestamp}}</div>
       <div class="flex-fill"></div>
       <button class="btn btn-primary session-button"
       data-bs-toggle="tooltip" title="download PCAP file">

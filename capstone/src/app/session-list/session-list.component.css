@@ -2,6 +2,11 @@
   color: var(--INDICATION_BORDER_COLOR);
 }
 
+.timestamp {
+  font-size: small;
+  text-anchor: middle;
+}
+
 .session {
   border-color: var(--INDICATION_BORDER_COLOR)!important;
   color: var(--INDICATION_BORDER_COLOR)!important;

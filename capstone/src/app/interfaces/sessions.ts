@@ -1,4 +1,5 @@
 export interface Session {
   name:string,
-  description:string
+  description:string,
+  timestamp: string
 }
