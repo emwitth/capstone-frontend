@@ -50,6 +50,11 @@ export class GraphComponent implements OnInit, AfterViewInit, OnDestroy {
       .then(data => this.makeGraph(data as GraphJSON));
       this.graphUpdateSubscription = graphInterval.subscribe(() => this.update());
     });
+    // Set listener to make graph with session data.
+    this.graphService.graphLoadSessionEvent.subscribe(() => {
+      d3.json("/api/graph-data")
+      .then(data => this.makeGraph(data as GraphJSON));
+    });
     // Set listener to stop periodic update.
     this.graphService.graphStopEvent.subscribe(() => {
       this.graphUpdateSubscription.unsubscribe();

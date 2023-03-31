@@ -10,6 +10,7 @@ export class GraphService {
   @Output() graphStartEvent = new EventEmitter();
   @Output() graphStopEvent = new EventEmitter();
   @Output() graphUpdateEvent = new EventEmitter();
+  @Output() graphLoadSessionEvent = new EventEmitter();
 
   SHOW_NO_PROC_NODE:string = "Show full 'no process' node"
   MIN_NO_PROC_NODE:string = "Minimize 'no process' node"
@@ -30,6 +31,10 @@ export class GraphService {
 
   public updateGraph() {
     this.graphUpdateEvent.emit();
+  }
+
+  public loadSession() {
+    this.graphLoadSessionEvent.emit();
   }
 
   public minNodesToggle() {

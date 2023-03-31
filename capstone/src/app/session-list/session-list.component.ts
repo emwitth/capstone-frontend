@@ -1,3 +1,4 @@
+import { GraphService } from './../services/graph.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +15,7 @@ export class SessionListComponent implements OnInit {
   sessions: Array<Session>  = []
 
   constructor(private toastr: ToastrService, private http:HttpClient,
-    public activeModal: NgbActiveModal) { }
+    public activeModal: NgbActiveModal, private graphService:GraphService) { }
 
   ngOnInit(): void {
     this.loadSessions();
@@ -64,6 +65,7 @@ export class SessionListComponent implements OnInit {
     this.http.post<any>("api/sessions/" + name, {}, { observe: "response" }).subscribe(result => {
       this.toastr.success(result.body);
       this.activeModal.close();
+      this.graphService.loadSession();
     }, err => {
       this.toastr.error(err.status + " " + err.statusText, "Error!");
       console.log(err);
