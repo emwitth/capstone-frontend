@@ -19,7 +19,7 @@ export class SaveComponent implements OnInit {
     private http: HttpClient, private toastr: ToastrService, public graphService: GraphService) { 
     this.form = this.fb.group({
       sessionName: ['', [Validators.required, Validators.pattern("[A-Za-z0-9]*")]],
-      description: ['', [Validators.pattern("[A-Za-z0-9 .!?+=-]*")]]
+      description: ['', [Validators.pattern("[A-Za-z0-9 .!?+=,-]*")]]
     }, {});
   }
 
