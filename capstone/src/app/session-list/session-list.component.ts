@@ -1,8 +1,10 @@
+import { GraphService } from './../services/graph.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Session } from '../interfaces/sessions';
 import * as FileSaver from 'file-saver';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-session-list',
@@ -12,7 +14,8 @@ import * as FileSaver from 'file-saver';
 export class SessionListComponent implements OnInit {
   sessions: Array<Session>  = []
 
-  constructor(private toastr: ToastrService, private http:HttpClient) { }
+  constructor(private toastr: ToastrService, private http:HttpClient,
+    public activeModal: NgbActiveModal, private graphService:GraphService) { }
 
   ngOnInit(): void {
     this.loadSessions();
@@ -30,7 +33,7 @@ export class SessionListComponent implements OnInit {
 
   delete(name:string) {
     console.log(name)
-    this.http.delete<any>("api/sessions/" + name , { observe: "response" }).subscribe(result => {
+    this.http.delete<any>("api/sessions/" + name, { observe: "response" }).subscribe(result => {
       console.log(result.body);
       this.toastr.success(result.body);
       this.loadSessions();
@@ -43,7 +46,7 @@ export class SessionListComponent implements OnInit {
 
   getPcap(name:string) {
     console.log(name)
-    this.http.post("api/sessions/" + name + "/pcap" ,{}, { responseType: 'blob' }).subscribe(result => {
+    this.http.post("api/sessions/" + name + "/pcap", {}, { responseType: 'blob' }).subscribe(result => {
       console.log(result);
       if(result) {
         FileSaver.saveAs(result, name+".pcap");
@@ -51,6 +54,18 @@ export class SessionListComponent implements OnInit {
       else {
         this.toastr.error("Something went wrong! File is null");
       }
+    }, err => {
+      this.toastr.error(err.status + " " + err.statusText, "Error!");
+      console.log(err);
+    });
+  }
+
+  loadSession(name:string) {
+    console.log(name)
+    this.http.post<any>("api/sessions/" + name, {}, { observe: "response" }).subscribe(result => {
+      this.toastr.success(result.body);
+      this.activeModal.close();
+      this.graphService.loadSession();
     }, err => {
       this.toastr.error(err.status + " " + err.statusText, "Error!");
       console.log(err);

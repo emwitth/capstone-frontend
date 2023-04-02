@@ -22,7 +22,7 @@
       id="description" placeholder="Enter Description (optional)" name="description">
     </div>
     <p *ngIf="this.form.get('sessionName')?.hasError('pattern')">Session names can only have aphanumaric values (and no spaces).<p>
-    <p *ngIf="this.form.get('description')?.hasError('pattern')">description can only have alpahnumeric values and these: .!?+=- (including spaces).<p></p>
+    <p *ngIf="this.form.get('description')?.hasError('pattern')">description can only have alpahnumeric values and these: .!?+=,- (including spaces).<p></p>
     <p *ngIf="error != ''">{{error}}<p>
   </form>
 </div>
