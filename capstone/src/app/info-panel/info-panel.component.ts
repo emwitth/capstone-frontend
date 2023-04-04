@@ -136,7 +136,7 @@ export class InfoPanelComponent implements OnInit {
     if (node?.program) {
       this.determineSpecialNode(node)
       heading = node.program.name;
-      subheading = "port: " + node.program.port;
+      subheading = "pid: " + node.program.fd;
       this.timestamp = node.program.timestamp;
       if (node.program.name === "no process") {
         subheading = "no associated process";
